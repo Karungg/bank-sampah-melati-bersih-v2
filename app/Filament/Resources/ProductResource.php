@@ -37,10 +37,19 @@ class ProductResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('product_code')
                             ->required()
-                            ->maxLength(16)
+                            ->maxValue(16)
                             ->label('Kode Kategori')
-                            ->helperText('Kode Kategori terisi otomatis.')
-                            ->readOnly(),
+                            ->helperText(
+                                fn(string $context): string
+                                => $context == 'view' ? '' : 'Kode Kategori terisi otomatis.'
+                            )
+                            ->readOnly()
+                            ->unique(ignoreRecord: true)
+                            ->validationMessages([
+                                'required' => 'Kode Kategori harus terisi.',
+                                'max' => 'Kode Kategori tidak boleh lebih dari 16 karakter',
+                                'unique' => 'Kode Kategori sudah digunakan.'
+                            ]),
                         Grid::make([
                             'default' => 1,
                             'md' => 2
@@ -48,24 +57,45 @@ class ProductResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->required()
-                                    ->maxLength(100)
+                                    ->maxValue(100)
                                     ->label('Nama Kategori')
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(function (Set $set, ?string $state, ProductServiceInterface $service) {
+                                    ->unique(ignoreRecord: true)
+                                    ->afterStateUpdated(function (Set $set, ?string $state, ProductServiceInterface $service): string {
                                         return $set('product_code', $service->generateCode($state));
-                                    }),
+                                    })
+                                    ->validationMessages([
+                                        'required' => 'Nama Kategori harus diisi.',
+                                        'max' => 'Nama Kategori tidak boleh melebihi 100 karakter.',
+                                        'unique' => 'Nama Kategori sudah digunakan.'
+                                    ]),
                                 Forms\Components\Textarea::make('description')
                                     ->maxLength(1000)
                                     ->label('Deskripsi'),
-                                Forms\Components\TextInput::make('unit')
+                                Forms\Components\Select::make('unit')
                                     ->required()
-                                    ->maxLength(20)
-                                    ->label('Satuan'),
+                                    ->label('Satuan')
+                                    ->options([
+                                        'kg' => 'Kg',
+                                        'liter' => 'Liter',
+                                        'pcs' => 'Pcs'
+                                    ])
+                                    ->validationMessages([
+                                        'required' => 'Satuan harus diisi.'
+                                    ]),
                                 Forms\Components\TextInput::make('price')
                                     ->required()
                                     ->numeric()
                                     ->prefix('Rp')
-                                    ->label('Harga'),
+                                    ->label('Harga')
+                                    ->maxLength(10)
+                                    ->minValue(1)
+                                    ->validationMessages([
+                                        'required' => 'Harga harus diisi.',
+                                        'numeric' => 'Harga harus berupa angka.',
+                                        'max_digits' => 'Harga tidak boleh melebihi 10 digit dan dua angka dibelakang koma',
+                                        'min' => 'Harga tidak boleh kurang dari 1',
+                                    ]),
                             ])
                     ])
             ]);
@@ -74,7 +104,7 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->orderBy('created_at'))
+            ->defaultSort('created_at')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('No')
@@ -85,14 +115,17 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->label('Nama Kategori')
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
-                    ->label('Deskripsi'),
+                    ->label('Deskripsi')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('unit')
                     ->searchable()
                     ->label('Satuan')
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(fn(string $state) => ucfirst($state)),
                 Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
                     ->sortable()

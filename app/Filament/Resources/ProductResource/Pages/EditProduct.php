@@ -19,4 +19,11 @@ class EditProduct extends EditRecord
             Actions\RestoreAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['price'] = substr($data['price'], 0, -3);
+
+        return $data;
+    }
 }
