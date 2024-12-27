@@ -28,7 +28,36 @@ class AdminUserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxValue(255)
+                    ->label('Nama')
+                    ->validationMessages([
+                        'required' => 'Nama harus diisi.',
+                        'max' => 'Nama tidak boleh lebih dari 255 karakter.'
+                    ]),
+                Forms\Components\TextInput::make('email')
+                    ->required()
+                    ->maxValue(255)
+                    ->unique(ignoreRecord: true)
+                    ->email()
+                    ->validationMessages([
+                        'required' => 'Email harus diisi.',
+                        'max' => 'Email tidak boleh lebih dari 255 karakter.',
+                        'unique' => 'Email sudah digunakan.',
+                        'email' => 'Email tidak valid.'
+                    ]),
+                Forms\Components\TextInput::make('password')
+                    ->required()
+                    ->password()
+                    ->revealable()
+                    ->maxValue(255)
+                    ->minValue(8)
+                    ->validationMessages([
+                        'required' => 'Password harus diisi.',
+                        'max' => 'Password tidak boleh lebih dari 255 karakter.',
+                        'min' => 'Password harus berisi setidaknya 8 karakter.',
+                    ])
             ]);
     }
 
@@ -36,7 +65,24 @@ class AdminUserResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id')
+                    ->label('No')
+                    ->rowIndex(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Nama'),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -57,5 +103,11 @@ class AdminUserResource extends Resource
         return [
             'index' => Pages\ManageAdminUsers::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereRelation('roles', 'name', '=', 'admin');
     }
 }
