@@ -8,6 +8,7 @@ use App\Filament\Clusters\Users\Resources\AdminUserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -89,7 +90,8 @@ class AdminUserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->hidden(fn(User $user): bool => $user->id == auth()->id())
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -108,6 +110,13 @@ class AdminUserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->select([
+                'id',
+                'name',
+                'email',
+                'created_at',
+                'updated_at'
+            ])
             ->whereRelation('roles', 'name', '=', 'admin');
     }
 }

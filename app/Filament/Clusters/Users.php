@@ -13,4 +13,6 @@ class Users extends Cluster
     protected static ?string $navigationGroup = 'Master';
 
     protected static ?string $navigationLabel = 'Pengguna';
+
+    protected static ?string $clusterBreadcrumb = 'Pengguna';
 }

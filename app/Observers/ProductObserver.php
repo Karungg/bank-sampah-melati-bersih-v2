@@ -55,7 +55,7 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        if (!request()->fullUrl() == route('filament.admin.resources.products.index') . '') {
+        if (!$product->wasChanged()) {
             $this->sendNotification(
                 'Kategori Sampah berhasil diubah.',
                 auth()->user()->name . ' mengubah Kategori Sampah ' . $product->title . '.',
