@@ -76,6 +76,11 @@ class AdminUserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('avatar_url')
+                    ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
+                    ->circular()
+                    ->extraImgAttributes(['loading' => 'lazy'])
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -116,6 +121,7 @@ class AdminUserResource extends Resource
                 'id',
                 'name',
                 'email',
+                'avatar_url',
                 'created_at',
                 'updated_at'
             ])
