@@ -5,7 +5,9 @@ namespace App\Filament\Clusters\Users\Resources;
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\AdminUserResource\Pages;
 use App\Filament\Clusters\Users\Resources\AdminUserResource\RelationManagers;
+use App\Filament\Exports\UserExporter;
 use App\Models\User;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -29,6 +31,17 @@ class AdminUserResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\FileUpload::make('avatar_url')
+                    ->label('Foto Profil')
+                    ->maxFiles(1024)
+                    ->avatar()
+                    ->imageEditor()
+                    ->directory('avatars')
+                    ->nullable()
+                    ->image()
+                    ->validationMessages([
+                        'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
+                    ]),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxValue(255)
@@ -80,7 +93,8 @@ class AdminUserResource extends Resource
                     ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
                     ->circular()
                     ->extraImgAttributes(['loading' => 'lazy'])
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->label('Foto Profil'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -96,7 +110,10 @@ class AdminUserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->url(fn($record) => $record->id === auth()->id()
+                        ? route('filament.admin.pages.my-profile')
+                        : null),
                 Tables\Actions\DeleteAction::make()
                     ->hidden(fn(User $user): bool => $user->id == auth()->id())
             ])
@@ -104,6 +121,8 @@ class AdminUserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->exporter(UserExporter::class),
             ]);
     }
 

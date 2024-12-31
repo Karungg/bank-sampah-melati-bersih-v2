@@ -3,17 +3,56 @@
 namespace App\Observers;
 
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class UserObserver
 {
+    protected function sendNotification(
+        string $title,
+        ?string $body,
+        string $icon,
+        string $type,
+        ?User $user = null,
+        ?bool $recipient = null
+    ) {
+        $notification = Notification::make()
+            ->title($title)
+            ->body($body)
+            ->icon($icon);
+
+        if ($type == 'success') {
+            $notification->success();
+        } elseif ($type == 'warning') {
+            $notification->warning();
+        } elseif ($type == 'danger') {
+            $notification->danger();
+        }
+
+        if ($user) {
+            $notification->actions([
+                Action::make('Lihat')
+                    ->url(route('filament.admin.users.resources.admin-users.index', ['tableSearch' => $user->name]))
+            ]);
+        }
+
+        $recipient = $recipient ? User::role('admin')->get() : auth()->user();
+        $notification->sendToDatabase($recipient);
+    }
     /**
      * Handle the User "created" event.
      */
     public function created(User $user): void
     {
-        //
+        $this->sendNotification(
+            "Pengguna Admin baru berhasil ditambahkan",
+            auth()->user()->name . " menambahkan admin $user->name",
+            "heroicon-o-check-circle",
+            "success",
+            $user,
+            true
+        );
     }
 
     /**
@@ -28,6 +67,15 @@ class UserObserver
                 Storage::delete($oldProfile);
             }
         }
+
+        $this->sendNotification(
+            "Profile berhasil diubah",
+            auth()->user()->name . " mengubah pengguna admin " . $user->name,
+            "heroicon-o-check-circle",
+            "warning",
+            $user,
+            true
+        );
     }
 
     /**
@@ -35,7 +83,14 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        //
+        $this->sendNotification(
+            "Pengguna Admin berhasil dihapus",
+            auth()->user()->name . " menghapus pengguna admin " . $user->name,
+            "heroicon-o-exclamation-triangle",
+            "danger",
+            $user,
+            true
+        );
     }
 
     /**

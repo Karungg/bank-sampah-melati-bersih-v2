@@ -10,8 +10,13 @@ use Illuminate\Support\Facades\Route;
 
 class ProductObserver
 {
-    protected function sendNotification(string $title, string $body, string $icon, string $type, ?Product $product = null): void
-    {
+    protected function sendNotification(
+        string $title,
+        string $body,
+        string $icon,
+        string $type,
+        ?Product $product = null
+    ): void {
         $recipient = User::role('admin')->get();
         $notification = Notification::make()
             ->title($title)
