@@ -40,7 +40,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('product_code')
                             ->required()
                             ->maxValue(16)
-                            ->label('Kode Kategori')
+                            ->label(dd())
                             ->helperText(
                                 fn(string $context): string
                                 => $context == 'view' ? '' : 'Kode Kategori terisi otomatis.'
@@ -189,5 +189,10 @@ class ProductResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
     }
 }

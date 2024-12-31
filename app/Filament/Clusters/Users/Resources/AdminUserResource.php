@@ -62,11 +62,16 @@ class AdminUserResource extends Resource
                         'email' => 'Email tidak valid.'
                     ]),
                 Forms\Components\TextInput::make('password')
-                    ->required()
+                    ->required(fn(string $context) => $context != 'edit')
                     ->password()
                     ->revealable()
                     ->maxValue(255)
                     ->minValue(8)
+                    ->helperText(
+                        fn(string $context): string => $context == 'edit'
+                            ? 'Kosongkan jika tidak ingin diubah'
+                            : ''
+                    )
                     ->validationMessages([
                         'required' => 'Password harus diisi.',
                         'max' => 'Password tidak boleh lebih dari 255 karakter.',
@@ -113,7 +118,11 @@ class AdminUserResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->url(fn($record) => $record->id === auth()->id()
                         ? route('filament.admin.pages.my-profile')
-                        : null),
+                        : null)
+                    ->mutateFormDataUsing(function (array $data, $record): array {
+                        $data['password'] ?? $data['password'] = $record->password;
+                        return $data;
+                    }),
                 Tables\Actions\DeleteAction::make()
                     ->hidden(fn(User $user): bool => $user->id == auth()->id())
             ])
@@ -141,9 +150,15 @@ class AdminUserResource extends Resource
                 'name',
                 'email',
                 'avatar_url',
+                'password',
                 'created_at',
                 'updated_at'
             ])
             ->whereRelation('roles', 'name', '=', 'admin');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
     }
 }

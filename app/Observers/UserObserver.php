@@ -31,23 +31,28 @@ class UserObserver
         }
 
         if ($user) {
+            $route = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+                ? 'filament.admin.users.resources.admin-users.index'
+                : 'filament.admin.users.resources.management-users.index';
+
             $notification->actions([
                 Action::make('Lihat')
-                    ->url(route('filament.admin.users.resources.admin-users.index', ['tableSearch' => $user->name]))
+                    ->url(route($route, ['tableSearch' => $user->name]))
             ]);
         }
 
         $recipient = $recipient ? User::role('admin')->get() : auth()->user();
         $notification->sendToDatabase($recipient);
     }
+
     /**
      * Handle the User "created" event.
      */
     public function created(User $user): void
     {
         $this->sendNotification(
-            "Pengguna Admin baru berhasil ditambahkan",
-            auth()->user()->name . " menambahkan admin $user->name",
+            "Pengguna baru berhasil ditambahkan",
+            auth()->user()->name . " menambahkan $user->name",
             "heroicon-o-check-circle",
             "success",
             $user,
@@ -70,7 +75,7 @@ class UserObserver
 
         $this->sendNotification(
             "Profile berhasil diubah",
-            auth()->user()->name . " mengubah pengguna admin " . $user->name,
+            auth()->user()->name . " mengubah pengguna " . $user->name,
             "heroicon-o-check-circle",
             "warning",
             $user,
@@ -84,8 +89,8 @@ class UserObserver
     public function deleted(User $user): void
     {
         $this->sendNotification(
-            "Pengguna Admin berhasil dihapus",
-            auth()->user()->name . " menghapus pengguna admin " . $user->name,
+            "Pengguna berhasil dihapus",
+            auth()->user()->name . " menghapus pengguna " . $user->name,
             "heroicon-o-exclamation-triangle",
             "danger",
             $user,

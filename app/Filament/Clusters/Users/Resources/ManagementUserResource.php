@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\Users\Resources;
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\ManagementUserResource\Pages;
 use App\Filament\Clusters\Users\Resources\ManagementUserResource\RelationManagers;
+use App\Filament\Exports\ManagementExporter;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -28,6 +29,17 @@ class ManagementUserResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\FileUpload::make('avatar_url')
+                    ->label('Foto Profil')
+                    ->maxFiles(1024)
+                    ->avatar()
+                    ->imageEditor()
+                    ->directory('avatars')
+                    ->nullable()
+                    ->image()
+                    ->validationMessages([
+                        'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
+                    ]),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxValue(255)
@@ -48,11 +60,14 @@ class ManagementUserResource extends Resource
                         'email' => 'Email tidak valid.'
                     ]),
                 Forms\Components\TextInput::make('password')
-                    ->required()
+                    ->required(fn(string $context): string => $context != 'edit')
                     ->password()
                     ->revealable()
                     ->maxValue(255)
                     ->minValue(8)
+                    ->helperText(fn(string $context): string => $context == 'edit'
+                        ? 'Kosongkan jika tidak diubah'
+                        : '')
                     ->validationMessages([
                         'required' => 'Password harus diisi.',
                         'max' => 'Password tidak boleh lebih dari 255 karakter.',
@@ -75,26 +90,40 @@ class ManagementUserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('avatar_url')
+                    ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
+                    ->circular()
+                    ->extraImgAttributes(['loading' => 'lazy'])
+                    ->alignCenter()
+                    ->label('Foto Profil'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Dibuat Saat'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Diupdate Saat'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateFormDataUsing(function (array $data, $record): array {
+                        $data['password'] ?? $data['password'] = $record->password;
+                        return $data;
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->exporter(ManagementExporter::class),
             ]);
     }
 
@@ -109,5 +138,10 @@ class ManagementUserResource extends Resource
     {
         return parent::getEloquentQuery()
             ->whereRelation('roles', 'name', '=', 'management');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('admin');
     }
 }
