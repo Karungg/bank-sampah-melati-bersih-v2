@@ -123,8 +123,36 @@ class AdminUserResource extends Resource
                         $data['password'] ?? $data['password'] = $record->password;
                         return $data;
                     }),
-                Tables\Actions\DeleteAction::make()
-                    ->hidden(fn(User $user): bool => $user->id == auth()->id())
+                Tables\Actions\Action::make('hapus')
+                    ->hidden(fn(User $user) => $user->id == auth()->id())
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus Pengguna')
+                    ->modalDescription('Apakah anda yakin ingin menghapus pengguna ini? Hal ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Hapus')
+                    ->icon('heroicon-m-trash')
+                    ->color('danger')
+                    ->form([
+                        Forms\Components\TextInput::make('confirm')
+                            ->required()
+                            ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
+                    ])
+                    ->action(function (array $data, User $record) {
+                        if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
+                            Notification::make()
+                                ->title('Konfirmasi tidak sesuai')
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
+                        $record->delete();
+
+                        Notification::make()
+                            ->title('Pengguna berhasil dihapus.')
+                            ->success()
+                            ->send();
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
