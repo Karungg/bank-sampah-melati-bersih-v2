@@ -197,6 +197,15 @@ class ManagementUserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->select([
+                'id',
+                'name',
+                'email',
+                'avatar_url',
+                'password',
+                'created_at',
+                'updated_at'
+            ])
             ->whereRelation('roles', 'name', '=', 'management');
     }
 

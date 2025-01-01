@@ -157,38 +157,36 @@ class AdminUserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkActionGroup::make([
-                        Tables\Actions\BulkAction::make('Hapus pengurus yang dipilih')
-                            ->requiresConfirmation()
-                            ->modalHeading('Hapus admin yang dipilih')
-                            ->modalDescription('Apakah anda yakin ingin menghapus admin ini? Hal ini tidak dapat dibatalkan.')
-                            ->modalSubmitActionLabel('Hapus')
-                            ->icon('heroicon-m-trash')
-                            ->color('danger')
-                            ->form([
-                                Forms\Components\TextInput::make('confirm')
-                                    ->required()
-                                    ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
-                            ])
-                            ->action(function (array $data, Collection $records) {
-                                if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
-                                    Notification::make()
-                                        ->title('Konfirmasi tidak sesuai')
-                                        ->danger()
-                                        ->send();
-
-                                    return;
-                                }
-
-                                $records->each->delete();
-
+                    Tables\Actions\BulkAction::make('Hapus admin yang dipilih')
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus admin yang dipilih')
+                        ->modalDescription('Apakah anda yakin ingin menghapus admin ini? Hal ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Hapus')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->form([
+                            Forms\Components\TextInput::make('confirm')
+                                ->required()
+                                ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
+                        ])
+                        ->action(function (array $data, Collection $records) {
+                            if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
                                 Notification::make()
-                                    ->title('Admin berhasil dihapus.')
-                                    ->success()
+                                    ->title('Konfirmasi tidak sesuai')
+                                    ->danger()
                                     ->send();
-                            })
-                            ->deselectRecordsAfterCompletion(),
-                    ]),
+
+                                return;
+                            }
+
+                            $records->each->delete();
+
+                            Notification::make()
+                                ->title('Admin berhasil dihapus.')
+                                ->success()
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                 ]),
                 Tables\Actions\ExportBulkAction::make()
                     ->exporter(UserExporter::class),

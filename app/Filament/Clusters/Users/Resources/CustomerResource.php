@@ -6,7 +6,10 @@ use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Clusters\Users\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
+use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,47 +31,181 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nik')
-                    ->required()
-                    ->maxLength(16),
-                Forms\Components\TextInput::make('full_name')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('place_of_birth')
-                    ->required()
-                    ->maxLength(50),
-                Forms\Components\DatePicker::make('date_of_birth')
-                    ->required(),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->required()
-                    ->maxLength(14),
-                Forms\Components\Textarea::make('address')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('rt')
-                    ->required()
-                    ->maxLength(3),
-                Forms\Components\TextInput::make('rw')
-                    ->required()
-                    ->maxLength(3),
-                Forms\Components\TextInput::make('village')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('district')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('city')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('postal_code')
-                    ->required()
-                    ->maxLength(5),
-                Forms\Components\TextInput::make('identity_card_photo')
-                    ->maxLength(255),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+                Section::make('Data Diri')
+                    ->schema([
+                        Forms\Components\TextInput::make('nik')
+                            ->required()
+                            ->numeric()
+                            ->maxLength(16)
+                            ->minLength(16)
+                            ->label('NIK')
+                            ->unique(ignoreRecord: true)
+                            ->helperText(fn(string $context): string => $context != 'view'
+                                ? 'Mohon isi NIK dengan 16 digit angka.'
+                                : '')
+                            ->validationMessages([
+                                'required' => 'NIK harus diisi.',
+                                'numeric' => 'NIK harus berisi angka.',
+                                'min_digits' => 'NIK harus berisi 16 digit angka.',
+                                'max_digits' => 'NIK berisi maksimal 16 digit angka.',
+                                'unique' => 'NIK sudah digunakan.'
+                            ]),
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2
+                        ])->schema([
+                            Forms\Components\TextInput::make('full_name')
+                                ->required()
+                                ->maxValue(100)
+                                ->label('Nama Lengkap')
+                                ->validationMessages([
+                                    'required' => 'Nama Lengkap harus diisi.',
+                                    'max' => 'Nama Lengkap tidak boleh melebihi 100 karakter.'
+                                ]),
+                            Forms\Components\TextInput::make('place_of_birth')
+                                ->required()
+                                ->maxValue(50)
+                                ->label('Tempat Lahir')
+                                ->validationMessages([
+                                    'required' => 'Tempat Lahir harus diisi.',
+                                    'max' => 'Tempat Lahir tidak boleh melebihi 50 karakter.'
+                                ]),
+                            Forms\Components\DatePicker::make('date_of_birth')
+                                ->required()
+                                ->label('Tanggal Lahir')
+                                ->validationMessages([
+                                    'required' => 'Tanggal Lahir harus diisi.'
+                                ]),
+                            Forms\Components\TextInput::make('phone')
+                                ->tel()
+                                ->required()
+                                ->maxLength(14)
+                                ->minLength(9)
+                                ->unique(ignoreRecord: true)
+                                ->validationMessages([
+                                    'required' => 'Nomor Telepon harus diisi.',
+                                    'min_digits' => 'Nomor Telepon harus berisi setidaknya 9 digit angka.',
+                                    'max_digits' => 'Nomor Telepon tidak boleh melebihi 14 digit angka.',
+                                    'unique' => 'Nomor Telepon sudah digunakan.',
+                                    'regex' => 'Nomor Telepon tidak valid'
+                                ])
+                                ->prefix('+62')
+                                ->label('Nomor Telepon'),
+                        ]),
+                        Forms\Components\FileUpload::make('identity_card_photo')
+                            ->label('Foto KTP')
+                            ->maxFiles(1024)
+                            ->imageEditor()
+                            ->directory('identity_card_photos')
+                            ->nullable()
+                            ->image()
+                            ->validationMessages([
+                                'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 1024KB.',
+                            ]),
+                    ]),
+                Section::make('Alamat Lengkap')
+                    ->schema([
+                        Forms\Components\Textarea::make('address')
+                            ->required()
+                            ->columnSpanFull()
+                            ->maxLength(2000)
+                            ->label('Alamat')
+                            ->validationMessages([
+                                'required' => 'Alamat harus diisi.',
+                                'max' => 'Alamat tidak boleh melebihi 2000 karakter.'
+                            ]),
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2
+                        ])->schema([
+                            Forms\Components\TextInput::make('rt')
+                                ->required()
+                                ->numeric()
+                                ->maxLength(3)
+                                ->label('RT')
+                                ->validationMessages([
+                                    'required' => 'RT harus diisi.',
+                                    'max_digits' => 'RT tidak boleh melebihi 3 digit angka.'
+                                ]),
+                            Forms\Components\TextInput::make('rw')
+                                ->required()
+                                ->numeric()
+                                ->label('RW')
+                                ->maxLength(3)
+                                ->validationMessages([
+                                    'required' => 'RW harus diisi.',
+                                    'max_digits' => 'RW tidak boleh melebihi 3 digit angka.'
+                                ]),
+                            Forms\Components\TextInput::make('village')
+                                ->required()
+                                ->maxLength(100)
+                                ->label('Desa')
+                                ->validationMessages([
+                                    'required' => 'Desa harus diisi.',
+                                    'max' => 'Desa tidak boleh melebihi 100 karakter.'
+                                ]),
+                            Forms\Components\TextInput::make('district')
+                                ->required()
+                                ->label('Kecamatan')
+                                ->maxLength(100)
+                                ->validationMessages([
+                                    'required' => 'Kecamatan harus diisi.',
+                                    'max' => 'Kecamatan tidak boleh melebihi 100 karakter.'
+                                ]),
+                            Forms\Components\TextInput::make('city')
+                                ->required()
+                                ->maxLength(100)
+                                ->label('Kota')
+                                ->validationMessages([
+                                    'required' => 'Kota harus diisi.',
+                                    'max' => 'Kota tidak boleh melebihi 100 karakter.'
+                                ]),
+                            Forms\Components\TextInput::make('postal_code')
+                                ->required()
+                                ->maxLength(5)
+                                ->numeric()
+                                ->label('Kode Pos')
+                                ->validationMessages([
+                                    'required' => 'Kode Pos harus diisi.',
+                                    'max_digits' => 'Kode Pos tidak boleh melebihi 5 digit angka.'
+                                ]),
+                        ])
+                    ]),
+                Section::make('Akun Nasabah')
+                    ->schema([
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2
+                        ])->schema([
+                            Forms\Components\TextInput::make('email')
+                                ->required()
+                                ->maxValue(255)
+                                ->unique(ignoreRecord: true, table: User::class)
+                                ->email()
+                                ->validationMessages([
+                                    'required' => 'Email harus diisi.',
+                                    'max' => 'Email tidak boleh lebih dari 255 karakter.',
+                                    'unique' => 'Email sudah digunakan.',
+                                    'email' => 'Email tidak valid.'
+                                ]),
+                            Forms\Components\TextInput::make('password')
+                                ->required(fn(string $context) => $context != 'edit')
+                                ->password()
+                                ->revealable()
+                                ->maxValue(255)
+                                ->minValue(8)
+                                ->helperText(
+                                    fn(string $context): string => $context == 'edit'
+                                        ? 'Kosongkan jika tidak ingin diubah'
+                                        : ''
+                                )
+                                ->validationMessages([
+                                    'required' => 'Password harus diisi.',
+                                    'max' => 'Password tidak boleh lebih dari 255 karakter.',
+                                    'min' => 'Password harus berisi setidaknya 8 karakter.',
+                                ])
+                        ])
+                    ])
             ]);
     }
 
