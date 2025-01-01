@@ -9,10 +9,12 @@ use App\Filament\Exports\ManagementExporter;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ManagementUserResource extends Resource
@@ -116,11 +118,69 @@ class ManagementUserResource extends Resource
                         $data['password'] ?? $data['password'] = $record->password;
                         return $data;
                     }),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('hapus')
+                    ->hidden(fn(User $user) => $user->id == auth()->id())
+                    ->requiresConfirmation()
+                    ->modalHeading('Hapus pengurus')
+                    ->modalDescription('Apakah anda yakin ingin menghapus pengurus ini? Hal ini tidak dapat dibatalkan.')
+                    ->modalSubmitActionLabel('Hapus')
+                    ->icon('heroicon-m-trash')
+                    ->color('danger')
+                    ->form([
+                        Forms\Components\TextInput::make('confirm')
+                            ->required()
+                            ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
+                    ])
+                    ->action(function (array $data, User $record) {
+                        if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
+                            Notification::make()
+                                ->title('Konfirmasi tidak sesuai')
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
+                        $record->delete();
+
+                        Notification::make()
+                            ->title('Pengguna berhasil dihapus.')
+                            ->success()
+                            ->send();
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('Hapus pengurus yang dipilih')
+                        ->requiresConfirmation()
+                        ->modalHeading('Hapus pengurus yang dipilih')
+                        ->modalDescription('Apakah anda yakin ingin menghapus pengurus ini? Hal ini tidak dapat dibatalkan.')
+                        ->modalSubmitActionLabel('Hapus')
+                        ->icon('heroicon-m-trash')
+                        ->color('danger')
+                        ->form([
+                            Forms\Components\TextInput::make('confirm')
+                                ->required()
+                                ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
+                        ])
+                        ->action(function (array $data, Collection $records) {
+                            if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
+                                Notification::make()
+                                    ->title('Konfirmasi tidak sesuai')
+                                    ->danger()
+                                    ->send();
+
+                                return;
+                            }
+
+                            $records->each->delete();
+
+                            Notification::make()
+                                ->title('Pengurus berhasil dihapus.')
+                                ->success()
+                                ->send();
+                        })
+                        ->deselectRecordsAfterCompletion(),
                 ]),
                 Tables\Actions\ExportBulkAction::make()
                     ->exporter(ManagementExporter::class),

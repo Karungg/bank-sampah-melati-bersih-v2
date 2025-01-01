@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AdminUserResource extends Resource
@@ -126,8 +127,8 @@ class AdminUserResource extends Resource
                 Tables\Actions\Action::make('hapus')
                     ->hidden(fn(User $user) => $user->id == auth()->id())
                     ->requiresConfirmation()
-                    ->modalHeading('Hapus Pengguna')
-                    ->modalDescription('Apakah anda yakin ingin menghapus pengguna ini? Hal ini tidak dapat dibatalkan.')
+                    ->modalHeading('Hapus admin')
+                    ->modalDescription('Apakah anda yakin ingin menghapus admin ini? Hal ini tidak dapat dibatalkan.')
                     ->modalSubmitActionLabel('Hapus')
                     ->icon('heroicon-m-trash')
                     ->color('danger')
@@ -149,14 +150,45 @@ class AdminUserResource extends Resource
                         $record->delete();
 
                         Notification::make()
-                            ->title('Pengguna berhasil dihapus.')
+                            ->title('Admin berhasil dihapus.')
                             ->success()
                             ->send();
                     })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkActionGroup::make([
+                        Tables\Actions\BulkAction::make('Hapus pengurus yang dipilih')
+                            ->requiresConfirmation()
+                            ->modalHeading('Hapus admin yang dipilih')
+                            ->modalDescription('Apakah anda yakin ingin menghapus admin ini? Hal ini tidak dapat dibatalkan.')
+                            ->modalSubmitActionLabel('Hapus')
+                            ->icon('heroicon-m-trash')
+                            ->color('danger')
+                            ->form([
+                                Forms\Components\TextInput::make('confirm')
+                                    ->required()
+                                    ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
+                            ])
+                            ->action(function (array $data, Collection $records) {
+                                if ($data['confirm'] !== 'Saya yakin ingin menghapus') {
+                                    Notification::make()
+                                        ->title('Konfirmasi tidak sesuai')
+                                        ->danger()
+                                        ->send();
+
+                                    return;
+                                }
+
+                                $records->each->delete();
+
+                                Notification::make()
+                                    ->title('Admin berhasil dihapus.')
+                                    ->success()
+                                    ->send();
+                            })
+                            ->deselectRecordsAfterCompletion(),
+                    ]),
                 ]),
                 Tables\Actions\ExportBulkAction::make()
                     ->exporter(UserExporter::class),
