@@ -40,7 +40,7 @@ class ProductResource extends Resource
                         Forms\Components\TextInput::make('product_code')
                             ->required()
                             ->maxValue(16)
-                            ->label(dd())
+                            ->label('Kode Kategori')
                             ->helperText(
                                 fn(string $context): string
                                 => $context == 'view' ? '' : 'Kode Kategori terisi otomatis.'

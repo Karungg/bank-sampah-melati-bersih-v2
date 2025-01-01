@@ -18,9 +18,11 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $cluster = Users::class;
+
+    protected static ?string $modelLabel = 'Nasabah';
 
     public static function form(Form $form): Form
     {
@@ -75,43 +77,81 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
+                    ->label('No')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('nik')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('NIK')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('full_name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Nama Lengkap'),
                 Tables\Columns\TextColumn::make('place_of_birth')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Tempat Lahir')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('date_of_birth')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Tanggal Lahir')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Telepon'),
                 Tables\Columns\TextColumn::make('rt')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('RT')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('rw')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('RW')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('village')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Desa')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('district')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Kecamatan')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Kota')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('postal_code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('identity_card_photo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('user.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Kode Pos')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('address')
+                    ->searchable()
+                    ->label('Alamat')
+                    ->toggleable()
+                    ->limit(50),
+                Tables\Columns\ImageColumn::make('identity_card_photo')
+                    ->searchable()
+                    ->label('Foto')
+                    ->circular()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Dibuat Saat'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Diupdate Saat'),
             ])
             ->filters([
                 //
