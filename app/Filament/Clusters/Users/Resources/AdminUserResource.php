@@ -33,6 +33,11 @@ class AdminUserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\FileUpload::make('avatar_url')
+                    ->hidden(
+                        fn(string $context) =>
+                        $context === 'edit' && auth()->id()
+                            !== ($form->getRecord()->id ?? '')
+                    )
                     ->label('Foto Profil')
                     ->maxFiles(1024)
                     ->avatar()

@@ -9,8 +9,14 @@ use Filament\Notifications\Notification;
 
 class UserService implements UserServiceInterface
 {
-    public function sendNotification(string $title, ?string $body, string $icon, string $type, ?User $user = null, ?bool $recipient = null): void
-    {
+    public function sendNotification(
+        string $title,
+        ?string $body,
+        string $icon,
+        string $type,
+        ?User $user = null,
+        ?bool $recipient = null
+    ): void {
         $notification = Notification::make()
             ->title($title)
             ->body($body)
@@ -18,8 +24,6 @@ class UserService implements UserServiceInterface
 
         if ($type == 'success') {
             $notification->success();
-        } elseif ($type == 'warning') {
-            $notification->warning();
         } elseif ($type == 'danger') {
             $notification->danger();
         }

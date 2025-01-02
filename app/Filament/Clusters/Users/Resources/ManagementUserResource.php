@@ -161,7 +161,7 @@ class ManagementUserResource extends Resource
             });
     }
 
-    public function getDeleteAction(): Tables\Actions\Action
+    public static function getDeleteAction(): Tables\Actions\Action
     {
         return Tables\Actions\Action::make('hapus')
             ->hidden(fn(User $user) => $user->id == auth()->id())

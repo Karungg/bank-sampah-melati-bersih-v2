@@ -15,9 +15,17 @@ class UserObserver
      */
     public function created(User $user): void
     {
+        $title = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+            ? 'Admin baru berhasil ditambahkan'
+            : 'Pengurus baru berhasil ditambahkan';
+
+        $body = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+            ? auth()->user()->name . ' menambahkan admin baru ' . $user->name
+            : auth()->user()->name . ' menambahkan pengurus baru ' . $user->name;
+
         $this->userService->sendNotification(
-            "Pengguna baru berhasil ditambahkan",
-            auth()->user()->name . " menambahkan $user->name",
+            $title,
+            $body,
             "heroicon-o-check-circle",
             "success",
             $user,
@@ -40,11 +48,9 @@ class UserObserver
 
         $this->userService->sendNotification(
             "Profile berhasil diubah",
-            auth()->user()->name . " mengubah pengguna " . $user->name,
+            'Anda baru saja mengubah profile',
             "heroicon-o-check-circle",
-            "warning",
-            $user,
-            true
+            "success"
         );
     }
 
