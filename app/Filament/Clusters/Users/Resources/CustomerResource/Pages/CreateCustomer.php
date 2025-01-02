@@ -22,7 +22,8 @@ class CreateCustomer extends CreateRecord
                 $user = User::create([
                     'name' => $data['full_name'],
                     'email' => $data['email'],
-                    'password' => $data['password']
+                    'password' => $data['password'],
+                    'avatar_url' => $data['avatar_url']
                 ]);
             });
 

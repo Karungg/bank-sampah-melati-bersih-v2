@@ -7,6 +7,7 @@ use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EditCustomer extends EditRecord
 {
@@ -36,6 +37,10 @@ class EditCustomer extends EditRecord
                     $update['password'] = $data['password'];
                 }
 
+                if (!empty($data['avatar_url'])) {
+                    $update['avatar_url'] = $data['avatar_url'];
+                }
+
                 $user = DB::table('users')
                     ->where('id', $data['user_id'])
                     ->update($update);
@@ -57,12 +62,12 @@ class EditCustomer extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $email = DB::table('users')
+        $customer = DB::table('users')
             ->where('id', $data['user_id'])
-            ->value('email');
+            ->first(['email', 'avatar_url']);
 
-        $data['email'] = $email;
-        $data['user_id'] = $data['user_id'];
+        $data['email'] = $customer->email;
+        $data['avatar_url'] = $customer->avatar_url;
 
         return $data;
     }

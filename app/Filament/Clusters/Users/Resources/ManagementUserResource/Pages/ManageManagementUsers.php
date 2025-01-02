@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Users\Resources\ManagementUserResource\Pages;
 
 use App\Filament\Clusters\Users\Resources\ManagementUserResource;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 
@@ -13,7 +14,10 @@ class ManageManagementUsers extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->after(function (User $user) {
+                    $user->assignRole('management');
+                }),
         ];
     }
 }

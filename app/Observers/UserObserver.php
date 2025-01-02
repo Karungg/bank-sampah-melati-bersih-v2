@@ -2,55 +2,19 @@
 
 namespace App\Observers;
 
+use App\Contracts\UserServiceInterface;
 use App\Models\User;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class UserObserver
 {
-    protected function sendNotification(
-        string $title,
-        ?string $body,
-        string $icon,
-        string $type,
-        ?User $user = null,
-        ?bool $recipient = null
-    ) {
-        $notification = Notification::make()
-            ->title($title)
-            ->body($body)
-            ->icon($icon);
-
-        if ($type == 'success') {
-            $notification->success();
-        } elseif ($type == 'warning') {
-            $notification->warning();
-        } elseif ($type == 'danger') {
-            $notification->danger();
-        }
-
-        if ($user) {
-            $route = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
-                ? 'filament.admin.users.resources.admin-users.index'
-                : 'filament.admin.users.resources.management-users.index';
-
-            $notification->actions([
-                Action::make('Lihat')
-                    ->url(route($route, ['tableSearch' => $user->name]))
-            ]);
-        }
-
-        $recipient = $recipient ? User::role('admin')->get() : auth()->user();
-        $notification->sendToDatabase($recipient);
-    }
-
+    public function __construct(protected UserServiceInterface $userService) {}
     /**
      * Handle the User "created" event.
      */
     public function created(User $user): void
     {
-        $this->sendNotification(
+        $this->userService->sendNotification(
             "Pengguna baru berhasil ditambahkan",
             auth()->user()->name . " menambahkan $user->name",
             "heroicon-o-check-circle",
@@ -73,7 +37,7 @@ class UserObserver
             }
         }
 
-        $this->sendNotification(
+        $this->userService->sendNotification(
             "Profile berhasil diubah",
             auth()->user()->name . " mengubah pengguna " . $user->name,
             "heroicon-o-check-circle",
@@ -88,12 +52,12 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        $this->sendNotification(
+        $this->userService->sendNotification(
             "Pengguna berhasil dihapus",
             auth()->user()->name . " menghapus pengguna " . $user->name,
             "heroicon-o-exclamation-triangle",
             "danger",
-            $user,
+            null,
             true
         );
     }

@@ -6,7 +6,6 @@ use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Clusters\Users\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
-use App\Models\User;
 use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -95,17 +94,27 @@ class CustomerResource extends Resource
                                 ])
                                 ->prefix('+62')
                                 ->label('Nomor Telepon'),
+                            Forms\Components\FileUpload::make('identity_card_photo')
+                                ->label('Foto KTP')
+                                ->maxFiles(1024)
+                                ->imageEditor()
+                                ->directory('identity_card_photos')
+                                ->nullable()
+                                ->image()
+                                ->validationMessages([
+                                    'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 1024KB.',
+                                ]),
+                            Forms\Components\FileUpload::make('avatar_url')
+                                ->label('Foto Profil')
+                                ->maxFiles(1024)
+                                ->imageEditor()
+                                ->directory('avatars')
+                                ->nullable()
+                                ->image()
+                                ->validationMessages([
+                                    'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
+                                ]),
                         ]),
-                        Forms\Components\FileUpload::make('identity_card_photo')
-                            ->label('Foto KTP')
-                            ->maxFiles(1024)
-                            ->imageEditor()
-                            ->directory('identity_card_photos')
-                            ->nullable()
-                            ->image()
-                            ->validationMessages([
-                                'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 1024KB.',
-                            ]),
                     ]),
                 Section::make('Alamat Lengkap')
                     ->schema([
@@ -203,8 +212,8 @@ class CustomerResource extends Resource
                                     }
                                 ]),
                             Forms\Components\TextInput::make('password')
-                                ->required()
-                                ->required(fn(string $context) => $context != 'edit')
+                                ->hidden(fn(string $context): bool => $context == 'view')
+                                ->required(fn(string $context): bool => $context != 'edit')
                                 ->password()
                                 ->revealable()
                                 ->maxValue(255)
