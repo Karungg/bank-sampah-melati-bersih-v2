@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class UserObserver
 {
     public function __construct(protected UserServiceInterface $userService) {}
+
     /**
      * Handle the User "created" event.
      */
