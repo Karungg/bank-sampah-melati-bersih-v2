@@ -15,13 +15,13 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $title = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
+
+        $title = $isAdminPage
             ? 'Admin baru berhasil ditambahkan'
             : 'Pengurus baru berhasil ditambahkan';
 
-        $body = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
-            ? auth()->user()->name . ' menambahkan admin baru ' . $user->name
-            : auth()->user()->name . ' menambahkan pengurus baru ' . $user->name;
+        $body = auth()->user()->name . ' menambahkan ' . ($isAdminPage ? 'admin' : 'pengurus') . ' baru ' . $user->name;
 
         $this->userService->sendNotification(
             $title,
@@ -33,35 +33,61 @@ class UserObserver
         );
     }
 
+
     /**
      * Handle the User "updated" event.
      */
     public function updated(User $user): void
     {
-        $oldProfile = auth()->user()->avatar_url;
+        $authUser = auth()->user();
+        $recipient = null;
 
-        if ($oldProfile) {
-            if ($user->avatar_url != $oldProfile) {
-                Storage::delete($oldProfile);
+        if ($user->id === $authUser->id) {
+            $title = 'Profil berhasil diubah';
+            $body = 'Anda baru saja mengubah profil';
+        } else {
+            $title = 'Profil berhasil diubah';
+            if ($user->hasRole('admin')) {
+                $body = 'Admin ' . $authUser->name . ' merubah profil admin ' . $user->name;
+                $recipient = true;
+            } elseif ($user->hasRole('management')) {
+                $body = $authUser->name . ' merubah profil pengurus ' . $user->name;
+                $recipient = true;
             }
         }
 
+        $oldProfile = $authUser->avatar_url;
+        if ($oldProfile && $user->avatar_url !== $oldProfile) {
+            Storage::delete($oldProfile);
+        }
+
         $this->userService->sendNotification(
-            "Profile berhasil diubah",
-            'Anda baru saja mengubah profile',
+            $title,
+            $body,
             "heroicon-o-check-circle",
-            "success"
+            "success",
+            null,
+            $recipient
         );
     }
+
 
     /**
      * Handle the User "deleted" event.
      */
     public function deleted(User $user): void
     {
+        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
+
+        $title = $isAdminPage
+            ? 'Admin berhasil dihapus'
+            : 'Pengurus berhasil dihapus';
+
+        $body = auth()->user()->name . ' menghapus ' . ($isAdminPage ? 'admin ' : 'pengurus ') . $user->name;
+
         $this->userService->sendNotification(
-            "Pengguna berhasil dihapus",
-            auth()->user()->name . " menghapus pengguna " . $user->name,
+            $title,
+            $body,
             "heroicon-o-exclamation-triangle",
             "danger",
             null,
