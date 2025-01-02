@@ -4,7 +4,7 @@ namespace App\Observers;
 
 use App\Models\Customer;
 use App\Models\User;
-use Filament\Actions\Action;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 
 class CustomerObserver
@@ -34,7 +34,7 @@ class CustomerObserver
                 ->url(route('filament.admin.users.resources.customers.index', ['tableSearch' => $customer->full_name]))
         ]);
 
-        $recipient = User::role(['admin', 'management'])->get();
+        $recipient = User::withoutRole('customer')->get();
         $notification->sendToDatabase($recipient);
     }
 

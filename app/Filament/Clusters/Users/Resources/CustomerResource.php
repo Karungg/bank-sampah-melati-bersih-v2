@@ -7,8 +7,10 @@ use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Clusters\Users\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use App\Models\User;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,6 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 class CustomerResource extends Resource
 {
@@ -33,6 +36,7 @@ class CustomerResource extends Resource
             ->schema([
                 Section::make('Data Diri')
                     ->schema([
+                        Hidden::make('user_id'),
                         Forms\Components\TextInput::make('nik')
                             ->required()
                             ->numeric()
@@ -84,8 +88,8 @@ class CustomerResource extends Resource
                                 ->unique(ignoreRecord: true)
                                 ->validationMessages([
                                     'required' => 'Nomor Telepon harus diisi.',
-                                    'min_digits' => 'Nomor Telepon harus berisi setidaknya 9 digit angka.',
-                                    'max_digits' => 'Nomor Telepon tidak boleh melebihi 14 digit angka.',
+                                    'min' => 'Nomor Telepon harus berisi setidaknya 9 digit angka.',
+                                    'max' => 'Nomor Telepon tidak boleh melebihi 14 digit angka.',
                                     'unique' => 'Nomor Telepon sudah digunakan.',
                                     'regex' => 'Nomor Telepon tidak valid'
                                 ])
@@ -180,15 +184,26 @@ class CustomerResource extends Resource
                             Forms\Components\TextInput::make('email')
                                 ->required()
                                 ->maxValue(255)
-                                ->unique(ignoreRecord: true, table: User::class)
                                 ->email()
                                 ->validationMessages([
                                     'required' => 'Email harus diisi.',
                                     'max' => 'Email tidak boleh lebih dari 255 karakter.',
                                     'unique' => 'Email sudah digunakan.',
                                     'email' => 'Email tidak valid.'
+                                ])->rules([
+                                    fn(): Closure => function (string $attribute, $value, Closure $fail) use ($form) {
+                                        $userExists = DB::table('users')
+                                            ->where('id', '!=', $form->getRecord()->user_id ?? '')
+                                            ->where('email', $value)
+                                            ->exists();
+
+                                        if ($userExists) {
+                                            $fail('Email sudah digunakan.');
+                                        }
+                                    }
                                 ]),
                             Forms\Components\TextInput::make('password')
+                                ->required()
                                 ->required(fn(string $context) => $context != 'edit')
                                 ->password()
                                 ->revealable()

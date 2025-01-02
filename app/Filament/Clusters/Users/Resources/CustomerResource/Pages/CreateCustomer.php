@@ -30,7 +30,7 @@ class CreateCustomer extends CreateRecord
                 $user->assignRole('customer');
                 $data['user_id'] = $user->id;
             } else {
-                throw new \Exception('User creation failed.');
+                throw new \Exception('Nasabah gagal ditambahkan.');
             }
 
             DB::commit();
