@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\Posts\Resources;
 use App\Filament\Clusters\Posts;
 use App\Filament\Clusters\Posts\Resources\CategoryResource\Pages;
 use App\Filament\Clusters\Posts\Resources\CategoryResource\RelationManagers;
+use App\Filament\Exports\CategoryExporter;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -91,6 +92,8 @@ class CategoryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->exporter(CategoryExporter::class)
             ]);
     }
 
