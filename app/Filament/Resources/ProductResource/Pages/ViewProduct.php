@@ -13,8 +13,11 @@ class ViewProduct extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make()
+            Actions\EditAction::make()
+                ->hidden($this->record->deleted_at != null),
+            Actions\DeleteAction::make(),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
         ];
     }
 }

@@ -15,9 +15,12 @@ class EditProduct extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
-            Actions\ForceDeleteAction::make(),
-            Actions\RestoreAction::make(),
         ];
+    }
+
+    protected function beforeFill(): void
+    {
+        $this->record->deleted_at != null ? redirect(route('filament.admin.resources.products.index')) : '';
     }
 
     protected function mutateFormDataBeforeFill(array $data): array
