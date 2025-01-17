@@ -22,7 +22,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $modelLabel = 'Kategori';
+    protected static ?string $modelLabel = 'Kategori Kegiatan';
 
     protected static ?string $cluster = Posts::class;
 
@@ -37,9 +37,9 @@ class CategoryResource extends Resource
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
                     ->validationMessages([
-                        'required' => 'Judul harus diisi',
+                        'required' => 'Judul harus diisi.',
                         'max' => 'Judul tidak boleh lebih dari 256 karakter.',
-                        'unique' => 'Judul sudah digunakan'
+                        'unique' => 'Judul sudah digunakan.'
                     ]),
                 Forms\Components\TextInput::make('slug')
                     ->required()
@@ -47,9 +47,9 @@ class CategoryResource extends Resource
                     ->maxValue(300)
                     ->unique(ignoreRecord: true)
                     ->validationMessages([
-                        'required' => 'Slug harus diisi',
+                        'required' => 'Slug harus diisi.',
                         'max' => 'Slug tidak boleh lebih dari 256 karakter.',
-                        'unique' => 'Slug sudah digunakan'
+                        'unique' => 'Slug sudah digunakan.'
                     ]),
             ]);
     }
@@ -58,7 +58,7 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('no')
+                Tables\Columns\TextColumn::make('id')
                     ->label('No')
                     ->searchable()
                     ->rowIndex(),
@@ -68,7 +68,7 @@ class CategoryResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
-                    ->label('slug'),
+                    ->label('Slug'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
