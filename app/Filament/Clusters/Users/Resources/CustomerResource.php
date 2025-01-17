@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\Users\Resources;
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Clusters\Users\Resources\CustomerResource\RelationManagers;
+use App\Filament\Exports\CustomerExporter;
 use App\Models\Customer;
 use Closure;
 use Filament\Forms;
@@ -325,6 +326,8 @@ class CustomerResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->exporter(CustomerExporter::class)
             ]);
     }
 
