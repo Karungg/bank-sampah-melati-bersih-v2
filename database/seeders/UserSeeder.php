@@ -23,13 +23,14 @@ class UserSeeder extends Seeder
 
         User::withoutEvents(function () use ($records) {
             User::factory()->admin()->create(); // Admin
+            User::factory()->management()->create(); // Management
 
             foreach ($records as $record) {
                 User::factory()->management()->create([
                     'name' => $record['name'],
                     'email' => strtolower(str_replace(' ', '', $record['name'])) . '@filament.com'
                 ]);
-            } // Management
+            } // Management from excel
 
             User::factory()->customer()->create(); // Customer
         });
