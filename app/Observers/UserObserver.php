@@ -33,7 +33,6 @@ class UserObserver
         );
     }
 
-
     /**
      * Handle the User "updated" event.
      */
@@ -70,7 +69,6 @@ class UserObserver
             $recipient
         );
     }
-
 
     /**
      * Handle the User "deleted" event.

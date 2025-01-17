@@ -32,7 +32,7 @@ class ProductObserver
      */
     public function updated(Product $product): void
     {
-        if (!$product->wasChanged()) {
+        if (!$product->wasChanged('deleted_at')) {
             $this->productService->sendNotification(
                 'Kategori Sampah berhasil diubah.',
                 auth()->user()->name . ' mengubah Kategori Sampah ' . $product->title . '.',

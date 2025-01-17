@@ -4,9 +4,8 @@ namespace App\Observers;
 
 use App\Contracts\CustomerServiceInterface;
 use App\Models\Customer;
-use App\Models\User;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerObserver
 {
@@ -31,6 +30,22 @@ class CustomerObserver
      */
     public function updated(Customer $customer): void
     {
+        $oldCustomerData = DB::table('users')
+            ->join('customers', 'users.id', 'customers.user_id')
+            ->select(['users.id', 'users.avatar_url', 'customers.id', 'customers.identity_card_photo'])
+            ->where('customers.id', $customer->id)
+            ->first();
+
+        $oldProfile = $oldCustomerData->avatar_url;
+        if ($oldProfile && $customer->avatar_url !== $oldProfile) {
+            Storage::delete($oldProfile);
+        }
+
+        $oldIdentity = $oldCustomerData->identity_card_photo;
+        if ($oldIdentity && $customer->identity_card_photo !== $oldIdentity) {
+            Storage::delete($oldIdentity);
+        }
+
         $this->customerService->sendNotification(
             'Nasabah berhasil diubah',
             auth()->user()->name . ' mengubah nasabah ' . $customer->full_name,
