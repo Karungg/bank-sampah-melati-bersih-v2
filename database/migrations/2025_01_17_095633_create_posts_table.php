@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title', 256);
             $table->string('slug', 300);
             $table->longText('body');
+            $table->string('images', 1000);
             $table->boolean('active')->default(false);
             $table->string('link', 256)->nullable();
             $table->foreignUuid('user_id')->constrained();

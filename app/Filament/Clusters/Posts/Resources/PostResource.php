@@ -5,14 +5,19 @@ namespace App\Filament\Clusters\Posts\Resources;
 use App\Filament\Clusters\Posts;
 use App\Filament\Clusters\Posts\Resources\PostResource\Pages;
 use App\Filament\Clusters\Posts\Resources\PostResource\RelationManagers;
+use App\Filament\Exports\PostExporter;
 use App\Models\Post;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
@@ -28,22 +33,79 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(256),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(300),
-                Forms\Components\Textarea::make('body')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Toggle::make('active')
-                    ->required(),
-                Forms\Components\TextInput::make('link')
-                    ->maxLength(256),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
+                Section::make()
+                    ->schema([
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2
+                        ])
+                            ->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->required()
+                                    ->maxValue(256)
+                                    ->label('Judul')
+                                    ->live(onBlur: true)
+                                    ->unique(ignoreRecord: true)
+                                    ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                                    ->validationMessages([
+                                        'required' => 'Judul harus diisi.',
+                                        'max' => 'Judul tidak boleh lebih dari 256 karakter.',
+                                        'unique' => 'Judul sudah digunakan.'
+                                    ]),
+                                Forms\Components\TextInput::make('slug')
+                                    ->required()
+                                    ->maxValue(300)
+                                    ->label('Slug')
+                                    ->readOnly()
+                                    ->unique(ignoreRecord: true)
+                                    ->helperText(fn(string $context) => $context != 'view' ? 'Slug terisi otomatis' : '')
+                                    ->validationMessages([
+                                        'required' => 'Slug harus diisi.',
+                                        'max' => 'Slug tidak boleh lebih dari 300 karakter.',
+                                        'unique' => 'Slug sudah digunakan.'
+                                    ]),
+                                Forms\Components\Select::make('categories')
+                                    ->required()
+                                    ->label('Kategori')
+                                    ->relationship(titleAttribute: 'title')
+                                    ->multiple()
+                                    ->validationMessages([
+                                        'required' => 'Kategori harus diisi.'
+                                    ]),
+                                Forms\Components\TextInput::make('link')
+                                    ->maxValue(256)
+                                    ->nullable()
+                                    ->validationMessages([
+                                        'max' => 'Link tidak boleh lebih dari 256 karakter.'
+                                    ]),
+                                Forms\Components\Toggle::make('active')
+                                    ->required()
+                                    ->label('Status')
+                                    ->validationMessages([
+                                        'required' => 'Status harus diisi.'
+                                    ]),
+                            ])
+                    ]),
+                Section::make()
+                    ->schema([
+                        Forms\Components\RichEditor::make('body')
+                            ->required()
+                            ->columnSpanFull()
+                            ->label('Isi')
+                            ->maxLength(5000)
+                            ->validationMessages([
+                                'required' => 'Isi kegiatan tidak boleh kosong.',
+                                'max' => 'Isi tidak boleh lebih dari 5000 karakter'
+                            ]),
+                        Forms\Components\FileUpload::make('images')
+                            ->required()
+                            ->label('Foto')
+                            ->image()
+                            ->multiple()
+                            ->validationMessages([
+                                'required' => 'Foto harus diisi.'
+                            ]),
+                    ])
             ]);
     }
 
@@ -95,6 +157,8 @@ class PostResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::make()
+                    ->exporter(PostExporter::class)
             ]);
     }
 

@@ -4,10 +4,6 @@ namespace App\Observers;
 
 use App\Contracts\ProductServiceInterface;
 use App\Models\Product;
-use App\Models\User;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Route;
 
 class ProductObserver
 {

@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CategoryPost extends Model
 {
-    use HasUuids;
+    use HasFactory;
 
-    protected $table = 'category_posts';
-    protected $keyType = 'string';
+    protected $table = 'category_post';
 }
