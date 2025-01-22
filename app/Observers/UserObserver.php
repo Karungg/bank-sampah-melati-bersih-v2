@@ -83,6 +83,10 @@ class UserObserver
 
         $body = auth()->user()->name . ' menghapus ' . ($isAdminPage ? 'admin ' : 'pengurus ') . $user->name;
 
+        if ($user->avatar_url) {
+            Storage::delete($user->avatar_url);
+        }
+
         $this->userService->sendNotification(
             $title,
             $body,
