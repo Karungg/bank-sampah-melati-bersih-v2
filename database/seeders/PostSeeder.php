@@ -30,8 +30,11 @@ class PostSeeder extends Seeder
             ];
         });
 
+
         DB::table('categories')->insert($categories->toArray());
 
-        Post::factory(50)->create();
+        Post::withoutEvents(function () {
+            Post::factory(10)->create();
+        });
     }
 }

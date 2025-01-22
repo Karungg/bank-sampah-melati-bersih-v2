@@ -25,7 +25,7 @@ class PostFactory extends Factory
         return [
             'title' => $title,
             'slug' => Str::slug($title),
-            'body' => fake()->realText(5000),
+            'body' => fake()->realText(500),
             'images' => fake()->imageUrl(),
             'active' => true,
             'link' => 'https://github.com/Karungg',
