@@ -102,6 +102,7 @@ class PostResource extends Resource
                             ->label('Foto')
                             ->image()
                             ->multiple()
+                            ->directory('posts')
                             ->validationMessages([
                                 'required' => 'Foto harus diisi.'
                             ]),

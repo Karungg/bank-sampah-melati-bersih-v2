@@ -49,6 +49,7 @@ class ProductDisplayResource extends Resource
                     ->image()
                     ->required()
                     ->label('Foto')
+                    ->directory('product-displays')
                     ->validationMessages([
                         'required' => 'Foto harus diisi.'
                     ]),
@@ -68,7 +69,8 @@ class ProductDisplayResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
-                    ->label('Deskripsi'),
+                    ->label('Deskripsi')
+                    ->limit(50),
                 Tables\Columns\ImageColumn::make('image')
                     ->label('Foto'),
                 Tables\Columns\TextColumn::make('created_at')
