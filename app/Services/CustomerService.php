@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\User;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class CustomerService implements CustomerServiceInterface
 {
@@ -37,5 +39,14 @@ class CustomerService implements CustomerServiceInterface
 
         $recipient = User::withoutRole('customer')->get();
         $notification->sendToDatabase($recipient);
+    }
+
+    public function getOldById(string $id)
+    {
+        return DB::table('users')
+            ->join('customers', 'users.id', 'customers.user_id')
+            ->select(['users.id', 'users.avatar_url', 'customers.id', 'customers.identity_card_photo'])
+            ->where('customers.id', $id)
+            ->first();
     }
 }

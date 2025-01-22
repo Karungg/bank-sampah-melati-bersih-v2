@@ -14,4 +14,6 @@ interface UserServiceInterface
         ?User $user = null,
         ?bool $recipient = null
     ): void;
+
+    public function getTitleBody(User $user): array;
 }

@@ -13,4 +13,6 @@ interface CustomerServiceInterface
         string $type,
         ?Customer $customer = null,
     ): void;
+
+    public function getOldById(string $id);
 }

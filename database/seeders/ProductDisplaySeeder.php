@@ -13,6 +13,8 @@ class ProductDisplaySeeder extends Seeder
      */
     public function run(): void
     {
-        ProductDisplay::factory(3)->create();
+        ProductDisplay::withoutEvents(function () {
+            ProductDisplay::factory(3)->create();
+        });
     }
 }

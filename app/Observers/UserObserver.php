@@ -15,17 +15,11 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
-
-        $title = $isAdminPage
-            ? 'Admin baru berhasil ditambahkan'
-            : 'Pengurus baru berhasil ditambahkan';
-
-        $body = auth()->user()->name . ' menambahkan ' . ($isAdminPage ? 'admin' : 'pengurus') . ' baru ' . $user->name;
+        $result = $this->userService->getTitleBody($user);
 
         $this->userService->sendNotification(
-            $title,
-            $body,
+            $result['title'],
+            $result['body'],
             "heroicon-o-check-circle",
             "success",
             $user,

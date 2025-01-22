@@ -42,4 +42,20 @@ class UserService implements UserServiceInterface
         $recipient = $recipient ? User::role('admin')->get() : auth()->user();
         $notification->sendToDatabase($recipient);
     }
+
+    public function getTitleBody(User $user): array
+    {
+        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
+
+        $title = $isAdminPage
+            ? 'Admin baru berhasil ditambahkan'
+            : 'Pengurus baru berhasil ditambahkan';
+
+        $body = auth()->user()->name . ' menambahkan ' . ($isAdminPage ? 'admin' : 'pengurus') . ' baru ' . $user->name;
+
+        return [
+            'title' => $title,
+            'body' => $body
+        ];
+    }
 }

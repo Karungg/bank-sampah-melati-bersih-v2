@@ -30,11 +30,7 @@ class CustomerObserver
      */
     public function updated(Customer $customer): void
     {
-        $oldCustomerData = DB::table('users')
-            ->join('customers', 'users.id', 'customers.user_id')
-            ->select(['users.id', 'users.avatar_url', 'customers.id', 'customers.identity_card_photo'])
-            ->where('customers.id', $customer->id)
-            ->first();
+        $oldCustomerData = $this->customerService->getOldById($customer->id);
 
         $oldProfile = $oldCustomerData->avatar_url;
         if ($oldProfile && $customer->avatar_url !== $oldProfile) {
@@ -60,6 +56,16 @@ class CustomerObserver
      */
     public function deleted(Customer $customer): void
     {
+        $oldCustomerData = $this->customerService->getOldById($customer->id);
+
+        if ($oldCustomerData->avatar_url) {
+            Storage::delete($oldCustomerData->avatar_url);
+        }
+
+        if ($oldCustomerData->identity_card_photo) {
+            Storage::delete($oldCustomerData->identity_card_photo);
+        }
+
         $this->customerService->sendNotification(
             'Nasabah berhasil dihapus',
             auth()->user()->name . ' menghapus nasabah ' . $customer->full_name,
