@@ -4,19 +4,16 @@ namespace App\Services;
 
 use App\Contracts\UserServiceInterface;
 use App\Models\User;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class UserService implements UserServiceInterface
 {
     public function updateProfile(User $user)
     {
-        $user = auth()->user();
+        $avatarToDelete = $user->id != auth()->id() ? $user->avatar_url : auth()->user()->avatar_url;
 
-        if ($user->avatar_url && ($user->avatar_url != $user->avatar_url)) {
-            Storage::delete($user->avatar_url);
+        if ($avatarToDelete) {
+            Storage::delete($avatarToDelete);
         }
     }
 
@@ -64,7 +61,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $route = (url()->livewire_current() == 'filament.admin.pages.my-profile') && auth()->user()->hasRole('admin')
+        $route = (url()->livewire_current() == 'filament.admin.pages.my-profile') || auth()->user()->hasRole('admin')
             ? 'filament.admin.users.resources.admin-users.index'
             : 'filament.admin.users.resources.management-users.index';
 
