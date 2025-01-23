@@ -61,7 +61,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $route = (url()->livewire_current() == 'filament.admin.pages.my-profile') || auth()->user()->hasRole('admin')
+        $route = url()->livewire_current() == 'filament.admin.pages.my-profile' || $user->hasRole('admin')
             ? 'filament.admin.users.resources.admin-users.index'
             : 'filament.admin.users.resources.management-users.index';
 
