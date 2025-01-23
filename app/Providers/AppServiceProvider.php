@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Contracts\AccountServiceInterface;
 use App\Contracts\CategoryServiceInterface;
 use App\Contracts\CustomerServiceInterface;
+use App\Contracts\NotificationServiceInterface;
 use App\Contracts\PostServiceInterface;
 use App\Contracts\ProductDisplayServiceInterface;
 use App\Contracts\ProductServiceInterface;
@@ -12,6 +13,7 @@ use App\Contracts\UserServiceInterface;
 use App\Services\AccountService;
 use App\Services\CategoryService;
 use App\Services\CustomerService;
+use App\Services\NotificationService;
 use App\Services\PostService;
 use App\Services\ProductDisplayService;
 use App\Services\ProductService;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(CustomerServiceInterface::class, CustomerService::class);

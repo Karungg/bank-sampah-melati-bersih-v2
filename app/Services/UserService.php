@@ -4,46 +4,30 @@ namespace App\Services;
 
 use App\Contracts\UserServiceInterface;
 use App\Models\User;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class UserService implements UserServiceInterface
 {
-    public function sendNotification(
-        string $title,
-        ?string $body,
-        string $icon,
-        string $type,
-        ?User $user = null,
-        ?bool $recipient = null
-    ): void {
-        $notification = Notification::make()
-            ->title($title)
-            ->body($body)
-            ->icon($icon);
+    public function updateProfile(User $user)
+    {
+        $user = auth()->user();
 
-        if ($type == 'success') {
-            $notification->success();
-        } elseif ($type == 'danger') {
-            $notification->danger();
+        if ($user->avatar_url && ($user->avatar_url != $user->avatar_url)) {
+            Storage::delete($user->avatar_url);
         }
-
-        if ($user) {
-            $route = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
-                ? 'filament.admin.users.resources.admin-users.index'
-                : 'filament.admin.users.resources.management-users.index';
-
-            $notification->actions([
-                Action::make('Lihat')
-                    ->url(route($route, ['tableSearch' => $user->name]))
-            ]);
-        }
-
-        $recipient = $recipient ? User::role('admin')->get() : auth()->user();
-        $notification->sendToDatabase($recipient);
     }
 
-    public function getTitleBody(User $user): array
+    public function deleteProfile(User $user)
+    {
+        if ($user->avatar_url) {
+            Storage::delete($user->avatar_url);
+        }
+    }
+
+    public function getTextCreateNotification(User $user): array
     {
         $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
 
@@ -53,9 +37,62 @@ class UserService implements UserServiceInterface
 
         $body = auth()->user()->name . ' menambahkan ' . ($isAdminPage ? 'admin' : 'pengurus') . ' baru ' . $user->name;
 
+        $route = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+            ? 'filament.admin.users.resources.admin-users.index'
+            : 'filament.admin.users.resources.management-users.index';
+
         return [
             'title' => $title,
-            'body' => $body
+            'body' => $body,
+            'route' => $route
+        ];
+    }
+
+    public function getTextUpdateNotification(User $user): array
+    {
+        $authUser = auth()->user();
+
+        if ($user->id === $authUser->id) {
+            $title = 'Profil berhasil diubah';
+            $body = 'Anda baru saja mengubah profil';
+        } else {
+            $title = 'Profil berhasil diubah';
+            if ($user->hasRole('admin')) {
+                $body = 'Admin ' . $authUser->name . ' merubah profil admin ' . $user->name;
+            } elseif ($user->hasRole('management')) {
+                $body = $authUser->name . ' merubah profil pengurus ' . $user->name;
+            }
+        }
+
+        $route = (url()->livewire_current() == 'filament.admin.pages.my-profile') && auth()->user()->hasRole('admin')
+            ? 'filament.admin.users.resources.admin-users.index'
+            : 'filament.admin.users.resources.management-users.index';
+
+        return [
+            'title' => $title,
+            'body' => $body,
+            'route' => $route
+        ];
+    }
+
+    public function getTextDeleteNotification(User $user): array
+    {
+        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
+
+        $title = $isAdminPage
+            ? 'Admin berhasil dihapus'
+            : 'Pengurus berhasil dihapus';
+
+        $body = auth()->user()->name . ' menghapus ' . ($isAdminPage ? 'admin ' : 'pengurus ') . $user->name;
+
+        $route = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index'
+            ? 'filament.admin.users.resources.admin-users.index'
+            : 'filament.admin.users.resources.management-users.index';
+
+        return [
+            'title' => $title,
+            'body' => $body,
+            'route' => $route
         ];
     }
 }

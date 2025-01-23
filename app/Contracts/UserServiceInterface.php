@@ -3,17 +3,17 @@
 namespace App\Contracts;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 interface UserServiceInterface
 {
-    public function sendNotification(
-        string $title,
-        ?string $body,
-        string $icon,
-        string $type,
-        ?User $user = null,
-        ?bool $recipient = null
-    ): void;
+    public function updateProfile(User $user);
 
-    public function getTitleBody(User $user): array;
+    public function deleteProfile(User $user);
+
+    public function getTextCreateNotification(User $user): array;
+
+    public function getTextUpdateNotification(User $user): array;
+
+    public function getTextDeleteNotification(User $user): array;
 }

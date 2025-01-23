@@ -2,28 +2,32 @@
 
 namespace App\Observers;
 
+use App\Contracts\NotificationServiceInterface;
 use App\Contracts\UserServiceInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class UserObserver
 {
-    public function __construct(protected UserServiceInterface $userService) {}
+    public function __construct(
+        protected UserServiceInterface $userService,
+        protected NotificationServiceInterface $notificationService
+    ) {}
 
     /**
      * Handle the User "created" event.
      */
     public function created(User $user): void
     {
-        $result = $this->userService->getTitleBody($user);
+        $result = $this->userService->getTextCreateNotification($user);
 
-        $this->userService->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             $result['title'],
             $result['body'],
-            "heroicon-o-check-circle",
-            "success",
             $user,
-            true
+            $result['route'],
+            'name',
+            'admin'
         );
     }
 
@@ -32,35 +36,17 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        $authUser = auth()->user();
-        $recipient = null;
+        $result = $this->userService->getTextUpdateNotification($user);
 
-        if ($user->id === $authUser->id) {
-            $title = 'Profil berhasil diubah';
-            $body = 'Anda baru saja mengubah profil';
-        } else {
-            $title = 'Profil berhasil diubah';
-            if ($user->hasRole('admin')) {
-                $body = 'Admin ' . $authUser->name . ' merubah profil admin ' . $user->name;
-                $recipient = true;
-            } elseif ($user->hasRole('management')) {
-                $body = $authUser->name . ' merubah profil pengurus ' . $user->name;
-                $recipient = true;
-            }
-        }
+        $this->userService->updateProfile($user);
 
-        $oldProfile = $authUser->avatar_url;
-        if ($oldProfile && $user->avatar_url !== $oldProfile) {
-            Storage::delete($oldProfile);
-        }
-
-        $this->userService->sendNotification(
-            $title,
-            $body,
-            "heroicon-o-check-circle",
-            "success",
-            null,
-            $recipient
+        $this->notificationService->sendUpdateNotification(
+            $result['title'],
+            $result['body'],
+            $user,
+            $result['route'],
+            'name',
+            'updatedUser'
         );
     }
 
@@ -69,25 +55,15 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
-        $isAdminPage = url()->livewire_current() == 'filament.admin.users.resources.admin-users.index';
+        $result = $this->userService->getTextDeleteNotification($user);
 
-        $title = $isAdminPage
-            ? 'Admin berhasil dihapus'
-            : 'Pengurus berhasil dihapus';
+        $this->userService->deleteProfile($user);
 
-        $body = auth()->user()->name . ' menghapus ' . ($isAdminPage ? 'admin ' : 'pengurus ') . $user->name;
-
-        if ($user->avatar_url) {
-            Storage::delete($user->avatar_url);
-        }
-
-        $this->userService->sendNotification(
-            $title,
-            $body,
-            "heroicon-o-exclamation-triangle",
-            "danger",
-            null,
-            true
+        $this->notificationService->sendDeleteNotification(
+            $result['title'],
+            $result['body'],
+            $result['route'],
+            'admin'
         );
     }
 
