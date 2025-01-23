@@ -68,11 +68,6 @@ class NotificationService implements NotificationServiceInterface
             $recipient = User::role('admin')->get();
         } elseif ($recipient == 'adminManagement') {
             $recipient = User::withoutRole('customer')->get();
-        } elseif ($recipient == 'updatedUser') {
-            $recipient = User::query()
-                ->role('admin')
-                ->orWhere('id', $model->id)
-                ->get();
         }
 
         $notification->sendToDatabase($recipient);

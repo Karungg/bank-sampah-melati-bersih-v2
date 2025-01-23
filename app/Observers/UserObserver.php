@@ -46,7 +46,7 @@ class UserObserver
             $user,
             $result['route'],
             'name',
-            'updatedUser'
+            'admin'
         );
     }
 
