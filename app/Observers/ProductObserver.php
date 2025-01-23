@@ -2,24 +2,28 @@
 
 namespace App\Observers;
 
+use App\Contracts\NotificationServiceInterface;
 use App\Contracts\ProductServiceInterface;
 use App\Models\Product;
 
 class ProductObserver
 {
-    public function __construct(protected ProductServiceInterface $productService) {}
+    public function __construct(
+        protected NotificationServiceInterface $notificationService
+    ) {}
 
     /**
      * Handle the Product "created" event.
      */
     public function created(Product $product): void
     {
-        $this->productService->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             'Kategori Sampah berhasil ditambahkan.',
             auth()->user()->name . ' menambahkan Kategori Sampah baru.',
-            'heroicon-o-check-circle',
-            'success',
-            $product
+            $product,
+            'filament.admin.resources.products.index',
+            'title',
+            'admin'
         );
     }
 
@@ -29,12 +33,13 @@ class ProductObserver
     public function updated(Product $product): void
     {
         if (!$product->wasChanged('deleted_at')) {
-            $this->productService->sendNotification(
-                'Kategori Sampah berhasil diubah.',
-                auth()->user()->name . ' mengubah Kategori Sampah ' . $product->title . '.',
-                'heroicon-o-exclamation-circle',
-                'warning',
-                $product
+            $this->notificationService->sendUpdateNotification(
+                'Kategori sampah berhasil diupdate.',
+                auth()->user()->name . ' mengupdate kategori Sampah ' . $product->title . '.',
+                $product,
+                'filament.admin.resources.products.index',
+                'title',
+                'admin'
             );
         }
     }
@@ -45,11 +50,11 @@ class ProductObserver
     public function deleted(Product $product): void
     {
         if ($product->exists) {
-            $this->productService->sendNotification(
-                'Kategori Sampah berhasil dihapus.',
-                auth()->user()->name . ' menghapus Kategori Sampah ' . $product->title . '.',
-                'heroicon-o-check-circle',
-                'danger'
+            $this->notificationService->sendDeleteNotification(
+                'Kategori sampah berhasil dihapus.',
+                auth()->user()->name . ' menghapus kategori Sampah ' . $product->title . '.',
+                'filament.admin.resources.products.index',
+                'admin'
             );
         }
     }
@@ -59,12 +64,13 @@ class ProductObserver
      */
     public function restored(Product $product): void
     {
-        $this->productService->sendNotification(
-            'Kategori Sampah berhasil dipulihkan.',
-            auth()->user()->name . ' memulihkan Kategori Sampah ' . $product->title . '.',
-            'heroicon-o-check',
-            'success',
-            $product
+        $this->notificationService->sendSuccessNotification(
+            'Kategori sampah berhasil dipulihkan.',
+            auth()->user()->name . ' memulihkan kategori Sampah ' . $product->title . '.',
+            $product,
+            'filament.admin.resources.products.index',
+            'title',
+            'admin'
         );
     }
 
@@ -73,11 +79,11 @@ class ProductObserver
      */
     public function forceDeleted(Product $product): void
     {
-        $this->productService->sendNotification(
-            'Kategori Sampah berhasil dihapus secara permanen.',
-            auth()->user()->name . ' menghapus permanen Kategori Sampah ' . $product->title . '.',
-            'heroicon-o-exclamation-triangle',
-            'danger'
+        $this->notificationService->sendDeleteNotification(
+            'Kategori sampah berhasil dihapus secara permanen.',
+            auth()->user()->name . ' menghapus permanen kategori Sampah ' . $product->title . '.',
+            'filament.admin.resources.products.index',
+            'admin'
         );
     }
 }

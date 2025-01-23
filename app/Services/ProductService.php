@@ -32,35 +32,4 @@ class ProductService implements ProductServiceInterface
 
         return $prefix . $date . $sequence;
     }
-
-    public function sendNotification(
-        string $title,
-        string $body,
-        string $icon,
-        string $type,
-        ?Product $product = null
-    ): void {
-        $recipient = User::role('admin')->get();
-        $notification = Notification::make()
-            ->title($title)
-            ->icon($icon)
-            ->body($body);
-
-        if ($type === 'success') {
-            $notification->success();
-        } elseif ($type === 'warning') {
-            $notification->warning();
-        } elseif ($type === 'danger') {
-            $notification->danger();
-        }
-
-        if ($product) {
-            $notification->actions([
-                Action::make('Lihat')
-                    ->url(route('filament.admin.resources.products.view', $product->id)),
-            ]);
-        }
-
-        $notification->sendToDatabase($recipient);
-    }
 }
