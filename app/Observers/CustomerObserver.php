@@ -3,25 +3,29 @@
 namespace App\Observers;
 
 use App\Contracts\CustomerServiceInterface;
+use App\Contracts\NotificationServiceInterface;
 use App\Models\Customer;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerObserver
 {
-    public function __construct(protected CustomerServiceInterface $customerService) {}
+    public function __construct(
+        protected CustomerServiceInterface $customerService,
+        protected NotificationServiceInterface $notificationService
+    ) {}
 
     /**
      * Handle the Customer "created" event.
      */
     public function created(Customer $customer): void
     {
-        $this->customerService->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             'Nasabah berhasil ditambahkan',
-            auth()->user()->name . ' menambahkan nasabah ' . $customer->full_name,
-            'heroicon-o-check-circle',
-            'success',
-            $customer
+            auth()->user()->name . ' menambahkan nasabah ' . $customer->full_name . '.',
+            $customer,
+            'filament.admin.users.resources.customers.index',
+            'full_name',
+            'adminManagement'
         );
     }
 
@@ -30,24 +34,15 @@ class CustomerObserver
      */
     public function updated(Customer $customer): void
     {
-        $oldCustomerData = $this->customerService->getOldById($customer->id);
+        $this->customerService->updateImages($customer);
 
-        $oldProfile = $oldCustomerData->avatar_url;
-        if ($oldProfile && $customer->avatar_url !== $oldProfile) {
-            Storage::delete($oldProfile);
-        }
-
-        $oldIdentity = $oldCustomerData->identity_card_photo;
-        if ($oldIdentity && $customer->identity_card_photo !== $oldIdentity) {
-            Storage::delete($oldIdentity);
-        }
-
-        $this->customerService->sendNotification(
-            'Nasabah berhasil diubah',
-            auth()->user()->name . ' mengubah nasabah ' . $customer->full_name,
-            'heroicon-o-check-circle',
-            'warning',
-            $customer
+        $this->notificationService->sendUpdateNotification(
+            'Nasabah berhasil diupdate',
+            auth()->user()->name . ' mengupdate nasabah ' . $customer->full_name . '.',
+            $customer,
+            'filament.admin.users.resources.customers.index',
+            'full_name',
+            'adminManagement'
         );
     }
 
@@ -56,22 +51,13 @@ class CustomerObserver
      */
     public function deleted(Customer $customer): void
     {
-        $oldCustomerData = $this->customerService->getOldById($customer->id);
+        $this->customerService->deleteImages($customer);
 
-        if ($oldCustomerData->avatar_url) {
-            Storage::delete($oldCustomerData->avatar_url);
-        }
-
-        if ($oldCustomerData->identity_card_photo) {
-            Storage::delete($oldCustomerData->identity_card_photo);
-        }
-
-        $this->customerService->sendNotification(
+        $this->notificationService->sendDeleteNotification(
             'Nasabah berhasil dihapus',
-            auth()->user()->name . ' menghapus nasabah ' . $customer->full_name,
-            'heroicon-o-exclamation-triangle',
-            'danger',
-            $customer
+            auth()->user()->name . ' menghapus nasabah ' . $customer->full_name . '.',
+            $customer,
+            'adminManagement'
         );
     }
 

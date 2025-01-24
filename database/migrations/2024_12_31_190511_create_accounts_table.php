@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('debit', 12, 2)->default(0);
             $table->decimal('credit', 12, 2)->default(0);
             $table->decimal('balance', 12, 2)->default(0);
-            $table->foreignUuid('customer_id')->constrained();
+            $table->foreignUuid('customer_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

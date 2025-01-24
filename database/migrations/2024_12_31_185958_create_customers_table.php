@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('city', 100);
             $table->string('postal_code', 5);
             $table->string('identity_card_photo', 255)->nullable();
-            $table->foreignUuid('user_id')->constrained();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

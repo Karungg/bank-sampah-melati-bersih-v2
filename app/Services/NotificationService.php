@@ -19,7 +19,7 @@ class NotificationService implements NotificationServiceInterface
         Model $model,
         string $route,
         string $tableSearch,
-        $recipient = null
+        $recipient
     ) {
         $notification = Notification::make()
             ->title($title)

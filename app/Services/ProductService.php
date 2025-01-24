@@ -3,10 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\ProductServiceInterface;
-use App\Models\Product;
-use App\Models\User;
-use Filament\Notifications\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 
 class ProductService implements ProductServiceInterface
