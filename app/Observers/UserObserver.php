@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Contracts\NotificationServiceInterface;
 use App\Contracts\UserServiceInterface;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 
 class UserObserver
 {
@@ -65,21 +64,5 @@ class UserObserver
             $result['route'],
             'admin'
         );
-    }
-
-    /**
-     * Handle the User "restored" event.
-     */
-    public function restored(User $user): void
-    {
-        //
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     */
-    public function forceDeleted(User $user): void
-    {
-        //
     }
 }

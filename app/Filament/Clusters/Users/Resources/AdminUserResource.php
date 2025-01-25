@@ -4,7 +4,6 @@ namespace App\Filament\Clusters\Users\Resources;
 
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\AdminUserResource\Pages;
-use App\Filament\Clusters\Users\Resources\AdminUserResource\RelationManagers;
 use App\Filament\Exports\UserExporter;
 use App\Models\User;
 use Filament\Forms;
@@ -15,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AdminUserResource extends Resource
 {
