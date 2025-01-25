@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Contracts\TransactionServiceInterface as Service;
 use App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
@@ -38,7 +39,8 @@ class TransactionResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('transaction_code')
                             ->readOnly()
-                            ->label('Kode Transaksi'),
+                            ->label('Kode Transaksi')
+                            ->hiddenOn('create'),
                         Grid::make([
                             'default' => 1,
                             'sm' => 2
@@ -46,29 +48,38 @@ class TransactionResource extends Resource
                             Forms\Components\TextInput::make('total_quantity')
                                 ->suffix(' Pcs')
                                 ->readOnly()
-                                ->label('Jumlah'),
+                                ->label('Jumlah')
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('total_weight')
                                 ->suffix(' Kg')
                                 ->readOnly()
-                                ->label('Berat'),
+                                ->label('Berat')
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('total_liter')
                                 ->suffix(' Liter')
                                 ->readOnly()
-                                ->label('Liter'),
+                                ->label('Liter')
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('total_amount')
                                 ->prefix('Rp.')
                                 ->readOnly()
-                                ->label('Total'),
+                                ->label('Total')
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('location')
                                 ->maxLength(255)
                                 ->label('Lokasi Penimbangan')
-                                ->readOnly(),
+                                ->readOnly()
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('user_id')
                                 ->readOnly()
-                                ->label('Penimbang'),
+                                ->label('Penimbang')
+                                ->hiddenOn('create'),
                             Forms\Components\Select::make('customer_id')
-                                ->relationship('customer', 'full_name')
-                                ->label('Nasabah'),
+                                ->options(
+                                    DB::table('customers')->pluck('full_name', 'id')
+                                )
+                                ->label('Nasabah')
+                                ->searchable(),
                         ])
                     ]),
                 Section::make()
@@ -83,30 +94,40 @@ class TransactionResource extends Resource
                                         DB::table('products')->pluck('title', 'id')
                                     )
                                     ->searchable()
+                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->live(onBlur: true),
                                 Forms\Components\TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
                                     ->label('Jumlah')
                                     ->suffix(' Pcs')
-                                    ->hidden(function (Get $get): bool {
-                                        $unit = DB::table('products')
-                                            ->where('id', $get('product_id'))
-                                            ->value('unit');
-
-                                        return $unit != 'pcs';
+                                    ->hidden(function (Get $get, Service $service): bool {
+                                        return
+                                            $get('product_id') === null
+                                            || $service->unitCheck('pcs', $get('product_id'));
                                     }),
                                 Forms\Components\TextInput::make('weight')
                                     ->required()
                                     ->numeric()
                                     ->label('Berat')
-                                    ->suffix(' Kg'),
+                                    ->suffix(' Kg')
+                                    ->hidden(function (Get $get, Service $service): bool {
+                                        return
+                                            $get('product_id') === null
+                                            || $service->unitCheck('kg', $get('product_id'));
+                                    }),
                                 Forms\Components\TextInput::make('liter')
                                     ->required()
                                     ->numeric()
                                     ->label('Liter')
-                                    ->suffix(' Liter'),
+                                    ->suffix(' Liter')
+                                    ->hidden(function (Get $get, Service $service): bool {
+                                        return
+                                            $get('product_id') === null
+                                            || $service->unitCheck('liter', $get('product_id'));
+                                    }),
                             ])->reorderable(false)
+                            ->minItems(1)
                             ->columns(2)
                     ])
             ]);

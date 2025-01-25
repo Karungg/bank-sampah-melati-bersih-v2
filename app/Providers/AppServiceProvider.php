@@ -9,6 +9,7 @@ use App\Contracts\NotificationServiceInterface;
 use App\Contracts\PostServiceInterface;
 use App\Contracts\ProductDisplayServiceInterface;
 use App\Contracts\ProductServiceInterface;
+use App\Contracts\TransactionServiceInterface;
 use App\Contracts\UserServiceInterface;
 use App\Services\AccountService;
 use App\Services\CategoryService;
@@ -17,6 +18,7 @@ use App\Services\NotificationService;
 use App\Services\PostService;
 use App\Services\ProductDisplayService;
 use App\Services\ProductService;
+use App\Services\TransactionService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CategoryServiceInterface::class, CategoryService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
         $this->app->bind(ProductDisplayServiceInterface::class, ProductDisplayService::class);
+        $this->app->bind(TransactionServiceInterface::class, TransactionService::class);
     }
 
     /**
