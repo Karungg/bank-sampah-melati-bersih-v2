@@ -118,21 +118,25 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable()
-                    ->label('Judul'),
+                    ->label('Judul')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->label('Slug')
+                    ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('active')
                     ->boolean()
                     ->label('Status')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('link')
-                    ->searchable(),
+                    ->searchable()
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->label('Pembuat')
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
