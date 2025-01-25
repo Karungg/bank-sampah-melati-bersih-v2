@@ -17,7 +17,13 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-scale';
+
+    protected static ?int $navigationSort = 4;
+
+    protected static ?string $navigationGroup = 'Transaksi';
+
+    protected static ?string $modelLabel = 'Penimbangan';
 
     public static function form(Form $form): Form
     {
@@ -53,37 +59,49 @@ class TransactionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
+                    ->label('No')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('transaction_code')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Kode Transaksi'),
                 Tables\Columns\TextColumn::make('total_quantity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Jumlah'),
                 Tables\Columns\TextColumn::make('total_weight')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Berat'),
                 Tables\Columns\TextColumn::make('total_liter')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Liter'),
                 Tables\Columns\TextColumn::make('total_amount')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
+                    ->sortable()
+                    ->label('Total'),
                 Tables\Columns\TextColumn::make('location')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Lokasi')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('user.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Penimbang')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('customer.id')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nasabah')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Diupdate Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
