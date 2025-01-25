@@ -2,24 +2,27 @@
 
 namespace App\Observers;
 
-use App\Contracts\PostServiceInterface;
+use App\Contracts\NotificationServiceInterface;
 use App\Models\Post;
 
 class PostObserver
 {
-    public function __construct(protected PostServiceInterface $postService) {}
+    public function __construct(
+        protected NotificationServiceInterface $notificationService
+    ) {}
 
     /**
      * Handle the Post "created" event.
      */
     public function created(Post $post): void
     {
-        $this->postService->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             'Kegiatan berhasil ditambahkan.',
             auth()->user()->name . ' menambahkan kegiatan baru.',
-            'heroicon-o-check-circle',
-            'success',
-            $post
+            $post,
+            'filament.admin.posts.resources.posts.index',
+            'title',
+            'admin'
         );
     }
 
@@ -28,12 +31,13 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
-        $this->postService->sendNotification(
+        $this->notificationService->sendUpdateNotification(
             'Kegiatan berhasil diupdate.',
-            auth()->user()->name . ' mengubah kegiatan ' . $post->title,
-            'heroicon-o-check-circle',
-            'success',
-            $post
+            auth()->user()->name . ' mengupdate kegiatan ' . $post->title . '.',
+            $post,
+            'filament.admin.posts.resources.posts.index',
+            'title',
+            'admin'
         );
     }
 
@@ -42,28 +46,11 @@ class PostObserver
      */
     public function deleted(Post $post): void
     {
-        $this->postService->sendNotification(
+        $this->notificationService->sendDeleteNotification(
             'Kegiatan berhasil dihapus.',
-            auth()->user()->name . ' menghapus kegiatan ' . $post->title,
-            'heroicon-o-check-circle',
-            'success',
-            $post
+            auth()->user()->name . ' menghapus kegiatan ' . $post->title . '.',
+            'filament.admin.posts.resources.posts.index',
+            'admin'
         );
-    }
-
-    /**
-     * Handle the Post "restored" event.
-     */
-    public function restored(Post $post): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Post "force deleted" event.
-     */
-    public function forceDeleted(Post $post): void
-    {
-        //
     }
 }
