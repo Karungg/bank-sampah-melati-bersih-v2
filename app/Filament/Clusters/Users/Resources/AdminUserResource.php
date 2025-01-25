@@ -93,10 +93,12 @@ class AdminUserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->label('Nama'),
+                    ->label('Nama')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20),
                 Tables\Columns\ImageColumn::make('avatar_url')
                     ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
                     ->circular()

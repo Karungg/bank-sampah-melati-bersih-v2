@@ -4,7 +4,6 @@ namespace App\Filament\Clusters\Users\Resources;
 
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\ManagementUserResource\Pages;
-use App\Filament\Clusters\Users\Resources\ManagementUserResource\RelationManagers;
 use App\Filament\Exports\ManagementExporter;
 use App\Models\User;
 use Filament\Forms;
@@ -15,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ManagementUserResource extends Resource
 {
@@ -93,10 +91,12 @@ class ManagementUserResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->label('Nama'),
+                    ->label('Nama')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20),
                 Tables\Columns\ImageColumn::make('avatar_url')
                     ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
                     ->circular()
