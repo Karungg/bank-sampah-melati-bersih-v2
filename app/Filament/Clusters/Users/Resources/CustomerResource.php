@@ -246,11 +246,13 @@ class CustomerResource extends Resource
                 Tables\Columns\TextColumn::make('full_name')
                     ->searchable()
                     ->sortable()
-                    ->label('Nama Lengkap'),
+                    ->label('Nama Lengkap')
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('place_of_birth')
                     ->searchable()
                     ->sortable()
                     ->label('Tempat Lahir')
+                    ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('date_of_birth')
                     ->date()
@@ -275,17 +277,20 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->label('Desa')
+                    ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('district')
                     ->searchable()
                     ->sortable()
                     ->label('Kecamatan')
+                    ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('city')
                     ->searchable()
                     ->sortable()
                     ->label('Kota')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('postal_code')
                     ->searchable()
                     ->sortable()
@@ -295,7 +300,7 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->label('Alamat')
                     ->toggleable()
-                    ->limit(50),
+                    ->limit(20),
                 Tables\Columns\ImageColumn::make('identity_card_photo')
                     ->searchable()
                     ->label('Foto')
