@@ -66,7 +66,8 @@ class ProductDisplayResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->label('Nama Hasil Olahan')
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(20),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable()
                     ->label('Deskripsi')

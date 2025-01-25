@@ -2,24 +2,27 @@
 
 namespace App\Observers;
 
-use App\Contracts\ProductDisplayServiceInterface;
+use App\Contracts\NotificationServiceInterface;
 use App\Models\ProductDisplay;
 
 class ProductDisplayObserver
 {
-    public function __construct(protected ProductDisplayServiceInterface $ProductDisplayService) {}
+    public function __construct(
+        protected NotificationServiceInterface $notificationService
+    ) {}
 
     /**
      * Handle the ProductDisplay "created" event.
      */
     public function created(ProductDisplay $ProductDisplay): void
     {
-        $this->ProductDisplayService->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             'Hasil Olahan berhasil ditambahkan.',
             auth()->user()->name . ' menambahkan hasil olahan baru.',
-            'heroicon-o-check-circle',
-            'success',
-            $ProductDisplay
+            $ProductDisplay,
+            'filament.admin.resources.product-displays.index',
+            'title',
+            'admin'
         );
     }
 
@@ -28,12 +31,13 @@ class ProductDisplayObserver
      */
     public function updated(ProductDisplay $ProductDisplay): void
     {
-        $this->ProductDisplayService->sendNotification(
+        $this->notificationService->sendUpdateNotification(
             'Hasil Olahan berhasil diupdate.',
             auth()->user()->name . ' mengubah hasil olahan ' . $ProductDisplay->title,
-            'heroicon-o-check-circle',
-            'success',
-            $ProductDisplay
+            $ProductDisplay,
+            'filament.admin.resources.product-displays.index',
+            'title',
+            'admin'
         );
     }
 
@@ -42,28 +46,11 @@ class ProductDisplayObserver
      */
     public function deleted(ProductDisplay $ProductDisplay): void
     {
-        $this->ProductDisplayService->sendNotification(
+        $this->notificationService->sendDeleteNotification(
             'Hasil Olahan berhasil dihapus.',
-            auth()->user()->name . ' menghapus Hasil Olahan ' . $ProductDisplay->title,
-            'heroicon-o-exclamation-triangle',
-            'danger',
-            null
+            auth()->user()->name . ' menghapus hasil olahan ' . $ProductDisplay->title,
+            'filament.admin.resources.product-displays.index',
+            'admin'
         );
-    }
-
-    /**
-     * Handle the ProductDisplay "restored" event.
-     */
-    public function restored(ProductDisplay $productDisplay): void
-    {
-        //
-    }
-
-    /**
-     * Handle the ProductDisplay "force deleted" event.
-     */
-    public function forceDeleted(ProductDisplay $productDisplay): void
-    {
-        //
     }
 }
