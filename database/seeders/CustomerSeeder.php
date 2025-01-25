@@ -6,7 +6,6 @@ use App\Contracts\AccountServiceInterface;
 use App\Models\Account;
 use App\Models\Customer;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use League\Csv\Reader;
 use Illuminate\Support\Str;

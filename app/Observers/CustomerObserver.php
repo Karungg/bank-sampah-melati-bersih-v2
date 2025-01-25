@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Contracts\CustomerServiceInterface;
 use App\Contracts\NotificationServiceInterface;
 use App\Models\Customer;
-use Illuminate\Support\Facades\Storage;
 
 class CustomerObserver
 {
@@ -59,21 +58,5 @@ class CustomerObserver
             $customer,
             'adminManagement'
         );
-    }
-
-    /**
-     * Handle the Customer "restored" event.
-     */
-    public function restored(Customer $customer): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Customer "force deleted" event.
-     */
-    public function forceDeleted(Customer $customer): void
-    {
-        //
     }
 }

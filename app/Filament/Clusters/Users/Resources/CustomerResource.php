@@ -4,7 +4,6 @@ namespace App\Filament\Clusters\Users\Resources;
 
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
-use App\Filament\Clusters\Users\Resources\CustomerResource\RelationManagers;
 use App\Filament\Exports\CustomerExporter;
 use App\Models\Customer;
 use Closure;
@@ -16,8 +15,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 
 class CustomerResource extends Resource
