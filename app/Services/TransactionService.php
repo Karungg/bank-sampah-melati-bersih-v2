@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\TransactionServiceInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class TransactionService implements TransactionServiceInterface
 {
@@ -52,9 +53,7 @@ class TransactionService implements TransactionServiceInterface
                 $totals['weight'] += $detail['weight'];
                 $totals['liter'] += $detail['liter'];
 
-                $product = DB::table('products')
-                    ->where('id', $detail['product_id'])
-                    ->first(['unit', 'price']);
+                $product = $this->getProductById($detail['product_id']);
 
                 if ($product->unit == 'pcs') {
                     $totals['subtotal'] += $product->price * $detail['quantity'];
@@ -78,5 +77,45 @@ class TransactionService implements TransactionServiceInterface
         } catch (Exception $e) {
             return $data;
         }
+    }
+
+    public function saveTransactionDetails(string $transactionId, array $products)
+    {
+        try {
+            foreach ($products as $product) {
+                $getById = $this->getProductById($product['product_id']);
+
+                if ($getById->unit == 'pcs') {
+                    $subtotal = $getById->price * $product['quantity'];
+                } elseif ($getById->unit == 'kg') {
+                    $subtotal = $getById->price * $product['weight'];
+                } elseif ($getById->unit == 'liter') {
+                    $subtotal = $getById->price * $product['liter'];
+                }
+
+                DB::table('transaction_details')
+                    ->insert([
+                        'id' => Str::uuid(),
+                        'quantity' => $product['quantity'],
+                        'weight' => $product['weight'],
+                        'liter' => $product['liter'],
+                        'current_price' => $getById->price,
+                        'subtotal' => $subtotal,
+                        'transaction_id' => $transactionId,
+                        'product_id' => $product['product_id'],
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);
+            }
+        } catch (Exception $e) {
+            throw new Exception('Terjadi masalah saat memproses transaksi. Silahkan coba lagi nanti');
+        }
+    }
+
+    public function getProductById(string $id)
+    {
+        return DB::table('products')
+            ->where('id', $id)
+            ->first(['unit', 'price']);
     }
 }
