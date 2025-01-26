@@ -71,7 +71,6 @@ class TransactionResource extends Resource
                                 ->readOnly()
                                 ->hiddenOn('create'),
                             Forms\Components\TextInput::make('user_id')
-                                ->readOnly()
                                 ->label('Penimbang')
                                 ->hiddenOn('create'),
                             Forms\Components\Select::make('customer_id')

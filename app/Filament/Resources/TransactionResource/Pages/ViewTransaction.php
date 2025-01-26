@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\DB;
 
 class ViewTransaction extends ViewRecord
 {
@@ -15,5 +16,14 @@ class ViewTransaction extends ViewRecord
         return [
             Actions\EditAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['user_id'] = DB::table('users')
+            ->where('id', $data['user_id'])
+            ->value('name');
+
+        return $data;
     }
 }

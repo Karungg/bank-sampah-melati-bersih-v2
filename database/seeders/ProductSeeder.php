@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
             $timestamp = now()->addSeconds($index + 1);
             return [
                 'id' => Str::uuid(),
-                'product_code' => $product[0] . date('dmY') . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
+                'product_code' => $product[0] . date('Ymd') . str_pad($index + 1, 3, '0', STR_PAD_LEFT),
                 'title' => $product[1],
                 'description' => $product[2],
                 'unit' => $product[3],

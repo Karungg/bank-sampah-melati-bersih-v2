@@ -11,7 +11,7 @@ class ProductService implements ProductServiceInterface
     {
         $prefix = strtoupper(substr($productName, 0, 2));
 
-        $date = now()->format('dmY');
+        $date = now()->format('Ymd');
 
         $latestProduct = DB::table('products')
             ->whereDate('created_at', now())
