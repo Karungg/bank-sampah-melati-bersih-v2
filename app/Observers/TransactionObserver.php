@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Contracts\NotificationServiceInterface;
 use App\Contracts\TransactionServiceInterface;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\DB;
 
 class TransactionObserver
 {
@@ -26,14 +25,6 @@ class TransactionObserver
             'transaction_code',
             'adminManagement'
         );
-    }
-
-    /**
-     * Handle the Transaction "updated" event.
-     */
-    public function updated(Transaction $transaction): void
-    {
-        //
     }
 
     /**
