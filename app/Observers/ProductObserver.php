@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Contracts\NotificationServiceInterface;
-use App\Contracts\ProductServiceInterface;
 use App\Models\Product;
 
 class ProductObserver
