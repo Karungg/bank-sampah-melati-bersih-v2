@@ -3,44 +3,52 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AccountResource\Pages;
-use App\Filament\Resources\AccountResource\RelationManagers;
 use App\Models\Account;
+use App\Models\Customer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AccountResource extends Resource
 {
     protected static ?string $model = Account::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationGroup = 'Master';
+
+    protected static ?string $modelLabel = 'Rekening';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('account_number')
+                Forms\Components\Select::make('customer_id')
+                    ->options(
+                        Customer::doesntHave('account')->pluck('full_name', 'id')
+                    )
                     ->required()
-                    ->maxLength(10),
+                    ->label('Nasabah')
+                    ->searchable(),
                 Forms\Components\TextInput::make('debit')
                     ->required()
                     ->numeric()
-                    ->default(0.00),
+                    ->default(0.00)
+                    ->label('Debet'),
                 Forms\Components\TextInput::make('credit')
                     ->required()
                     ->numeric()
-                    ->default(0.00),
+                    ->default(0.00)
+                    ->label('Kredit'),
                 Forms\Components\TextInput::make('balance')
                     ->required()
                     ->numeric()
-                    ->default(0.00),
-                Forms\Components\Select::make('customer_id')
-                    ->relationship('customer', 'id')
-                    ->required(),
+                    ->default(0.00)
+                    ->label('Saldo'),
             ]);
     }
 
@@ -49,28 +57,39 @@ class AccountResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
+                    ->label('No')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('account_number')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nomor Rekening'),
+                Tables\Columns\TextColumn::make('customer.full_name')
+                    ->searchable()
+                    ->label('Nasabah')
+                    ->limit(30),
                 Tables\Columns\TextColumn::make('debit')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Debet')
+                    ->prefix('Rp.'),
                 Tables\Columns\TextColumn::make('credit')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Kredit')
+                    ->prefix('Rp.'),
                 Tables\Columns\TextColumn::make('balance')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('customer.id')
-                    ->searchable(),
+                    ->sortable()
+                    ->label('Saldo')
+                    ->prefix('Rp.'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Diupdate Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

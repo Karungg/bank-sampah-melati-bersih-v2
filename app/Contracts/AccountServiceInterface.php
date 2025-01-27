@@ -4,5 +4,5 @@ namespace App\Contracts;
 
 interface AccountServiceInterface
 {
-    public function generateAccountNumber(string $postalCode): string;
+    public function generateAccountNumber(string $customerId): string;
 }
