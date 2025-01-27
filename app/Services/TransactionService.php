@@ -75,7 +75,7 @@ class TransactionService implements TransactionServiceInterface
                 'user_id' => auth()->id(),
             ]);
         } catch (Exception $e) {
-            return $data;
+            throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti');
         }
     }
 
@@ -93,6 +93,7 @@ class TransactionService implements TransactionServiceInterface
                     $subtotal = $getById->price * $product['liter'];
                 }
 
+                // Save transaction details
                 DB::table('transaction_details')
                     ->insert([
                         'id' => Str::uuid(),
@@ -107,6 +108,17 @@ class TransactionService implements TransactionServiceInterface
                         'updated_at' => now()
                     ]);
             }
+
+            // Add customer balance
+            $transaction = DB::table('transactions')
+                ->where('id', $transactionId)
+                ->first(['total_amount', 'customer_id']);
+
+            $account = DB::table('accounts')
+                ->where('customer_id', $transaction->customer_id);
+
+            $account->increment('debit', $transaction->total_amount);
+            $account->increment('balance', $transaction->total_amount);
         } catch (Exception $e) {
             throw new Exception('Terjadi masalah saat memproses transaksi. Silahkan coba lagi nanti');
         }

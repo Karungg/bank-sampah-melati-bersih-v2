@@ -85,7 +85,7 @@ class TransactionResource extends Resource
                 Section::make()
                     ->schema([
                         Repeater::make('transactionDetails')
-                            ->label('Detail Transaksi')
+                            ->label('Sampah')
                             ->schema([
                                 Forms\Components\Select::make('product_id')
                                     ->required()
