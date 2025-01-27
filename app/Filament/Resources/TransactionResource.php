@@ -45,6 +45,21 @@ class TransactionResource extends Resource
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
+                            Forms\Components\Select::make('customer_id')
+                                ->options(
+                                    DB::table('customers')->pluck('full_name', 'id')
+                                )
+                                ->label('Nasabah')
+                                ->searchable()
+                                ->disabledOn('edit'),
+                            Forms\Components\TextInput::make('user_id')
+                                ->label('Penimbang')
+                                ->hiddenOn('create'),
+                            Forms\Components\TextInput::make('location')
+                                ->maxLength(255)
+                                ->label('Lokasi Penimbangan')
+                                ->readOnly()
+                                ->hiddenOn('create'),
                             Forms\Components\TextInput::make('total_quantity')
                                 ->suffix(' Pcs')
                                 ->readOnly()
@@ -65,26 +80,12 @@ class TransactionResource extends Resource
                                 ->readOnly()
                                 ->label('Total')
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('location')
-                                ->maxLength(255)
-                                ->label('Lokasi Penimbangan')
-                                ->readOnly()
-                                ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('user_id')
-                                ->label('Penimbang')
-                                ->hiddenOn('create'),
-                            Forms\Components\Select::make('customer_id')
-                                ->options(
-                                    DB::table('customers')->pluck('full_name', 'id')
-                                )
-                                ->label('Nasabah')
-                                ->searchable(),
                         ])
                     ]),
                 Section::make()
                     ->schema([
                         Repeater::make('transactionDetails')
-                            ->label('Sampah')
+                            ->label('Detail Transaksi')
                             ->schema([
                                 Forms\Components\Select::make('product_id')
                                     ->required()
@@ -125,9 +126,22 @@ class TransactionResource extends Resource
                                             $get('product_id') === null
                                             || $service->unitCheck('liter', $get('product_id'));
                                     }),
+                                Forms\Components\TextInput::make('subtotal')
+                                    ->required()
+                                    ->numeric()
+                                    ->label('Subtotal')
+                                    ->prefix('Rp.')
+                                    ->columnSpanFull()
+                                    ->hidden(fn(?string $state): bool => $state == null),
                             ])->reorderable(false)
                             ->minItems(1)
                             ->columns(2)
+                            ->itemLabel(function (array $state, $component) {
+                                $key = array_search($state, $component->getState());
+                                $index = array_search($key, array_keys($component->getState()));
+
+                                return 'Sampah ke-' . $index + 1;
+                            })
                     ])
             ]);
     }
