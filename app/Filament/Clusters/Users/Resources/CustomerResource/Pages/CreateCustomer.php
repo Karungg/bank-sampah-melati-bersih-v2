@@ -5,7 +5,6 @@ namespace App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Clusters\Users\Resources\CustomerResource;
 use App\Models\User;
 use Exception;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
 
