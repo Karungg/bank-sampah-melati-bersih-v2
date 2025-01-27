@@ -38,17 +38,20 @@ class AccountResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0.00)
+                    ->minValue(0)
                     ->label('Debet'),
                 Forms\Components\TextInput::make('credit')
                     ->required()
                     ->numeric()
                     ->default(0.00)
+                    ->minValue(0)
                     ->label('Kredit'),
                 Forms\Components\TextInput::make('balance')
                     ->required()
                     ->numeric()
                     ->default(0.00)
-                    ->label('Saldo'),
+                    ->label('Saldo')
+                    ->minValue(0),
             ]);
     }
 

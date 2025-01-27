@@ -6,6 +6,7 @@ use App\Contracts\ProductServiceInterface;
 use App\Filament\Exports\ProductExporter;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -71,8 +72,15 @@ class ProductResource extends Resource
                                         'unique' => 'Nama Kategori sudah digunakan.'
                                     ]),
                                 Forms\Components\Textarea::make('description')
-                                    ->maxLength(1000)
-                                    ->label('Deskripsi'),
+                                    ->label('Deskripsi')
+                                    ->autosize()
+                                    ->rules([
+                                        fn(): Closure => function (string $attribute, $value, Closure $fail) {
+                                            if ($value >= 1000) {
+                                                $fail('Deskripsi tidak boleh lebih dari 1000 karakter.');
+                                            }
+                                        }
+                                    ]),
                                 Forms\Components\Select::make('unit')
                                     ->required()
                                     ->label('Satuan')
