@@ -24,11 +24,6 @@ class AccountObserver
     }
 
     /**
-     * Handle the Account "updated" event.
-     */
-    public function updated(Account $account): void {}
-
-    /**
      * Handle the Account "deleted" event.
      */
     public function deleted(Account $account): void
