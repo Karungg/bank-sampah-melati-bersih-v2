@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 
 use App\Filament\Clusters\Users\Resources\CustomerResource;
 use App\Models\User;
+use Exception;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\DB;
@@ -35,21 +36,29 @@ class EditCustomer extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $user = User::findOrFail($data['user_id']);
+        try {
+            DB::beginTransaction();
+            $user = User::findOrFail($data['user_id']);
 
-        $user->fill([
-            'name' => $data['full_name'],
-            'email' => $data['email'],
-            'password' => $data['password'] ?? $user->password,
-            'avatar_url' => $data['avatar_url'],
-        ]);
+            $user->fill([
+                'name' => $data['full_name'],
+                'email' => $data['email'],
+                'password' => $data['password'] ?? $user->password,
+                'avatar_url' => $data['avatar_url'],
+            ]);
 
-        if ($user->isDirty('avatar_url') && $user->getOriginal('avatar_url') != null) {
-            Storage::delete($user->getOriginal('avatar_url'));
+            if ($user->isDirty('avatar_url') && $user->getOriginal('avatar_url') != null) {
+                Storage::delete($user->getOriginal('avatar_url'));
+            }
+
+            $user->saveQuietly();
+
+            DB::commit();
+
+            return $data;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception('Terjadi kesalahan saat mengupdate nasabah. Coba lagi nanti.');
         }
-
-        $user->saveQuietly();
-
-        return $data;
     }
 }
