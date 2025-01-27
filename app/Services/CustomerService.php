@@ -20,7 +20,7 @@ class CustomerService implements CustomerServiceInterface
                 Storage::delete($customer->getOriginal('identity_card_photo'));
             }
         } catch (Exception $e) {
-            $e->getMessage();
+            throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
 
@@ -38,7 +38,7 @@ class CustomerService implements CustomerServiceInterface
             }
             $user->delete();
         } catch (Exception $e) {
-            $e->getMessage();
+            throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
 }

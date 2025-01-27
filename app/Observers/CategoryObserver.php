@@ -2,23 +2,24 @@
 
 namespace App\Observers;
 
-use App\Contracts\CategoryServiceInterface;
+use App\Contracts\NotificationServiceInterface;
 use App\Models\Category;
 
 class CategoryObserver
 {
-    public function __construct(protected CategoryServiceInterface $service) {}
+    public function __construct(protected NotificationServiceInterface $notificationService) {}
     /**
      * Handle the Category "created" event.
      */
     public function created(Category $category): void
     {
-        $this->service->sendNotification(
+        $this->notificationService->sendSuccessNotification(
             'Kategori kegiatan baru berhasil ditambahkan',
             auth()->user()->name . ' menambahkan kategori kegiatan ' . $category->title,
-            'heroicon-o-check-circle',
-            'success',
-            $category
+            $category,
+            'filament.admin.posts.resources.categories.index',
+            'title',
+            'admin'
         );
     }
 
@@ -27,12 +28,13 @@ class CategoryObserver
      */
     public function updated(Category $category): void
     {
-        $this->service->sendNotification(
-            'Kategori kegiatan berhasil diubah',
-            auth()->user()->name . ' mengubah kategori kegiatan ' . $category->title,
-            'heroicon-o-check-circle',
-            'success',
-            $category
+        $this->notificationService->sendUpdateNotification(
+            'Kategori kegiatan berhasil diupdate',
+            auth()->user()->name . ' mengupdate kategori kegiatan ' . $category->title,
+            $category,
+            'filament.admin.posts.resources.categories.index',
+            'title',
+            'admin'
         );
     }
 
@@ -41,28 +43,11 @@ class CategoryObserver
      */
     public function deleted(Category $category): void
     {
-        $this->service->sendNotification(
+        $this->notificationService->sendDeleteNotification(
             'Kategori kegiatan berhasil dihapus',
             auth()->user()->name . ' menghapus kategori kegiatan ' . $category->title,
-            'heroicon-o-exclamation-triangle',
-            'danger',
-            null
+            'filament.admin.posts.resources.categories.index',
+            'admin'
         );
-    }
-
-    /**
-     * Handle the Category "restored" event.
-     */
-    public function restored(Category $category): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Category "force deleted" event.
-     */
-    public function forceDeleted(Category $category): void
-    {
-        //
     }
 }

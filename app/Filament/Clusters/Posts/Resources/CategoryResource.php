@@ -4,7 +4,6 @@ namespace App\Filament\Clusters\Posts\Resources;
 
 use App\Filament\Clusters\Posts;
 use App\Filament\Clusters\Posts\Resources\CategoryResource\Pages;
-use App\Filament\Clusters\Posts\Resources\CategoryResource\RelationManagers;
 use App\Filament\Exports\CategoryExporter;
 use App\Models\Category;
 use Filament\Forms;
@@ -13,8 +12,6 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
