@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 
 use App\Filament\Clusters\Users\Resources\CustomerResource;
 use App\Models\User;
+use Exception;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
@@ -30,15 +31,14 @@ class CreateCustomer extends CreateRecord
             if ($user) {
                 $user->assignRole('customer');
                 $data['user_id'] = $user->id;
-            } else {
-                throw new \Exception('Nasabah gagal ditambahkan.');
             }
 
             DB::commit();
 
             return $data;
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
             DB::rollBack();
+            throw new Exception('Terjadi kesalahan saat menambahkan nasabah. Coba lagi nanti.');
         }
     }
 }
