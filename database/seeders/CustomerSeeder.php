@@ -63,7 +63,7 @@ class CustomerSeeder extends Seeder
     private function createAccount(array $record, AccountServiceInterface $service, string $customerId): void
     {
         Account::create([
-            'account_number' => $service->generateAccountNumber($record['postal_code']),
+            'account_number' => $service->generateAccountNumber($customerId),
             'debit' => $record['debit'],
             'credit' => $record['credit'],
             'balance' => $record['balance'],
