@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ObservedBy(ProductObserver::class)]
@@ -29,5 +30,10 @@ class Product extends Model
     public function transactionDetails(): HasMany
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public function weightedProduct(): HasOne
+    {
+        return $this->hasOne(WeightedProduct::class, 'product_id', 'id');
     }
 }
