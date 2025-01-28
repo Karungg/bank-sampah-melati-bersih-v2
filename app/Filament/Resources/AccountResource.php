@@ -6,6 +6,8 @@ use App\Filament\Resources\AccountResource\Pages;
 use App\Models\Account;
 use App\Models\Customer;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,31 +29,59 @@ class AccountResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('customer_id')
-                    ->options(
-                        Customer::doesntHave('account')->pluck('full_name', 'id')
-                    )
-                    ->required()
-                    ->label('Nasabah')
-                    ->searchable(),
-                Forms\Components\TextInput::make('debit')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00)
-                    ->minValue(0)
-                    ->label('Debet'),
-                Forms\Components\TextInput::make('credit')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00)
-                    ->minValue(0)
-                    ->label('Kredit'),
-                Forms\Components\TextInput::make('balance')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00)
-                    ->label('Saldo')
-                    ->minValue(0),
+                Section::make()
+                    ->schema([
+                        Grid::make([
+                            'default' => 1,
+                            'sm' => 2
+                        ])
+                            ->schema([
+                                Forms\Components\Select::make('customer_id')
+                                    ->options(
+                                        Customer::doesntHave('account')->pluck('full_name', 'id')
+                                    )
+                                    ->required()
+                                    ->label('Nasabah')
+                                    ->searchable()
+                                    ->disabledOn('edit')
+                                    ->validationMessages([
+                                        'required' => 'Nasabah harus diisi.'
+                                    ]),
+                                Forms\Components\TextInput::make('debit')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0.00)
+                                    ->minValue(0)
+                                    ->label('Debet')
+                                    ->maxLength(12)
+                                    ->prefix('Rp.')
+                                    ->validationMessages([
+                                        'max_digits' => 'Debit maksimal 12 digit.'
+                                    ]),
+                                Forms\Components\TextInput::make('credit')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0.00)
+                                    ->minValue(0)
+                                    ->label('Kredit')
+                                    ->maxLength(12)
+                                    ->prefix('Rp.')
+                                    ->validationMessages([
+                                        'max_digits' => 'Kredit maksimal 12 digit.'
+                                    ]),
+                                Forms\Components\TextInput::make('balance')
+                                    ->required()
+                                    ->numeric()
+                                    ->default(0.00)
+                                    ->label('Saldo')
+                                    ->minValue(0)
+                                    ->maxLength(12)
+                                    ->prefix('Rp.')
+                                    ->validationMessages([
+                                        'max_digits' => 'Saldo maksimal 12 digit.'
+                                    ]),
+                            ])
+                    ])
             ]);
     }
 

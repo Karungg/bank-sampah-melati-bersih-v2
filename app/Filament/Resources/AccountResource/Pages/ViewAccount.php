@@ -5,6 +5,7 @@ namespace App\Filament\Resources\AccountResource\Pages;
 use App\Filament\Resources\AccountResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\DB;
 
 class ViewAccount extends ViewRecord
 {
@@ -15,5 +16,16 @@ class ViewAccount extends ViewRecord
         return [
             Actions\EditAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $fullName = DB::table('customers')
+            ->where('id', $data['customer_id'])
+            ->value('full_name');
+
+        $data['customer_id'] = $fullName;
+
+        return $data;
     }
 }
