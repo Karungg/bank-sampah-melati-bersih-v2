@@ -37,7 +37,6 @@ class EditCustomer extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         try {
-            DB::beginTransaction();
             $user = User::findOrFail($data['user_id']);
 
             $user->fill([
@@ -53,11 +52,8 @@ class EditCustomer extends EditRecord
 
             $user->saveQuietly();
 
-            DB::commit();
-
             return $data;
         } catch (Exception $e) {
-            DB::rollBack();
             throw new Exception('Terjadi kesalahan saat mengupdate nasabah. Coba lagi nanti.');
         }
     }

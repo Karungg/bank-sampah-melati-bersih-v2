@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Contracts\TransactionServiceInterface as Service;
 use App\Filament\Resources\TransactionResource\Pages;
-use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -12,11 +10,10 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 
 class TransactionResource extends Resource
@@ -50,8 +47,12 @@ class TransactionResource extends Resource
                                     DB::table('customers')->pluck('full_name', 'id')
                                 )
                                 ->label('Nasabah')
+                                ->required()
                                 ->searchable()
-                                ->disabledOn('edit'),
+                                ->disabledOn('edit')
+                                ->validationMessages([
+                                    'required' => 'Nasabah harus diisi.'
+                                ]),
                             Forms\Components\TextInput::make('user_id')
                                 ->label('Penimbang')
                                 ->hiddenOn('create'),
@@ -95,37 +96,33 @@ class TransactionResource extends Resource
                                     )
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                    ->live(onBlur: true),
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(function (string $state, Set $set) {
+                                        $productId = $state;
+                                        $unit = DB::table('products')
+                                            ->where('id', $productId)
+                                            ->value('unit');
+
+                                        $set('product_unit', $unit);
+                                    }),
                                 Forms\Components\TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
                                     ->label('Jumlah')
-                                    ->suffix(' Pcs')
-                                    ->hidden(function (Get $get, Service $service): bool {
-                                        return
-                                            $get('product_id') === null
-                                            || $service->unitCheck('pcs', $get('product_id'));
-                                    }),
+                                    ->suffix('Pcs')
+                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'pcs'),
                                 Forms\Components\TextInput::make('weight')
                                     ->required()
                                     ->numeric()
                                     ->label('Berat')
-                                    ->suffix(' Kg')
-                                    ->hidden(function (Get $get, Service $service): bool {
-                                        return
-                                            $get('product_id') === null
-                                            || $service->unitCheck('kg', $get('product_id'));
-                                    }),
+                                    ->suffix('Kg')
+                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'kg'),
                                 Forms\Components\TextInput::make('liter')
                                     ->required()
                                     ->numeric()
                                     ->label('Liter')
-                                    ->suffix(' Liter')
-                                    ->hidden(function (Get $get, Service $service): bool {
-                                        return
-                                            $get('product_id') === null
-                                            || $service->unitCheck('liter', $get('product_id'));
-                                    }),
+                                    ->suffix('Liter')
+                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'liter'),
                                 Forms\Components\TextInput::make('subtotal')
                                     ->required()
                                     ->numeric()

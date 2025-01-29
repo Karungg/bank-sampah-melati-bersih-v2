@@ -15,7 +15,7 @@ class TransactionService implements TransactionServiceInterface
             ->where('id', $productId)
             ->value('unit');
 
-        return $productUnit != $unit;
+        return $productUnit == $unit;
     }
 
     public function generateCode(): string
@@ -82,6 +82,7 @@ class TransactionService implements TransactionServiceInterface
     public function saveTransactionDetails(string $transactionId, array $products)
     {
         try {
+
             foreach ($products as $product) {
                 $getById = $this->getProductById($product['product_id']);
 
@@ -120,7 +121,7 @@ class TransactionService implements TransactionServiceInterface
             $account->increment('debit', $transaction->total_amount);
             $account->increment('balance', $transaction->total_amount);
         } catch (Exception $e) {
-            throw new Exception('Terjadi masalah saat memproses transaksi. Silahkan coba lagi nanti');
+            throw new Exception($e->getMessage());
         }
     }
 

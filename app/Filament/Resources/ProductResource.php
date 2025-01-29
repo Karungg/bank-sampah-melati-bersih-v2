@@ -76,7 +76,7 @@ class ProductResource extends Resource
                                     ->autosize()
                                     ->rules([
                                         fn(): Closure => function (string $attribute, $value, Closure $fail) {
-                                            if ($value >= 1000) {
+                                            if (strlen($value) >= 1000) {
                                                 $fail('Deskripsi tidak boleh lebih dari 1000 karakter.');
                                             }
                                         }
