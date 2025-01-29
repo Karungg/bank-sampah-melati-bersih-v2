@@ -6,6 +6,7 @@ use App\Filament\Clusters\Users\Resources\CustomerResource;
 use App\Models\User;
 use Exception;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\DB;
 
 class CreateCustomer extends CreateRecord
 {
@@ -14,6 +15,7 @@ class CreateCustomer extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         try {
+            DB::beginTransaction();
             $user = null;
             User::withoutEvents(function () use (&$user, $data) {
                 $user = User::create([
@@ -28,9 +30,10 @@ class CreateCustomer extends CreateRecord
                 $user->assignRole('customer');
                 $data['user_id'] = $user->id;
             }
-
+            DB::commit();
             return $data;
         } catch (Exception $e) {
+            DB::rollBack();
             throw new Exception('Terjadi kesalahan saat menambahkan nasabah. Coba lagi nanti.');
         }
     }

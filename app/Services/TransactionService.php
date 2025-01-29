@@ -9,15 +9,6 @@ use Illuminate\Support\Str;
 
 class TransactionService implements TransactionServiceInterface
 {
-    public function unitCheck(string $unit, ?string $productId): bool
-    {
-        $productUnit = DB::table('products')
-            ->where('id', $productId)
-            ->value('unit');
-
-        return $productUnit == $unit;
-    }
-
     public function generateCode(): string
     {
         $date = now()->format('Ymd');
@@ -82,6 +73,7 @@ class TransactionService implements TransactionServiceInterface
     public function saveTransactionDetails(string $transactionId, array $products)
     {
         try {
+            DB::beginTransaction();
 
             foreach ($products as $product) {
                 $getById = $this->getProductById($product['product_id']);
@@ -120,8 +112,10 @@ class TransactionService implements TransactionServiceInterface
 
             $account->increment('debit', $transaction->total_amount);
             $account->increment('balance', $transaction->total_amount);
+            DB::commit();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            DB::rollBack();
+            throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
 

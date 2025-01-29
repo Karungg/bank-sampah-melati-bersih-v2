@@ -110,19 +110,22 @@ class TransactionResource extends Resource
                                     ->numeric()
                                     ->label('Jumlah')
                                     ->suffix('Pcs')
-                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'pcs'),
+                                    ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'pcs'
+                                        || $state != null),
                                 Forms\Components\TextInput::make('weight')
                                     ->required()
                                     ->numeric()
                                     ->label('Berat')
                                     ->suffix('Kg')
-                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'kg'),
+                                    ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'kg'
+                                        || $state != null),
                                 Forms\Components\TextInput::make('liter')
                                     ->required()
                                     ->numeric()
                                     ->label('Liter')
                                     ->suffix('Liter')
-                                    ->visible(fn(Get $get): bool => $get('product_unit') == 'liter'),
+                                    ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'liter'
+                                        || $state != null),
                                 Forms\Components\TextInput::make('subtotal')
                                     ->required()
                                     ->numeric()
