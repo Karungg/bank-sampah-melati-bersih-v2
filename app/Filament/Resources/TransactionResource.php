@@ -157,6 +157,11 @@ class TransactionResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->label('Kode Transaksi'),
+                Tables\Columns\TextColumn::make('customer.full_name')
+                    ->searchable()
+                    ->label('Nasabah')
+                    ->limit(20)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('total_quantity')
                     ->numeric()
                     ->sortable()
@@ -180,15 +185,13 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('location')
                     ->searchable()
                     ->label('Lokasi')
-                    ->limit(20),
+                    ->limit(20)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->label('Penimbang')
-                    ->limit(20),
-                Tables\Columns\TextColumn::make('customer.full_name')
-                    ->searchable()
-                    ->label('Nasabah')
-                    ->limit(20),
+                    ->limit(20)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

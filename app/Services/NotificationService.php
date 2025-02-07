@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class NotificationService implements NotificationServiceInterface
 {
-    public function __construct(protected UserServiceInterface $userService) {}
-
     public function sendSuccessNotification(
         string $title,
         string $body,
