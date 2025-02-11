@@ -38,6 +38,7 @@ class TransactionService implements TransactionServiceInterface
         try {
             $productIds = array_column($data['transactionDetails'], 'product_id');
             $products = Product::whereIn('id', $productIds)->get(['id', 'unit', 'price'])->keyBy('id');
+            $weighing_location = DB::table('company_profiles')->value('weighing_location');
 
             $totals = [
                 'quantity' => 0,
@@ -63,7 +64,7 @@ class TransactionService implements TransactionServiceInterface
                 'total_liter' => $totals['liter'],
                 'total_amount' => $totals['subtotal'],
                 'type' => 'weighing',
-                'location' => 'Lapangan',
+                'location' => $weighing_location,
                 'user_id' => auth()->id(),
             ];
         } catch (Exception $e) {
