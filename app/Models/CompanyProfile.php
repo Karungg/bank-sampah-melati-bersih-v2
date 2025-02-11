@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\CompanyProfileObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
+#[ObservedBy(CompanyProfileObserver::class)]
 class CompanyProfile extends Model
 {
     use HasUuids;

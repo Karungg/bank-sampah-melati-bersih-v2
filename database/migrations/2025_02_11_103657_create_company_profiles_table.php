@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('company_profiles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 100);
-            $table->string('description', 255)->nullable();
+            $table->string('description', 2000)->nullable();
             $table->string('address', 255)->nullable();
             $table->string('weighing_location', 255)->nullable();
             $table->string('account_number', 15)->nullable();
