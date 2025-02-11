@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Contracts\TransactionServiceInterface;
+use App\Models\Product;
+use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use App\Models\Account;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -13,25 +17,21 @@ class TransactionService implements TransactionServiceInterface
     {
         $date = now()->format('Ymd');
 
-        $latestTransaction = DB::table('transactions')
-            ->whereDate('created_at', now())
+        $latestTransaction = Transaction::whereDate('created_at', now())
             ->latest()
             ->value('transaction_code');
 
-        $sequence = 1;
-        if ($latestTransaction) {
-            $latestSequence = substr($latestTransaction, -3);
-            $sequence = $latestSequence + 1;
-        }
+        $sequence = $latestTransaction ? (int)substr($latestTransaction, -3) + 1 : 1;
 
-        $sequence = str_pad($sequence, 3, '0', STR_PAD_LEFT);
-
-        return $date . $sequence;
+        return $date . str_pad($sequence, 3, '0', STR_PAD_LEFT);
     }
 
-    public function calculateTransaction($data): array
+    public function calculateTransaction(array $data): array
     {
         try {
+            $productIds = array_column($data['transactionDetails'], 'product_id');
+            $products = Product::whereIn('id', $productIds)->get(['id', 'unit', 'price'])->keyBy('id');
+
             $totals = [
                 'quantity' => 0,
                 'weight' => 0,
@@ -40,22 +40,15 @@ class TransactionService implements TransactionServiceInterface
             ];
 
             foreach ($data['transactionDetails'] as $detail) {
+                $product = $products[$detail['product_id']];
                 $totals['quantity'] += $detail['quantity'];
                 $totals['weight'] += $detail['weight'];
                 $totals['liter'] += $detail['liter'];
-
-                $product = $this->getProductById($detail['product_id']);
-
-                if ($product->unit == 'pcs') {
-                    $totals['subtotal'] += $product->price * $detail['quantity'];
-                } elseif ($product->unit == 'kg') {
-                    $totals['subtotal'] += $product->price * $detail['weight'];
-                } elseif ($product->unit == 'liter') {
-                    $totals['subtotal'] += $product->price * $detail['liter'];
-                }
+                $totals['subtotal'] += $this->calculateSubtotal($product, $detail);
             }
 
-            return array_merge($data, [
+            return [
+                ...$data,
                 'transaction_code' => $this->generateCode(),
                 'total_quantity' => $totals['quantity'],
                 'total_weight' => $totals['weight'],
@@ -64,65 +57,54 @@ class TransactionService implements TransactionServiceInterface
                 'type' => 'weighing',
                 'location' => 'Lapangan',
                 'user_id' => auth()->id(),
-            ]);
+            ];
         } catch (Exception $e) {
-            throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti');
-        }
-    }
-
-    public function saveTransactionDetails(string $transactionId, array $products)
-    {
-        try {
-            DB::beginTransaction();
-
-            foreach ($products as $product) {
-                $getById = $this->getProductById($product['product_id']);
-
-                if ($getById->unit == 'pcs') {
-                    $subtotal = $getById->price * $product['quantity'];
-                } elseif ($getById->unit == 'kg') {
-                    $subtotal = $getById->price * $product['weight'];
-                } elseif ($getById->unit == 'liter') {
-                    $subtotal = $getById->price * $product['liter'];
-                }
-
-                // Save transaction details
-                DB::table('transaction_details')
-                    ->insert([
-                        'id' => Str::uuid(),
-                        'quantity' => $product['quantity'],
-                        'weight' => $product['weight'],
-                        'liter' => $product['liter'],
-                        'current_price' => $getById->price,
-                        'subtotal' => $subtotal,
-                        'transaction_id' => $transactionId,
-                        'product_id' => $product['product_id'],
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
-            }
-
-            // Add customer balance
-            $transaction = DB::table('transactions')
-                ->where('id', $transactionId)
-                ->first(['total_amount', 'customer_id']);
-
-            $account = DB::table('accounts')
-                ->where('customer_id', $transaction->customer_id);
-
-            $account->increment('debit', $transaction->total_amount);
-            $account->increment('balance', $transaction->total_amount);
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
 
-    public function getProductById(string $id)
+    public function saveTransactionDetails(string $transactionId, array $products): void
     {
-        return DB::table('products')
-            ->where('id', $id)
-            ->first(['unit', 'price']);
+        DB::transaction(function () use ($transactionId, $products) {
+            $productIds = array_column($products, 'product_id');
+            $productsData = Product::whereIn('id', $productIds)->get(['id', 'unit', 'price'])->keyBy('id');
+
+            $transactionDetails = [];
+            foreach ($products as $product) {
+                $productModel = $productsData[$product['product_id']];
+                $transactionDetails[] = [
+                    'id' => Str::uuid(),
+                    'quantity' => $product['quantity'],
+                    'weight' => $product['weight'],
+                    'liter' => $product['liter'],
+                    'current_price' => $productModel->price,
+                    'subtotal' => $this->calculateSubtotal($productModel, $product),
+                    'transaction_id' => $transactionId,
+                    'product_id' => $product['product_id'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            TransactionDetail::insert($transactionDetails);
+
+            $transaction = Transaction::findOrFail($transactionId, ['total_amount', 'customer_id']);
+
+            Account::where('customer_id', $transaction->customer_id)
+                ->incrementEach([
+                    'debit' => $transaction->total_amount,
+                    'balance' => $transaction->total_amount,
+                ]);
+        });
+    }
+
+    protected function calculateSubtotal(Product $product, array $detail): float
+    {
+        return match ($product->unit) {
+            'pcs' => $product->price * $detail['quantity'],
+            'kg' => $product->price * $detail['weight'],
+            'liter' => $product->price * $detail['liter'],
+            default => throw new Exception('Unit produk tidak valid.'),
+        };
     }
 }
