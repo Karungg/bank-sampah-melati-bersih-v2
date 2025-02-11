@@ -3,11 +3,13 @@
 namespace App\Observers;
 
 use App\Contracts\NotificationServiceInterface;
+use App\Contracts\ProductServiceInterface;
 use App\Models\Product;
 
 class ProductObserver
 {
     public function __construct(
+        protected ProductServiceInterface $productService,
         protected NotificationServiceInterface $notificationService
     ) {}
 
@@ -16,6 +18,8 @@ class ProductObserver
      */
     public function created(Product $product): void
     {
+        $this->productService->createWeightedProduct($product->id);
+
         $this->notificationService->sendSuccessNotification(
             'Kategori Sampah berhasil ditambahkan.',
             auth()->user()->name . ' menambahkan Kategori Sampah baru.',
@@ -78,6 +82,8 @@ class ProductObserver
      */
     public function forceDeleted(Product $product): void
     {
+        $this->productService->deleteWeightedProduct($product->id);
+
         $this->notificationService->sendDeleteNotification(
             'Kategori sampah berhasil dihapus secara permanen.',
             auth()->user()->name . ' menghapus permanen kategori Sampah ' . $product->title . '.',

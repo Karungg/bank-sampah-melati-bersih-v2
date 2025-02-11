@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\ProductServiceInterface;
+use App\Models\WeightedProduct;
 use Illuminate\Support\Facades\DB;
 
 class ProductService implements ProductServiceInterface
@@ -27,5 +28,17 @@ class ProductService implements ProductServiceInterface
         $sequence = str_pad($sequence, 3, '0', STR_PAD_LEFT);
 
         return $prefix . $date . $sequence;
+    }
+
+    public function createWeightedProduct(string $id)
+    {
+        WeightedProduct::create([
+            'product_id' => $id
+        ]);
+    }
+
+    public function deleteWeightedProduct(string $id)
+    {
+        WeightedProduct::where('product_id', $id)->delete();
     }
 }

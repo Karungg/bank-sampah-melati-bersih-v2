@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Account;
+use App\Models\WeightedProduct;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
