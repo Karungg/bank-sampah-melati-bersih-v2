@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             CustomerSeeder::class,
             PostSeeder::class,
-            ProductDisplaySeeder::class
+            ProductDisplaySeeder::class,
+            CompanyProfileSeeder::class
         ]);
     }
 }
