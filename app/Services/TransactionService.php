@@ -18,13 +18,20 @@ class TransactionService implements TransactionServiceInterface
     {
         $date = now()->format('Ymd');
 
-        $latestTransaction = Transaction::whereDate('created_at', now())
+        $latestTransaction = DB::table('transactions')
+            ->whereDate('created_at', now())
             ->latest()
             ->value('transaction_code');
 
-        $sequence = $latestTransaction ? (int)substr($latestTransaction, -3) + 1 : 1;
+        $sequence = 1;
+        if ($latestTransaction) {
+            $latestSequence = substr($latestTransaction, -3);
+            $sequence = $latestSequence + 1;
+        }
 
-        return $date . str_pad($sequence, 3, '0', STR_PAD_LEFT);
+        $sequence = str_pad($sequence, 3, '0', STR_PAD_LEFT);
+
+        return $date . $sequence;
     }
 
     public function calculateTransaction(array $data): array
