@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Account;
+use App\Models\CompanyProfile;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -105,6 +106,8 @@ class TransactionService implements TransactionServiceInterface
                         'debit' => $transaction->total_amount,
                         'balance' => $transaction->total_amount,
                     ]);
+
+                CompanyProfile::increment('balance', $transaction->total_amount);
             });
         } catch (Exception $e) {
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi.');
