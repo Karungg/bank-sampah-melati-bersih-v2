@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SaleResource\Pages;
+use App\Filament\Widgets\WeightedProduct;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -14,6 +15,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class SaleResource extends Resource
@@ -127,6 +129,9 @@ class SaleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->where('type', 'sale');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('No')
