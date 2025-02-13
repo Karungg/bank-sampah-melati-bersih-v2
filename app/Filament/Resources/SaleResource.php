@@ -17,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 class SaleResource extends Resource
 {
@@ -77,19 +78,32 @@ class SaleResource extends Resource
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(function (string $state, Set $set) {
+                                    ->afterStateUpdated(function (string $state, Set $set, Get $get) {
                                         $productId = $state;
-                                        $unit = DB::table('products')
-                                            ->where('id', $productId)
-                                            ->value('unit');
+                                        $product = DB::table('products')
+                                            ->join('weighted_products', 'products.id', 'weighted_products.product_id')
+                                            ->where('products.id', $productId);
 
-                                        $set('product_unit', $unit);
+                                        $set('product_unit', $product->value('unit'));
+
+                                        if ($get('product_unit') == 'pcs') {
+                                            $set('weighted_product', $product->value('total_quantity'));
+                                        } elseif ($get('product_unit') == 'kg') {
+                                            $set('weighted_product', $product->value('total_weight'));
+                                        } elseif ($get('product_unit') == 'liter') {
+                                            $set('weighted_product', $product->value('total_liter'));
+                                        }
                                     }),
                                 Forms\Components\TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
                                     ->label('Jumlah')
                                     ->suffix('Pcs')
+                                    ->hint(function (Get $get) {
+                                        return new HtmlString('<strong>Terkumpul ' . $get('weighted_product') . ' Pcs</strong>');
+                                    })
+                                    ->hintColor('primary')
+                                    ->placeholder('Masukkan jumlah yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'pcs'
                                         || $state != null),
                                 Forms\Components\TextInput::make('weight')
@@ -97,6 +111,11 @@ class SaleResource extends Resource
                                     ->numeric()
                                     ->label('Berat')
                                     ->suffix('Kg')
+                                    ->hint(function (Get $get) {
+                                        return new HtmlString('<strong>Terkumpul ' . $get('weighted_product') . ' Kg</strong>');
+                                    })
+                                    ->hintColor('primary')
+                                    ->placeholder('Masukkan berat yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'kg'
                                         || $state != null),
                                 Forms\Components\TextInput::make('liter')
@@ -104,6 +123,11 @@ class SaleResource extends Resource
                                     ->numeric()
                                     ->label('Liter')
                                     ->suffix('Liter')
+                                    ->hint(function (Get $get) {
+                                        return new HtmlString('<strong>Terkumpul ' . $get('weighted_product') . ' Liter</strong>');
+                                    })
+                                    ->hintColor('primary')
+                                    ->placeholder('Masukkan liter yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'liter'
                                         || $state != null),
                                 Forms\Components\TextInput::make('subtotal')

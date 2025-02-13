@@ -20,7 +20,7 @@ class WeightedProduct extends TableWidget
         return $table
             ->query(
                 ModelsWeightedProduct::query()
-                    ->with(['product:id,title,unit'])
+                    ->with(['product:id,title,unit,price'])
                     ->where('total_quantity', '>=', 0)
                     ->where('total_weight', '>=', 0)
                     ->where('total_liter', '>=', 0)
@@ -35,6 +35,10 @@ class WeightedProduct extends TableWidget
                 TextColumn::make('product.unit')
                     ->searchable()
                     ->label('Satuan'),
+                TextColumn::make('product.price')
+                    ->searchable()
+                    ->label('Harga')
+                    ->prefix(' Rp.'),
                 TextColumn::make('total_quantity')
                     ->searchable()
                     ->label('Jumlah Terkumpul')

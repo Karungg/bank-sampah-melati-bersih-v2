@@ -34,7 +34,7 @@ class TransactionService implements TransactionServiceInterface
         return $date . $sequence;
     }
 
-    public function calculateTransaction(array $data): array
+    public function calculateTransaction(array $data, string $type): array
     {
         try {
             $productIds = array_column($data['transactionDetails'], 'product_id');
@@ -54,7 +54,7 @@ class TransactionService implements TransactionServiceInterface
                 $totals['weight'] += $detail['weight'];
                 $totals['liter'] += $detail['liter'];
                 $totals['subtotal'] += $this->calculateSubtotal($product, $detail);
-                $this->saveWeightedProduct($product, $detail);
+                $this->saveWeightedProduct($product, $detail, $type);
             }
 
             return [
@@ -64,8 +64,8 @@ class TransactionService implements TransactionServiceInterface
                 'total_weight' => $totals['weight'],
                 'total_liter' => $totals['liter'],
                 'total_amount' => $totals['subtotal'],
-                'type' => 'weighing',
-                'location' => $weighing_location,
+                'type' => $type,
+                'location' => $type == 'weighing' ? $weighing_location : null,
                 'user_id' => auth()->id(),
             ];
         } catch (Exception $e) {
@@ -73,7 +73,7 @@ class TransactionService implements TransactionServiceInterface
         }
     }
 
-    public function saveTransactionDetails(string $transactionId, array $products): void
+    public function saveTransactionDetails(string $transactionId, array $products, string $type): void
     {
         try {
             DB::transaction(function () use ($transactionId, $products) {
@@ -124,17 +124,19 @@ class TransactionService implements TransactionServiceInterface
         };
     }
 
-    protected function saveWeightedProduct(Product $product, array $detail)
+    protected function saveWeightedProduct(Product $product, array $detail, string $type)
     {
+        $method = $type == 'weighing' ? 'increment' : 'decrement';
+
         switch ($product['unit']) {
             case 'pcs':
-                $product->weightedProduct->increment('total_quantity', $detail['quantity']);
+                $product->weightedProduct->$method('total_quantity', $detail['quantity']);
                 break;
             case 'kg':
-                $product->weightedProduct->increment('total_weight', $detail['weight']);
+                $product->weightedProduct->$method('total_weight', $detail['weight']);
                 break;
             case 'liter':
-                $product->weightedProduct->increment('total_liter', $detail['liter']);
+                $product->weightedProduct->$method('total_liter', $detail['liter']);
                 break;
             default:
                 throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');

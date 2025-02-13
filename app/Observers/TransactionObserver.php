@@ -17,11 +17,21 @@ class TransactionObserver
      */
     public function created(Transaction $transaction): void
     {
+        if ($transaction->type == 'weighing') {
+            $title = 'Transaksi penimbangan berhasil ditambahkan.';
+            $body = ' menambahkan transaksi penimbangan nasabah ' . $transaction->customer->full_name;
+            $route = 'filament.admin.resources.transactions.index';
+        } else {
+            $title = 'Transaksi penjualan berhasil ditambahkan.';
+            $body = ' menambahkan transaksi penjualan.';
+            $route = 'filament.admin.resources.sales.index';
+        }
+
         $this->notificationService->sendSuccessNotification(
-            'Transaksi penimbangan berhasil ditambahkan.',
-            auth()->user()->name . ' menambahkan penimbangan nasabah ' . $transaction->customer->full_name,
+            $title,
+            auth()->user()->name . $body,
             $transaction,
-            'filament.admin.resources.transactions.index',
+            $route,
             'transaction_code',
             'adminManagement'
         );
