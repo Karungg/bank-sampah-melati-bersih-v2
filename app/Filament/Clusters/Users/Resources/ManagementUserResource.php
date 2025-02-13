@@ -49,6 +49,7 @@ class ManagementUserResource extends Resource
                     ->required()
                     ->maxValue(255)
                     ->label('Nama')
+                    ->placeholder('Masukkan nama')
                     ->validationMessages([
                         'required' => 'Nama harus diisi.',
                         'max' => 'Nama tidak boleh lebih dari 255 karakter.'
@@ -58,6 +59,7 @@ class ManagementUserResource extends Resource
                     ->maxValue(255)
                     ->unique(ignoreRecord: true)
                     ->email()
+                    ->placeholder('Masukkan email')
                     ->validationMessages([
                         'required' => 'Email harus diisi.',
                         'max' => 'Email tidak boleh lebih dari 255 karakter.',
@@ -68,6 +70,7 @@ class ManagementUserResource extends Resource
                     ->required(fn(string $context): string => $context != 'edit')
                     ->password()
                     ->revealable()
+                    ->placeholder('Masukkan password')
                     ->maxValue(255)
                     ->minValue(8)
                     ->helperText(fn(string $context): string => $context == 'edit'

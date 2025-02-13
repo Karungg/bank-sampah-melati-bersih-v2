@@ -63,7 +63,7 @@ class ProductResource extends Resource
                                     ->label('Nama Kategori')
                                     ->live(onBlur: true)
                                     ->unique(ignoreRecord: true)
-                                    ->placeholder('Masukkan nama kategori.')
+                                    ->placeholder('Masukkan nama kategori')
                                     ->afterStateUpdated(function (Set $set, ?string $state, ProductServiceInterface $service): ?string {
                                         return $state ? $set('product_code', $service->generateCode($state)) : null;
                                     })
@@ -75,7 +75,7 @@ class ProductResource extends Resource
                                 Forms\Components\Textarea::make('description')
                                     ->label('Deskripsi')
                                     ->autosize()
-                                    ->placeholder('Masukkan deskripsi kategori.')
+                                    ->placeholder('Masukkan deskripsi kategori')
                                     ->rules([
                                         fn(): Closure => function (string $attribute, $value, Closure $fail) {
                                             if (strlen($value) >= 1000) {
@@ -100,7 +100,7 @@ class ProductResource extends Resource
                                     ->prefix('Rp')
                                     ->label('Harga')
                                     ->maxLength(10)
-                                    ->placeholder('Masukkan harga.')
+                                    ->placeholder('Masukkan harga')
                                     ->minValue(1)
                                     ->validationMessages([
                                         'required' => 'Harga harus diisi.',
