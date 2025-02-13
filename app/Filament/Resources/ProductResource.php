@@ -54,7 +54,7 @@ class ProductResource extends Resource
                             ]),
                         Grid::make([
                             'default' => 1,
-                            'md' => 2
+                            'sm' => 2
                         ])
                             ->schema([
                                 Forms\Components\TextInput::make('title')
@@ -63,8 +63,9 @@ class ProductResource extends Resource
                                     ->label('Nama Kategori')
                                     ->live(onBlur: true)
                                     ->unique(ignoreRecord: true)
-                                    ->afterStateUpdated(function (Set $set, ?string $state, ProductServiceInterface $service): string {
-                                        return $set('product_code', $service->generateCode($state));
+                                    ->placeholder('Masukkan nama kategori.')
+                                    ->afterStateUpdated(function (Set $set, ?string $state, ProductServiceInterface $service): ?string {
+                                        return $state ? $set('product_code', $service->generateCode($state)) : null;
                                     })
                                     ->validationMessages([
                                         'required' => 'Nama Kategori harus diisi.',
@@ -138,9 +139,10 @@ class ProductResource extends Resource
                     ->sortable()
                     ->formatStateUsing(fn(string $state) => ucfirst($state)),
                 Tables\Columns\TextColumn::make('price')
-                    ->money('IDR')
                     ->sortable()
-                    ->label('Harga'),
+                    ->label('Harga')
+                    ->formatStateUsing(fn(string $state) => number_format($state, 0, ',', '.'))
+                    ->prefix('Rp.'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
