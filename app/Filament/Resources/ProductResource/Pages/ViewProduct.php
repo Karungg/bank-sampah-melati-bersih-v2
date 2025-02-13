@@ -20,4 +20,11 @@ class ViewProduct extends ViewRecord
             Actions\RestoreAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['price'] = number_format($data['price'], 0, ',', '.');
+
+        return $data;
+    }
 }

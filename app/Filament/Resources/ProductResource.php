@@ -75,6 +75,7 @@ class ProductResource extends Resource
                                 Forms\Components\Textarea::make('description')
                                     ->label('Deskripsi')
                                     ->autosize()
+                                    ->placeholder('Masukkan deskripsi kategori.')
                                     ->rules([
                                         fn(): Closure => function (string $attribute, $value, Closure $fail) {
                                             if (strlen($value) >= 1000) {
@@ -99,6 +100,7 @@ class ProductResource extends Resource
                                     ->prefix('Rp')
                                     ->label('Harga')
                                     ->maxLength(10)
+                                    ->placeholder('Masukkan harga.')
                                     ->minValue(1)
                                     ->validationMessages([
                                         'required' => 'Harga harus diisi.',
