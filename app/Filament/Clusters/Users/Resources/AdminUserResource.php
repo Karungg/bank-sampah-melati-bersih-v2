@@ -41,6 +41,7 @@ class AdminUserResource extends Resource
                     ->imageEditor()
                     ->directory('avatars')
                     ->nullable()
+                    ->placeholder('Unggah foto profil')
                     ->image()
                     ->validationMessages([
                         'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',

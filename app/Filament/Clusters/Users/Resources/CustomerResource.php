@@ -40,10 +40,8 @@ class CustomerResource extends Resource
                             ->maxLength(16)
                             ->minLength(16)
                             ->label('NIK')
+                            ->placeholder('Masukkan 16 digit NIK, contoh: 3171066509900001')
                             ->unique(ignoreRecord: true)
-                            ->helperText(fn(string $context): string => $context != 'view'
-                                ? 'Mohon isi NIK dengan 16 digit angka.'
-                                : '')
                             ->validationMessages([
                                 'required' => 'NIK harus diisi.',
                                 'numeric' => 'NIK harus berisi angka.',
@@ -57,6 +55,7 @@ class CustomerResource extends Resource
                         ])->schema([
                             Forms\Components\TextInput::make('full_name')
                                 ->required()
+                                ->placeholder('Masukkan nama lengkap sesuai KTP, contoh: Budi Santoso')
                                 ->maxValue(100)
                                 ->label('Nama Lengkap')
                                 ->validationMessages([
@@ -65,6 +64,7 @@ class CustomerResource extends Resource
                                 ]),
                             Forms\Components\TextInput::make('place_of_birth')
                                 ->required()
+                                ->placeholder('Masukkan kota kelahiran, contoh: Surabaya')
                                 ->maxValue(50)
                                 ->label('Tempat Lahir')
                                 ->validationMessages([
@@ -74,6 +74,7 @@ class CustomerResource extends Resource
                             Forms\Components\DatePicker::make('date_of_birth')
                                 ->required()
                                 ->label('Tanggal Lahir')
+                                ->placeholder('Pilih tanggal lahir sesuai KTP')
                                 ->validationMessages([
                                     'required' => 'Tanggal Lahir harus diisi.'
                                 ]),
@@ -83,6 +84,7 @@ class CustomerResource extends Resource
                                 ->maxLength(14)
                                 ->minLength(9)
                                 ->unique(ignoreRecord: true)
+                                ->placeholder('Masukkan nomor HP aktif, contoh: 81234567890')
                                 ->validationMessages([
                                     'required' => 'Nomor Telepon harus diisi.',
                                     'min' => 'Nomor Telepon harus berisi setidaknya 9 digit angka.',
@@ -99,6 +101,7 @@ class CustomerResource extends Resource
                                 ->directory('identity_card_photos')
                                 ->nullable()
                                 ->image()
+                                ->placeholder('Unggah foto KTP')
                                 ->validationMessages([
                                     'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 1024KB.',
                                 ]),
@@ -109,6 +112,7 @@ class CustomerResource extends Resource
                                 ->directory('avatars')
                                 ->nullable()
                                 ->image()
+                                ->placeholder('Unggah foto profil')
                                 ->validationMessages([
                                     'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
                                 ]),
@@ -121,6 +125,7 @@ class CustomerResource extends Resource
                             ->columnSpanFull()
                             ->maxLength(2000)
                             ->label('Alamat')
+                            ->placeholder('Masukkan alamat lengkap, contoh: Jl. Anggrek No. 123, Perumahan Griya Indah Blok A2')
                             ->validationMessages([
                                 'required' => 'Alamat harus diisi.',
                                 'max' => 'Alamat tidak boleh melebihi 2000 karakter.'
@@ -133,6 +138,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->numeric()
                                 ->maxLength(3)
+                                ->placeholder('Masukkan nomor RT, contoh: 003')
                                 ->label('RT')
                                 ->validationMessages([
                                     'required' => 'RT harus diisi.',
@@ -142,6 +148,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->numeric()
                                 ->label('RW')
+                                ->placeholder('Masukkan nomor RW, contoh: 005')
                                 ->maxLength(3)
                                 ->validationMessages([
                                     'required' => 'RW harus diisi.',
@@ -151,6 +158,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->maxLength(100)
                                 ->label('Desa')
+                                ->placeholder('Masukkan nama desa/kelurahan, contoh: Kelurahan Sukamaju')
                                 ->validationMessages([
                                     'required' => 'Desa harus diisi.',
                                     'max' => 'Desa tidak boleh melebihi 100 karakter.'
@@ -159,6 +167,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->label('Kecamatan')
                                 ->maxLength(100)
+                                ->placeholder('Masukkan nama kecamatan, contoh: Kecamatan Cilandak')
                                 ->validationMessages([
                                     'required' => 'Kecamatan harus diisi.',
                                     'max' => 'Kecamatan tidak boleh melebihi 100 karakter.'
@@ -167,6 +176,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->maxLength(100)
                                 ->label('Kota')
+                                ->placeholder('Masukkan nama kota/kabupaten, contoh: Kota Bandung')
                                 ->validationMessages([
                                     'required' => 'Kota harus diisi.',
                                     'max' => 'Kota tidak boleh melebihi 100 karakter.'
@@ -175,6 +185,7 @@ class CustomerResource extends Resource
                                 ->required()
                                 ->maxLength(5)
                                 ->numeric()
+                                ->placeholder('Masukkan 5 digit kode pos, contoh: 12440')
                                 ->label('Kode Pos')
                                 ->validationMessages([
                                     'required' => 'Kode Pos harus diisi.',
@@ -191,6 +202,7 @@ class CustomerResource extends Resource
                             Forms\Components\TextInput::make('email')
                                 ->required()
                                 ->maxValue(255)
+                                ->placeholder('Masukkan email aktif, contoh: budi.santoso@gmail.com')
                                 ->email()
                                 ->validationMessages([
                                     'required' => 'Email harus diisi.',
@@ -214,6 +226,7 @@ class CustomerResource extends Resource
                                 ->required(fn(string $context): bool => $context != 'edit')
                                 ->password()
                                 ->revealable()
+                                ->placeholder('Minimal 8 karakter dengan kombinasi huruf dan angka')
                                 ->maxValue(255)
                                 ->minValue(8)
                                 ->helperText(
