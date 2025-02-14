@@ -29,6 +29,7 @@ class ProductDisplayResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->label('Nama Hasil Olahan')
+                    ->placeholder('Masukkan nama hasil olahan')
                     ->maxValue(256)
                     ->validationMessages([
                         'required' => 'Nama Hasil Olahan harus diisi.',
@@ -37,6 +38,8 @@ class ProductDisplayResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->maxLength(2048)
+                    ->autosize()
+                    ->placeholder('Masukkan deskripsi')
                     ->label('Deskripsi')
                     ->validationMessages([
                         'required' => 'Deskripsi harus diisi.',
@@ -45,7 +48,9 @@ class ProductDisplayResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required()
+                    ->placeholder('Unggah foto')
                     ->label('Foto')
+                    ->columnSpanFull()
                     ->directory('product-displays')
                     ->validationMessages([
                         'required' => 'Foto harus diisi.'

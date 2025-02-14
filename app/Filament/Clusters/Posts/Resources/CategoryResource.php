@@ -31,6 +31,8 @@ class CategoryResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->maxValue(256)
+                    ->placeholder('Masukkan judul kategori')
+                    ->label('Judul Kategori')
                     ->unique(ignoreRecord: true)
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
@@ -41,6 +43,7 @@ class CategoryResource extends Resource
                     ]),
                 Forms\Components\TextInput::make('slug')
                     ->required()
+                    ->helperText('Slug terisi otomatis setelah mengisi judul kategori')
                     ->readOnly()
                     ->maxValue(300)
                     ->unique(ignoreRecord: true)
@@ -62,7 +65,7 @@ class CategoryResource extends Resource
                     ->rowIndex(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
-                    ->label('Judul')
+                    ->label('Judul Kategori')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()

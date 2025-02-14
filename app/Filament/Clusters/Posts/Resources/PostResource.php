@@ -41,6 +41,7 @@ class PostResource extends Resource
                                     ->required()
                                     ->maxValue(256)
                                     ->label('Judul')
+                                    ->placeholder('Masukkan judul')
                                     ->live(onBlur: true)
                                     ->unique(ignoreRecord: true)
                                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state)))
@@ -55,7 +56,7 @@ class PostResource extends Resource
                                     ->label('Slug')
                                     ->readOnly()
                                     ->unique(ignoreRecord: true)
-                                    ->helperText(fn(string $context) => $context != 'view' ? 'Slug terisi otomatis' : '')
+                                    ->helperText(fn(string $context) => $context != 'view' ? 'Slug terisi otomatis setelah mengisi judul' : '')
                                     ->validationMessages([
                                         'required' => 'Slug harus diisi.',
                                         'max' => 'Slug tidak boleh lebih dari 300 karakter.',
@@ -71,6 +72,7 @@ class PostResource extends Resource
                                     ]),
                                 Forms\Components\TextInput::make('link')
                                     ->maxValue(256)
+                                    ->placeholder('Masukkan link')
                                     ->nullable()
                                     ->validationMessages([
                                         'max' => 'Link tidak boleh lebih dari 256 karakter.'
@@ -89,6 +91,7 @@ class PostResource extends Resource
                             ->required()
                             ->columnSpanFull()
                             ->label('Isi')
+                            ->placeholder('Masukkan isi kegiatan')
                             ->maxLength(5000)
                             ->validationMessages([
                                 'required' => 'Isi kegiatan tidak boleh kosong.',
@@ -98,6 +101,7 @@ class PostResource extends Resource
                             ->required()
                             ->label('Foto')
                             ->image()
+                            ->placeholder('Unggah foto kegiatan')
                             ->multiple()
                             ->directory('posts')
                             ->validationMessages([
