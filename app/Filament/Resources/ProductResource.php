@@ -49,7 +49,7 @@ class ProductResource extends Resource
                             ->unique(ignoreRecord: true)
                             ->validationMessages([
                                 'required' => 'Kode Kategori harus terisi.',
-                                'max' => 'Kode Kategori tidak boleh lebih dari 16 karakter',
+                                'max' => 'Kode Kategori tidak boleh lebih dari 16 karakter.',
                                 'unique' => 'Kode Kategori sudah digunakan.'
                             ]),
                         Grid::make([
@@ -69,7 +69,7 @@ class ProductResource extends Resource
                                     })
                                     ->validationMessages([
                                         'required' => 'Nama Kategori harus diisi.',
-                                        'max' => 'Nama Kategori tidak boleh melebihi 100 karakter.',
+                                        'max' => 'Nama Kategori tidak boleh lebih dari 100 karakter.',
                                         'unique' => 'Nama Kategori sudah digunakan.'
                                     ]),
                                 Forms\Components\Textarea::make('description')
@@ -78,7 +78,7 @@ class ProductResource extends Resource
                                     ->placeholder('Masukkan deskripsi kategori')
                                     ->rules([
                                         fn(): Closure => function (string $attribute, $value, Closure $fail) {
-                                            if (strlen($value) >= 1000) {
+                                            if (strlen($value) > 1000) {
                                                 $fail('Deskripsi tidak boleh lebih dari 1000 karakter.');
                                             }
                                         }
@@ -105,8 +105,8 @@ class ProductResource extends Resource
                                     ->validationMessages([
                                         'required' => 'Harga harus diisi.',
                                         'numeric' => 'Harga harus berupa angka.',
-                                        'max_digits' => 'Harga tidak boleh melebihi 10 digit dan dua angka dibelakang koma',
-                                        'min' => 'Harga tidak boleh kurang dari 1',
+                                        'max_digits' => 'Harga tidak boleh lebih dari 10 digit dan dua angka dibelakang koma.',
+                                        'min' => 'Harga tidak boleh kurang dari 1.',
                                     ]),
                             ])
                     ])
