@@ -6,7 +6,7 @@ use App\Filament\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Support\Str;
 
-it('create product resource: can validate required inputs', function () {
+test('create product resource : can validate required input', function () {
     $user = User::factory()->admin()->create();
     $this->actingAs($user);
 
@@ -21,7 +21,7 @@ it('create product resource: can validate required inputs', function () {
         ->assertHasFormErrors();
 });
 
-it('create product resource: required errors form input', function () {
+test('create product resource : required errors form input', function () {
     $user = User::factory()->admin()->create();
     $this->actingAs($user);
 
@@ -42,7 +42,7 @@ it('create product resource: required errors form input', function () {
         ]);
 });
 
-it('create product resource : max length errors form input', function () {
+test('create product resource : max length errors form input', function () {
     $user = User::factory()->admin()->create();
     $this->actingAs($user);
 
@@ -62,7 +62,7 @@ it('create product resource : max length errors form input', function () {
         ->assertSeeText('Deskripsi tidak boleh lebih dari 1000 karakter.');
 });
 
-it('create product resource : unique validation errors form input', function () {
+test('create product resource : unique validation errors form input', function () {
     $user = User::factory()->admin()->create();
     $this->actingAs($user);
 
@@ -85,5 +85,42 @@ it('create product resource : unique validation errors form input', function () 
         ->call('create')
         ->assertHasFormErrors([
             'title' => 'unique'
+        ]);
+});
+
+test('create product resource : min validation error price input', function () {
+    $user = User::factory()->admin()->create();
+    $this->actingAs($user);
+
+    livewire(ProductResource\Pages\CreateProduct::class)
+        ->fillForm([
+            'product_code' => 'SA20250216',
+            'title' => 'Sampah',
+            'description' => 'Deskripsi sampah',
+            'unit' => 'pcs',
+            'price' => 0,
+        ])
+        ->call('create')
+        ->assertHasFormErrors([
+            'price' => 'min'
+        ])
+        ->assertSeeText('Harga tidak boleh kurang dari 1.');
+});
+
+test('create product resource : numeric validation error price input', function () {
+    $user = User::factory()->admin()->create();
+    $this->actingAs($user);
+
+    livewire(ProductResource\Pages\CreateProduct::class)
+        ->fillForm([
+            'product_code' => 'SA20250216',
+            'title' => 'Sampah',
+            'description' => 'Deskripsi sampah',
+            'unit' => 'pcs',
+            'price' => true,
+        ])
+        ->call('create')
+        ->assertHasFormErrors([
+            'price' => 'numeric'
         ]);
 });
