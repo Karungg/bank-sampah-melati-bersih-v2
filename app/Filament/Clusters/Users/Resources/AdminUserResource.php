@@ -36,7 +36,7 @@ class AdminUserResource extends Resource
                             !== ($form->getRecord()->id ?? '')
                     )
                     ->label('Foto Profil')
-                    ->maxFiles(1024)
+                    ->maxFiles(3072)
                     ->avatar()
                     ->imageEditor()
                     ->directory('avatars')

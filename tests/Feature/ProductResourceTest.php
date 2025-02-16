@@ -6,10 +6,12 @@ use App\Filament\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Support\Str;
 
-test('create product resource : can validate required input', function () {
+beforeEach(function () {
     $user = User::factory()->admin()->create();
     $this->actingAs($user);
+});
 
+test('create product resource : can validate required input', function () {
     livewire(ProductResource\Pages\CreateProduct::class)
         ->fillForm([
             'product_code' => Str::random(16),
@@ -22,9 +24,6 @@ test('create product resource : can validate required input', function () {
 });
 
 test('create product resource : required errors form input', function () {
-    $user = User::factory()->admin()->create();
-    $this->actingAs($user);
-
     livewire(ProductResource\Pages\CreateProduct::class)
         ->fillForm([
             'product_code' => null,
@@ -43,9 +42,6 @@ test('create product resource : required errors form input', function () {
 });
 
 test('create product resource : max length errors form input', function () {
-    $user = User::factory()->admin()->create();
-    $this->actingAs($user);
-
     livewire(ProductResource\Pages\CreateProduct::class)
         ->fillForm([
             'product_code' => Str::random(17), // max length 16
@@ -63,9 +59,6 @@ test('create product resource : max length errors form input', function () {
 });
 
 test('create product resource : unique validation errors form input', function () {
-    $user = User::factory()->admin()->create();
-    $this->actingAs($user);
-
     Product::create([
         'product_code' => 'SA20250216',
         'title' => 'Sampah',
@@ -89,9 +82,6 @@ test('create product resource : unique validation errors form input', function (
 });
 
 test('create product resource : min validation error price input', function () {
-    $user = User::factory()->admin()->create();
-    $this->actingAs($user);
-
     livewire(ProductResource\Pages\CreateProduct::class)
         ->fillForm([
             'product_code' => 'SA20250216',
@@ -108,9 +98,6 @@ test('create product resource : min validation error price input', function () {
 });
 
 test('create product resource : numeric validation error price input', function () {
-    $user = User::factory()->admin()->create();
-    $this->actingAs($user);
-
     livewire(ProductResource\Pages\CreateProduct::class)
         ->fillForm([
             'product_code' => 'SA20250216',
