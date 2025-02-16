@@ -73,24 +73,26 @@ class CustomerResource extends Resource
                                 ]),
                             Forms\Components\DatePicker::make('date_of_birth')
                                 ->required()
+                                ->date()
                                 ->label('Tanggal Lahir')
                                 ->placeholder('Pilih tanggal lahir sesuai KTP')
                                 ->validationMessages([
-                                    'required' => 'Tanggal Lahir harus diisi.'
+                                    'required' => 'Tanggal Lahir harus diisi.',
+                                    'date' => 'Tanggal lahir tidak valid.'
                                 ]),
                             Forms\Components\TextInput::make('phone')
-                                ->tel()
+                                ->numeric()
                                 ->required()
-                                ->maxLength(14)
                                 ->minLength(9)
+                                ->maxLength(14)
                                 ->unique(ignoreRecord: true)
                                 ->placeholder('Masukkan nomor HP aktif, contoh: 81234567890')
                                 ->validationMessages([
-                                    'required' => 'Nomor Telepon harus diisi.',
-                                    'min' => 'Nomor Telepon harus berisi setidaknya 9 digit angka.',
-                                    'max' => 'Nomor Telepon tidak boleh melebihi 14 digit angka.',
-                                    'unique' => 'Nomor Telepon sudah digunakan.',
-                                    'regex' => 'Nomor Telepon tidak valid'
+                                    'required' => 'Nomor telepon harus diisi.',
+                                    'min_digits' => 'Nomor telepon harus berisi setidaknya 9 digit angka.',
+                                    'max_digits' => 'Nomor telepon tidak boleh melebihi 14 digit angka.',
+                                    'unique' => 'Nomor telepon sudah digunakan.',
+                                    'numeric' => 'Nomor telepon tidak valid.'
                                 ])
                                 ->prefix('+62')
                                 ->label('Nomor Telepon'),
@@ -137,22 +139,26 @@ class CustomerResource extends Resource
                             Forms\Components\TextInput::make('rt')
                                 ->required()
                                 ->numeric()
+                                ->minLength(3)
                                 ->maxLength(3)
                                 ->placeholder('Masukkan nomor RT, contoh: 003')
                                 ->label('RT')
                                 ->validationMessages([
                                     'required' => 'RT harus diisi.',
-                                    'max_digits' => 'RT tidak boleh melebihi 3 digit angka.'
+                                    'max_digits' => 'RT tidak boleh melebihi 3 digit angka.',
+                                    'min_digits' => 'RT harus berisi 3 digit angka.'
                                 ]),
                             Forms\Components\TextInput::make('rw')
                                 ->required()
                                 ->numeric()
                                 ->label('RW')
                                 ->placeholder('Masukkan nomor RW, contoh: 005')
+                                ->minLength(3)
                                 ->maxLength(3)
                                 ->validationMessages([
                                     'required' => 'RW harus diisi.',
-                                    'max_digits' => 'RW tidak boleh melebihi 3 digit angka.'
+                                    'max_digits' => 'RW tidak boleh melebihi 3 digit angka.',
+                                    'min_digits' => 'RW harus berisi 3 digit angka.'
                                 ]),
                             Forms\Components\TextInput::make('village')
                                 ->required()
@@ -184,12 +190,14 @@ class CustomerResource extends Resource
                             Forms\Components\TextInput::make('postal_code')
                                 ->required()
                                 ->maxLength(5)
+                                ->minLength(5)
                                 ->numeric()
                                 ->placeholder('Masukkan 5 digit kode pos, contoh: 12440')
                                 ->label('Kode Pos')
                                 ->validationMessages([
                                     'required' => 'Kode Pos harus diisi.',
-                                    'max_digits' => 'Kode Pos tidak boleh melebihi 5 digit angka.'
+                                    'max_digits' => 'Kode Pos tidak boleh melebihi 5 digit angka.',
+                                    'min_digits' => 'Kode Pos harus berisi setidaknya 5 digit angka.'
                                 ]),
                         ])
                     ]),
@@ -238,7 +246,7 @@ class CustomerResource extends Resource
                                     'required' => 'Password harus diisi.',
                                     'max' => 'Password tidak boleh lebih dari 255 karakter.',
                                     'min' => 'Password harus berisi setidaknya 8 karakter.',
-                                ])
+                                ]),
                         ])
                     ])
             ]);
