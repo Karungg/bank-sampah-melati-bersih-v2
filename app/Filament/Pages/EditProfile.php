@@ -46,9 +46,9 @@ class EditProfile extends Page implements HasForms
     {
         return $form
             ->schema([
-                Section::make('Profile Information')
+                Section::make('Informasi ' . __('filament-panels::pages/auth/edit-profile.label'))
                     ->aside()
-                    ->description('Update informasi akun anda.')
+                    ->description('Perbarui informasi profil akun dan alamat email anda.')
                     ->schema([
                         FileUpload::make('avatar_url')
                             ->label('Foto Profil')
@@ -92,26 +92,46 @@ class EditProfile extends Page implements HasForms
     {
         return $form
             ->schema([
-                Section::make('Update Password')
+                Section::make('Perbarui Password')
                     ->aside()
                     ->description('Pastikan akun anda menggunakan password yang tidak mudah ditebak agar menjaga keamanan akun anda.')
                     ->schema([
                         TextInput::make('Current Password')
+                            ->label('Password saat ini')
                             ->password()
+                            ->maxValue(255)
                             ->required()
-                            ->currentPassword(),
+                            ->currentPassword()
+                            ->validationMessages([
+                                'required' => 'Password saat ini harus diisi.',
+                                'max' => 'Password saat ini tidak boleh lebih dari 255 karakter.',
+                                'current_password' => 'Password saat ini salah.'
+                            ]),
                         TextInput::make('password')
                             ->password()
                             ->required()
+                            ->maxValue(255)
                             ->rule(Password::default())
                             ->autocomplete(false)
                             ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
                             ->live(debounce: 500)
-                            ->same('passwordConfirmation'),
+                            ->same('passwordConfirmation')
+                            ->validationMessages([
+                                'required' => 'Password harus diisi.',
+                                'max' => 'Password tidak boleh lebih dari 255 karakter.',
+                                'min' => 'Password harus berisi setidaknya 8 karakter.'
+                            ]),
                         TextInput::make('passwordConfirmation')
                             ->password()
+                            ->label('Konfirmasi password')
                             ->required()
+                            ->maxValue(255)
                             ->dehydrated(false)
+                            ->validationMessages([
+                                'required' => 'Konfirmasi password saat ini harus diisi.',
+                                'max' => 'Konfirmasi password saat ini tidak boleh lebih dari 255 karakter.',
+                                'min' => 'Konfirmasi password harus berisi setidaknya 8 karakter.'
+                            ])
                     ])
             ])->model($this->getUser())
             ->statePath('passwordData');
