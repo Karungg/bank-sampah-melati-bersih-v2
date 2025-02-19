@@ -48,6 +48,7 @@ class ProductDisplayResource extends Resource
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required()
+                    ->maxSize(3072)
                     ->placeholder('Unggah foto')
                     ->label('Foto')
                     ->columnSpanFull()

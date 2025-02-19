@@ -36,16 +36,13 @@ class ManagementUserResource extends Resource
                             !== ($form->getRecord()->id ?? '')
                     )
                     ->label('Foto Profil')
-                    ->maxFiles(1024)
+                    ->maxSize(3072)
                     ->avatar()
                     ->imageEditor()
                     ->directory('avatars')
                     ->nullable()
                     ->placeholder('Unggah foto profil')
-                    ->image()
-                    ->validationMessages([
-                        'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
-                    ]),
+                    ->image(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxValue(255)

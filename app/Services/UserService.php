@@ -10,11 +10,13 @@ class UserService implements UserServiceInterface
 {
     public function updateProfile(User $user)
     {
-        if (url()->livewire_current() == 'filament.admin.pages.my-profile') {
-            $avatarToDelete = $user->id != auth()->id() ? $user->avatar_url : auth()->user()->avatar_url;
+        if (url()->livewire_current() == 'filament.admin.pages.edit-profile') {
+            $avatarToDelete = $user->id != auth()->id()
+                ? $user->getOriginal('avatar_url')
+                : auth()->user()->getOriginal('avatar_url');
 
             if ($avatarToDelete) {
-                Storage::delete($avatarToDelete);
+                Storage::disk('public')->delete($avatarToDelete);
             }
         }
     }
@@ -22,7 +24,7 @@ class UserService implements UserServiceInterface
     public function deleteProfile(User $user)
     {
         if ($user->avatar_url) {
-            Storage::delete($user->avatar_url);
+            Storage::disk('public')->delete($user->avatar_url);
         }
     }
 
@@ -63,7 +65,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $route = url()->livewire_current() == 'filament.admin.pages.my-profile' || $user->hasRole('admin')
+        $route = url()->livewire_current() == 'filament.admin.pages.edit-profile' || $user->hasRole('admin')
             ? 'filament.admin.users.resources.admin-users.index'
             : 'filament.admin.users.resources.management-users.index';
 

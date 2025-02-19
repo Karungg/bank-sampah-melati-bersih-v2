@@ -36,16 +36,13 @@ class AdminUserResource extends Resource
                             !== ($form->getRecord()->id ?? '')
                     )
                     ->label('Foto Profil')
-                    ->maxFiles(3072)
+                    ->maxSize(3072)
                     ->avatar()
                     ->imageEditor()
                     ->directory('avatars')
                     ->nullable()
                     ->placeholder('Unggah foto profil')
-                    ->image()
-                    ->validationMessages([
-                        'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
-                    ]),
+                    ->image(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxValue(255)
@@ -167,7 +164,7 @@ class AdminUserResource extends Resource
     {
         return Tables\Actions\EditAction::make()
             ->url(fn($record) => $record->id === auth()->id()
-                ? route('filament.admin.pages.my-profile')
+                ? route('filament.admin.pages.edit-profile')
                 : null)
             ->mutateFormDataUsing(function (array $data, $record): array {
                 $data['password'] ?? $data['password'] = $record->password;

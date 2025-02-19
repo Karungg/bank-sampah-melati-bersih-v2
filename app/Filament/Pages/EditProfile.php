@@ -52,16 +52,13 @@ class EditProfile extends Page implements HasForms
                     ->schema([
                         FileUpload::make('avatar_url')
                             ->label('Foto Profil')
-                            ->maxFiles(3072)
+                            ->maxSize(3072)
                             ->avatar()
                             ->imageEditor()
                             ->directory('avatars')
                             ->nullable()
                             ->placeholder('Unggah foto profil')
-                            ->image()
-                            ->validationMessages([
-                                'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 3072Kb.',
-                            ]),
+                            ->image(),
                         TextInput::make('name')
                             ->required()
                             ->maxValue(255)

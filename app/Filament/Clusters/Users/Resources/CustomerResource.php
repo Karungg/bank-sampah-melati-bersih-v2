@@ -98,25 +98,25 @@ class CustomerResource extends Resource
                                 ->label('Nomor Telepon'),
                             Forms\Components\FileUpload::make('identity_card_photo')
                                 ->label('Foto KTP')
-                                ->maxFiles(1024)
+                                ->maxSize(3072)
                                 ->imageEditor()
                                 ->directory('identity_card_photos')
                                 ->nullable()
                                 ->image()
                                 ->placeholder('Unggah foto KTP')
                                 ->validationMessages([
-                                    'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 1024KB.',
+                                    'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 3072KB.',
                                 ]),
                             Forms\Components\FileUpload::make('avatar_url')
                                 ->label('Foto Profil')
-                                ->maxFiles(1024)
+                                ->maxSize(3072)
                                 ->imageEditor()
                                 ->directory('avatars')
                                 ->nullable()
                                 ->image()
                                 ->placeholder('Unggah foto profil')
                                 ->validationMessages([
-                                    'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 1024KB.',
+                                    'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 3072KB.',
                                 ]),
                         ]),
                     ]),
