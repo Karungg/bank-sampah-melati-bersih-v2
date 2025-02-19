@@ -17,7 +17,7 @@ class CustomerService implements CustomerServiceInterface
                 $customer->isDirty('identity_card_photo')
                 && $customer->getOriginal('identity_card_photo') !== null
             ) {
-                Storage::delete($customer->getOriginal('identity_card_photo'));
+                Storage::disk('public')->delete($customer->getOriginal('identity_card_photo'));
             }
         } catch (Exception $e) {
             throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
@@ -30,11 +30,11 @@ class CustomerService implements CustomerServiceInterface
             $user = DB::table('users')->where('id', $customer->user_id);
 
             if ($customer->identity_card_photo != null) {
-                Storage::delete($customer->identity_card_photo);
+                Storage::disk('public')->delete($customer->identity_card_photo);
             }
 
             if ($user->value('avatar_url') != null) {
-                Storage::delete($user->value('avatar_url'));
+                Storage::disk('public')->delete($user->value('avatar_url'));
             }
             $user->delete();
         } catch (Exception $e) {
