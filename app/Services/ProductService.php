@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\ProductServiceInterface;
-use App\Models\Product;
 use App\Models\WeightedProduct;
 use Illuminate\Support\Facades\DB;
 

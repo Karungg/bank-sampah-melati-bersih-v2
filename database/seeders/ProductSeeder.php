@@ -4,10 +4,7 @@ namespace Database\Seeders;
 
 use App\Contracts\ProductServiceInterface;
 use App\Models\Product;
-use App\Models\WeightedProduct;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
