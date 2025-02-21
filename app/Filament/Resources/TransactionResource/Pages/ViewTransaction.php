@@ -37,8 +37,7 @@ class ViewTransaction extends ViewRecord
             ->get(['product_id', 'quantity', 'weight', 'liter', 'subtotal'])
             ->map(function ($item) {
                 return (array)$item;
-            })
-            ->toArray();
+            });
 
         return $data;
     }

@@ -22,11 +22,11 @@ class CreateTransaction extends CreateRecord
     {
         $this->products = $data['transactionDetails'];
 
-        return $this->transactionService->calculateTransaction($data);
+        return $this->transactionService->calculateTransaction($data, 'weighing');
     }
 
     protected function afterCreate(): void
     {
-        $this->transactionService->saveTransactionDetails($this->record->id, $this->products);
+        $this->transactionService->saveTransactionDetails($this->record->id, $this->products, 'weighing');
     }
 }

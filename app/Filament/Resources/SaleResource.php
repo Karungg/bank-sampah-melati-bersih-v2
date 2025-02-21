@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SaleResource\Pages;
-use App\Filament\Widgets\WeightedProduct;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
