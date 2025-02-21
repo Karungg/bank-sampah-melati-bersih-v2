@@ -13,16 +13,16 @@ class CustomerService implements CustomerServiceInterface
     public function updateImages(Customer $customer)
     {
         try {
-            if (
-                $customer->isDirty('identity_card_photo')
-                && $customer->getOriginal('identity_card_photo') !== null
-            ) {
-                Storage::disk('public')->delete($customer->getOriginal('identity_card_photo'));
+            $oldIdentityCard = $customer->getOriginal('identity_card_photo');
+
+            if ($customer->isDirty('identity_card_photo') && $oldIdentityCard) {
+                Storage::disk('public')->delete($oldIdentityCard);
             }
         } catch (Exception $e) {
             throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
+
 
     public function deleteImages(Customer $customer)
     {

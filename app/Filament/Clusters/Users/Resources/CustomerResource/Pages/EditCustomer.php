@@ -48,7 +48,7 @@ class EditCustomer extends EditRecord
             ]);
 
             if ($user->isDirty('avatar_url') && $user->getOriginal('avatar_url') != null) {
-                Storage::delete($user->getOriginal('avatar_url'));
+                Storage::disk('public')->delete($user->getOriginal('avatar_url'));
             }
 
             $user->saveQuietly();
