@@ -2,4 +2,11 @@
 
 namespace App\Contracts;
 
-interface ProductDisplayServiceInterface {}
+use App\Models\ProductDisplay;
+
+interface ProductDisplayServiceInterface
+{
+    public function updateImage(ProductDisplay $productDisplay): void;
+
+    public function deleted(ProductDisplay $productDisplay): void;
+}

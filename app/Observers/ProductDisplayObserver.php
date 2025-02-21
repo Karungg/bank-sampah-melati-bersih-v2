@@ -3,11 +3,13 @@
 namespace App\Observers;
 
 use App\Contracts\NotificationServiceInterface;
+use App\Contracts\ProductDisplayServiceInterface;
 use App\Models\ProductDisplay;
 
 class ProductDisplayObserver
 {
     public function __construct(
+        protected ProductDisplayServiceInterface $productDisplayService,
         protected NotificationServiceInterface $notificationService
     ) {}
 
@@ -31,6 +33,8 @@ class ProductDisplayObserver
      */
     public function updated(ProductDisplay $ProductDisplay): void
     {
+        $this->productDisplayService->updateImage($ProductDisplay);
+
         $this->notificationService->sendUpdateNotification(
             'Hasil Olahan berhasil diupdate.',
             auth()->user()->name . ' mengubah hasil olahan ' . $ProductDisplay->title,
@@ -46,6 +50,8 @@ class ProductDisplayObserver
      */
     public function deleted(ProductDisplay $ProductDisplay): void
     {
+        $this->productDisplayService->deleted($ProductDisplay);
+
         $this->notificationService->sendDeleteNotification(
             'Hasil Olahan berhasil dihapus.',
             auth()->user()->name . ' menghapus hasil olahan ' . $ProductDisplay->title,
