@@ -3,11 +3,13 @@
 namespace App\Observers;
 
 use App\Contracts\NotificationServiceInterface;
+use App\Contracts\PostServiceInterface;
 use App\Models\Post;
 
 class PostObserver
 {
     public function __construct(
+        protected PostServiceInterface $postService,
         protected NotificationServiceInterface $notificationService
     ) {}
 
@@ -31,6 +33,8 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
+        $this->postService->updateImage($post);
+
         $this->notificationService->sendUpdateNotification(
             'Kegiatan berhasil diupdate.',
             auth()->user()->name . ' mengupdate kegiatan ' . $post->title . '.',
@@ -46,6 +50,8 @@ class PostObserver
      */
     public function deleted(Post $post): void
     {
+        $this->postService->deleted($post);
+
         $this->notificationService->sendDeleteNotification(
             'Kegiatan berhasil dihapus.',
             auth()->user()->name . ' menghapus kegiatan ' . $post->title . '.',

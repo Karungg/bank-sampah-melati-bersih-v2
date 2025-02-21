@@ -103,10 +103,7 @@ class CustomerResource extends Resource
                                 ->directory('identity_card_photos')
                                 ->nullable()
                                 ->image()
-                                ->placeholder('Unggah foto KTP')
-                                ->validationMessages([
-                                    'max' => 'Ukuran file Foto KTP tidak boleh lebih dari 3072KB.',
-                                ]),
+                                ->placeholder('Unggah foto KTP'),
                             Forms\Components\FileUpload::make('avatar_url')
                                 ->label('Foto Profil')
                                 ->maxSize(3072)
@@ -114,10 +111,7 @@ class CustomerResource extends Resource
                                 ->directory('avatars')
                                 ->nullable()
                                 ->image()
-                                ->placeholder('Unggah foto profil')
-                                ->validationMessages([
-                                    'max' => 'Ukuran file Foto Profil tidak boleh lebih dari 3072KB.',
-                                ]),
+                                ->placeholder('Unggah foto profil'),
                         ]),
                     ]),
                 Section::make('Alamat Lengkap')

@@ -10,10 +10,10 @@ class UserService implements UserServiceInterface
 {
     public function updateProfile(User $user)
     {
-        if (url()->livewire_current() == 'filament.admin.pages.edit-profile') {
-            $avatarToDelete = $user->id != auth()->id()
-                ? $user->getOriginal('avatar_url')
-                : auth()->user()->getOriginal('avatar_url');
+        if (url()->livewire_current() === 'filament.admin.pages.edit-profile' && $user->isDirty('avatar_url')) {
+            $avatarToDelete = $user->id === auth()->id()
+                ? auth()->user()->getOriginal('avatar_url')
+                : $user->getOriginal('avatar_url');
 
             if ($avatarToDelete) {
                 Storage::disk('public')->delete($avatarToDelete);

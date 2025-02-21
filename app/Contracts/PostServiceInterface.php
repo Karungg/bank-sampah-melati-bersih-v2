@@ -2,4 +2,11 @@
 
 namespace App\Contracts;
 
-interface PostServiceInterface {}
+use App\Models\Post;
+
+interface PostServiceInterface
+{
+    public function updateImage(Post $post): void;
+
+    public function deleted(Post $post): void;
+}
