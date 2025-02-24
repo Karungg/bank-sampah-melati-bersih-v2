@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\SaleResource\Pages;
 
 use App\Filament\Resources\SaleResource;
-use App\Filament\Widgets\WeightedProduct;
+use App\Filament\Resources\SaleResource\Widgets\WeightedProductsOverview;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -21,7 +21,7 @@ class ListSales extends ListRecords
     protected function getFooterWidgets(): array
     {
         return [
-            WeightedProduct::class
+            WeightedProductsOverview::class
         ];
     }
 }
