@@ -30,7 +30,7 @@ class StatsOverview extends StatsOverviewWidget
                     ',',
                     '.'
                 ),
-            ),
+            )->description($startDate ? "Dimulai dari $startDate" : ""),
             StatsOverviewWidget\Stat::make(
                 label: 'Total pendapatan penjualan',
                 value: 'Rp.' . number_format(
@@ -43,7 +43,7 @@ class StatsOverview extends StatsOverviewWidget
                     ',',
                     '.'
                 ),
-            ),
+            )->description($endDate ? "Hingga $endDate" : ""),
             StatsOverviewWidget\Stat::make(
                 label: 'Saldo bank',
                 value: 'Rp.' . number_format(
@@ -53,11 +53,7 @@ class StatsOverview extends StatsOverviewWidget
                     ',',
                     '.'
                 ),
-            )
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
-                ->color('success')
-                ->description('Increase'),
+            ),
         ];
     }
 }
