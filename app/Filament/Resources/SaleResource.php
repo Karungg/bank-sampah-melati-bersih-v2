@@ -72,7 +72,14 @@ class SaleResource extends Resource
                                     ->required()
                                     ->label('Kategori Sampah')
                                     ->options(
-                                        DB::table('products')->pluck('title', 'id')
+                                        DB::table('products')
+                                            ->join('weighted_products', 'products.id', 'weighted_products.product_id')
+                                            ->whereAny([
+                                             'weighted_products.total_quantity',
+                                             'weighted_products.total_weight',
+                                             'weighted_products.total_liter',   
+                                            ], '>', 0)
+                                            ->pluck('products.title', 'products.id')
                                     )
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
