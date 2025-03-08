@@ -49,7 +49,7 @@ class CategoryResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->validationMessages([
                         'required' => 'Slug harus diisi.',
-                        'max' => 'Slug tidak boleh lebih dari 256 karakter.',
+                        'max' => 'Slug tidak boleh lebih dari 300 karakter.',
                         'unique' => 'Slug sudah digunakan.'
                     ]),
             ]);
