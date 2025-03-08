@@ -228,7 +228,7 @@ class CustomerResource extends Resource
                                 ->required(fn(string $context): bool => $context != 'edit')
                                 ->password()
                                 ->revealable()
-                                ->placeholder('Minimal 8 karakter dengan kombinasi huruf dan angka')
+                                ->placeholder('Minimal 8 karakter')
                                 ->maxValue(255)
                                 ->minValue(8)
                                 ->helperText(
