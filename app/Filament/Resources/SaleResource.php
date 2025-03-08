@@ -84,7 +84,7 @@ class SaleResource extends Resource
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(function (string $state, Set $set, Get $get) {
+                                    ->afterStateUpdated(function (?string $state, Set $set, Get $get) {
                                         $productId = $state;
                                         $product = DB::table('products')
                                             ->join('weighted_products', 'products.id', 'weighted_products.product_id')

@@ -98,7 +98,7 @@ class TransactionResource extends Resource
                                     ->searchable()
                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->live(onBlur: true)
-                                    ->afterStateUpdated(function (string $state, Set $set) {
+                                    ->afterStateUpdated(function (?string $state, Set $set) {
                                         $productId = $state;
                                         $unit = DB::table('products')
                                             ->where('id', $productId)

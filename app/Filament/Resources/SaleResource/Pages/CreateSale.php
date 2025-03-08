@@ -7,6 +7,7 @@ use App\Filament\Resources\SaleResource;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\WeightedProduct;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\SaleResource\Widgets\WeightedProductsOverview;
 
 class CreateSale extends CreateRecord
 {
@@ -30,5 +31,12 @@ class CreateSale extends CreateRecord
     protected function afterCreate(): void
     {
         $this->transactionService->saveTransactionDetails($this->record->id, $this->products, 'sale');
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            WeightedProductsOverview::class
+        ];
     }
 }
