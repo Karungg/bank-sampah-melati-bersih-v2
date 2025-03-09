@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\NotificationServiceInterface;
-use App\Contracts\UserServiceInterface;
 use App\Models\User;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;

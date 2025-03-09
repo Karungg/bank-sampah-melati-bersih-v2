@@ -2,4 +2,7 @@
 
 namespace App\Contracts;
 
-interface WithDrawalServerInterface {}
+interface WithDrawalServerInterface
+{
+    public function generateCode(): string;
+}
