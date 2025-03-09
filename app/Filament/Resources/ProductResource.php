@@ -139,11 +139,11 @@ class ProductResource extends Resource
                     ->searchable()
                     ->label('Satuan')
                     ->sortable()
-                    ->formatStateUsing(fn(string $state) => ucfirst($state)),
+                    ->formatStateUsing(fn(string $state): string => ucfirst($state)),
                 Tables\Columns\TextColumn::make('price')
                     ->sortable()
                     ->label('Harga')
-                    ->formatStateUsing(fn(string $state) => number_format($state, 0, ',', '.'))
+                    ->formatStateUsing(fn(string $state): string => number_format($state, 0, ',', '.'))
                     ->prefix('Rp.'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
