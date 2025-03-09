@@ -21,6 +21,7 @@ class CompanyProfile extends Model
         'weighing_location',
         'account_number',
         'on_behalf',
-        'balance'
+        'balance',
+        'sales_balance'
     ];
 }
