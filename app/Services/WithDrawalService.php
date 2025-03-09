@@ -26,4 +26,23 @@ class WithDrawalService implements WithDrawalServerInterface
 
         return 'WD' . $date . $sequence;
     }
+
+    public function store(string $customerId, int $amount): bool
+    {
+        try {
+            return DB::transaction(function () use ($customerId, $amount) {
+                $account = DB::table('accounts')
+                    ->where('customer_id', $customerId);
+
+                $account->decrement('balance', $amount);
+                $account->increment('credit', $amount);
+
+                DB::table('company_profiles')
+                    ->decrement('balance', $amount);
+                return true;
+            });
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }

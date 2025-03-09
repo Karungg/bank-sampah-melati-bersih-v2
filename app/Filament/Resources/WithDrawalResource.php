@@ -52,6 +52,10 @@ class WithDrawalResource extends Resource
                                     ->readOnly()
                                     ->prefix('Rp.')
                                     ->label('Saldo'),
+                                Forms\Components\TextInput::make('balanceUnformatted')
+                                    ->readOnly()
+                                    ->prefix('Rp.')
+                                    ->label('Saldo'),
                             ])
                     ])
                     ->hidden(fn(Get $get): bool => empty($get('customer_id'))),
