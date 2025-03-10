@@ -41,7 +41,8 @@ class CompanyProfile extends Page implements HasForms
             'weighing_location',
             'account_number',
             'on_behalf',
-            'balance'
+            'balance',
+            'sales_balance'
         ])->map(function ($item) {
             return (array) $item;
         });
@@ -125,6 +126,10 @@ class CompanyProfile extends Page implements HasForms
                             ->readOnly()
                             ->prefix('Rp.')
                             ->label('Saldo'),
+                        TextInput::make('sales_balance')
+                            ->readOnly()
+                            ->prefix('Rp.')
+                            ->label('Saldo Penjualan'),
                     ])
             ])->statePath('data');
     }

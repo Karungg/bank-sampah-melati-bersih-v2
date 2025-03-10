@@ -76,7 +76,7 @@ class TransactionService implements TransactionServiceInterface
     public function saveTransactionDetails(string $transactionId, array $products, string $type): void
     {
         try {
-            DB::transaction(function () use ($transactionId, $products) {
+            DB::transaction(function () use ($transactionId, $products, $type) {
                 $productIds = array_column($products, 'product_id');
                 $productsData = Product::whereIn('id', $productIds)->get(['id', 'unit', 'price'])->keyBy('id');
 
@@ -101,13 +101,17 @@ class TransactionService implements TransactionServiceInterface
 
                 $transaction = Transaction::findOrFail($transactionId, ['total_amount', 'customer_id']);
 
-                Account::where('customer_id', $transaction->customer_id)
-                    ->incrementEach([
-                        'debit' => $transaction->total_amount,
-                        'balance' => $transaction->total_amount,
-                    ]);
+                if ($type == 'weighing') {
+                    Account::where('customer_id', $transaction->customer_id)
+                        ->incrementEach([
+                            'debit' => $transaction->total_amount,
+                            'balance' => $transaction->total_amount,
+                        ]);
 
-                CompanyProfile::increment('balance', $transaction->total_amount);
+                    CompanyProfile::increment('balance', $transaction->total_amount);
+                } else {
+                    CompanyProfile::increment('sales_balance', $transaction->total_amount);
+                }
             });
         } catch (Exception $e) {
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi.');

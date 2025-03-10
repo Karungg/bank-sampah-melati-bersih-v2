@@ -33,8 +33,15 @@ class ViewSale extends ViewRecord
             ->value('name');
 
         $data['transactionDetails'] = DB::table('transaction_details')
-            ->where('transaction_id', $this->record->id)
-            ->get(['product_id', 'quantity', 'weight', 'liter', 'subtotal'])
+            ->join('products', 'transaction_details.product_id', 'products.id')
+            ->where('transaction_details.transaction_id', $this->record->id)
+            ->get([
+                DB::raw('products.title as product_id'),
+                'transaction_details.quantity',
+                'transaction_details.weight',
+                'transaction_details.liter',
+                'transaction_details.subtotal'
+            ])
             ->map(function ($item) {
                 return (array)$item;
             })

@@ -75,9 +75,9 @@ class SaleResource extends Resource
                                         DB::table('products')
                                             ->join('weighted_products', 'products.id', 'weighted_products.product_id')
                                             ->whereAny([
-                                             'weighted_products.total_quantity',
-                                             'weighted_products.total_weight',
-                                             'weighted_products.total_liter',   
+                                                'weighted_products.total_quantity',
+                                                'weighted_products.total_weight',
+                                                'weighted_products.total_liter',
                                             ], '>', 0)
                                             ->pluck('products.title', 'products.id')
                                     )
@@ -111,7 +111,11 @@ class SaleResource extends Resource
                                     ->hintColor('primary')
                                     ->placeholder('Masukkan jumlah yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'pcs'
-                                        || $state != null),
+                                        || $state != null)
+                                    ->maxValue(fn(Get $get): ?string => $get('weighted_product'))
+                                    ->validationMessages([
+                                        'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
+                                    ]),
                                 Forms\Components\TextInput::make('weight')
                                     ->required()
                                     ->numeric()
@@ -123,7 +127,11 @@ class SaleResource extends Resource
                                     ->hintColor('primary')
                                     ->placeholder('Masukkan berat yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'kg'
-                                        || $state != null),
+                                        || $state != null)
+                                    ->maxValue(fn(Get $get): ?string => $get('weighted_product'))
+                                    ->validationMessages([
+                                        'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
+                                    ]),
                                 Forms\Components\TextInput::make('liter')
                                     ->required()
                                     ->numeric()
@@ -135,7 +143,11 @@ class SaleResource extends Resource
                                     ->hintColor('primary')
                                     ->placeholder('Masukkan liter yang ingin dijual.')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'liter'
-                                        || $state != null),
+                                        || $state != null)
+                                    ->maxValue(fn(Get $get): ?string => $get('weighted_product'))
+                                    ->validationMessages([
+                                        'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
+                                    ]),
                                 Forms\Components\TextInput::make('subtotal')
                                     ->required()
                                     ->numeric()
