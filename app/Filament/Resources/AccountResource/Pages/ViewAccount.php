@@ -13,9 +13,7 @@ class ViewAccount extends ViewRecord
 
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\EditAction::make(),
-        ];
+        return [];
     }
 
     protected function mutateFormDataBeforeFill(array $data): array

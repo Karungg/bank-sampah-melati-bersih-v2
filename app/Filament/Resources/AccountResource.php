@@ -133,7 +133,6 @@ class AccountResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -155,7 +154,6 @@ class AccountResource extends Resource
             'index' => Pages\ListAccounts::route('/'),
             'create' => Pages\CreateAccount::route('/create'),
             'view' => Pages\ViewAccount::route('/{record}'),
-            'edit' => Pages\EditAccount::route('/{record}/edit'),
         ];
     }
 }
