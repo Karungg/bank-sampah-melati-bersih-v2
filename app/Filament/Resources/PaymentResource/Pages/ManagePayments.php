@@ -5,7 +5,6 @@ namespace App\Filament\Resources\PaymentResource\Pages;
 use App\Filament\Resources\PaymentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
-use Illuminate\Support\Facades\DB;
 
 class ManagePayments extends ManageRecords
 {

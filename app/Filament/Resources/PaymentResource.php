@@ -49,7 +49,7 @@ class PaymentResource extends Resource
                     ->label('Jumlah Pembayaran')
                     ->placeholder('Masukkan Jumlah Pembayaran')
                     ->minValue(0)
-                    ->maxValue(fn(Get $get): int => $get('debt'))
+                    ->maxValue(fn(Get $get): ?int => $get('debt'))
                     ->maxLength(12)
                     ->prefix('Rp.')
                     ->columnSpanFull()
@@ -65,25 +65,27 @@ class PaymentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
+                    ->label('No')
+                    ->searchable()
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Total'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Dibuat Saat'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Diupdate Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
