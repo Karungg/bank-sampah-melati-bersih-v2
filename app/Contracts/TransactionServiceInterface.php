@@ -2,6 +2,8 @@
 
 namespace App\Contracts;
 
+use App\Models\Transaction;
+
 interface TransactionServiceInterface
 {
     public function generateCode(): string;

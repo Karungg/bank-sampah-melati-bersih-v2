@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Contracts\NotificationServiceInterface;
+use App\Contracts\ReportServiceInterface;
 use App\Contracts\TransactionServiceInterface;
 use App\Models\Transaction;
 
@@ -10,7 +11,8 @@ class TransactionObserver
 {
     public function __construct(
         protected NotificationServiceInterface $notificationService,
-        protected TransactionServiceInterface $transactionService
+        protected TransactionServiceInterface $transactionService,
+        protected ReportServiceInterface $reportService
     ) {}
     /**
      * Handle the Transaction "created" event.
@@ -26,6 +28,8 @@ class TransactionObserver
             $body = ' menambahkan transaksi penjualan.';
             $route = 'filament.admin.resources.sales.index';
         }
+
+        $this->reportService->customerReportSave($transaction);
 
         $this->notificationService->sendSuccessNotification(
             $title,

@@ -9,6 +9,7 @@ use App\Contracts\NotificationServiceInterface;
 use App\Contracts\PostServiceInterface;
 use App\Contracts\ProductDisplayServiceInterface;
 use App\Contracts\ProductServiceInterface;
+use App\Contracts\ReportServiceInterface;
 use App\Contracts\TransactionServiceInterface;
 use App\Contracts\UserServiceInterface;
 use App\Contracts\WithDrawalServerInterface;
@@ -19,6 +20,7 @@ use App\Services\NotificationService;
 use App\Services\PostService;
 use App\Services\ProductDisplayService;
 use App\Services\ProductService;
+use App\Services\ReportService;
 use App\Services\TransactionService;
 use App\Services\UserService;
 use App\Services\WithDrawalService;
@@ -42,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductDisplayServiceInterface::class, ProductDisplayService::class);
         $this->app->bind(TransactionServiceInterface::class, TransactionService::class);
         $this->app->bind(WithDrawalServerInterface::class, WithDrawalService::class);
+        $this->app->bind(ReportServiceInterface::class, ReportService::class);
     }
 
     /**

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('debit', 12, 2)->default(0);
             $table->decimal('credit', 12, 2)->default(0);
             $table->decimal('balance', 12, 2)->default(0);
+            $table->string('type', 20);
             $table->char('customer_id', 36);
             $table->timestamps();
         });

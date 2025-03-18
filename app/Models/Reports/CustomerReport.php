@@ -14,6 +14,7 @@ class CustomerReport extends Model
         'debit',
         'credit',
         'balance',
+        'type',
         'customer_id'
     ];
 }
