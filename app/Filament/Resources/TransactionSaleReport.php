@@ -2,24 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TransactionReportResource\Pages;
+use App\Filament\Resources\TransactionSaleReportResource\Pages;
 use App\Models\Reports\TransactionReport;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class TransactionReportResource extends Resource
+class TransactionSaleReport extends Resource
 {
     protected static ?string $model = TransactionReport::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 11;
 
     protected static ?string $navigationGroup = 'Laporan';
 
-    protected static ?string $modelLabel = 'Laporan Penimbangan';
+    protected static ?string $modelLabel = 'Laporan Penjualan';
 
     public static function form(Form $form): Form
     {
