@@ -5,19 +5,20 @@ namespace App\Models\Reports;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerReport extends Model
+class TransactionDetailReport extends Model
 {
     use HasUuids;
 
-    protected $table = 'customer_reports';
+    protected $table = "transaction_detail_reports";
+
     protected $keyType = 'string';
 
     protected $fillable = [
-        'transaction_code',
-        'debit',
-        'credit',
-        'balance',
-        'type',
-        'customer_id'
+        'transaction_id',
+        'product_id',
+        'quantity',
+        'weight',
+        'liter',
+        'total_amount'
     ];
 }

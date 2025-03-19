@@ -2,10 +2,13 @@
 
 namespace App\Models\Reports;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class TransactionReport extends Model
 {
+    use HasUuids;
+
     protected $table = 'transaction_reports';
     protected $keyType = 'string';
 
