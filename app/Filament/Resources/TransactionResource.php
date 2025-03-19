@@ -151,7 +151,8 @@ class TransactionResource extends Resource
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
-                $query->where('type', 'weighing');
+                $query->where('type', 'weighing')
+                    ->orderBy('created_at', 'desc');
             })
             ->columns([
                 Tables\Columns\TextColumn::make('id')

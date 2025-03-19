@@ -34,7 +34,8 @@ class TransactionSaleReport extends Resource
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
-                $query->where('type', 'sale');
+                $query->where('type', 'sale')
+                    ->orderBy('created_at', 'desc');
             })
             ->columns([
                 Tables\Columns\TextColumn::make('id')

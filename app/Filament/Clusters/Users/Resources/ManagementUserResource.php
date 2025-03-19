@@ -150,7 +150,8 @@ class ManagementUserResource extends Resource
                 'created_at',
                 'updated_at'
             ])
-            ->whereRelation('roles', 'name', '=', 'management');
+            ->whereRelation('roles', 'name', '=', 'management')
+            ->orderBy('created_at', 'desc');
     }
 
     public static function canViewAny(): bool

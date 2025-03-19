@@ -152,7 +152,8 @@ class AdminUserResource extends Resource
                 'created_at',
                 'updated_at'
             ])
-            ->whereRelation('roles', 'name', '=', 'admin');
+            ->whereRelation('roles', 'name', '=', 'admin')
+            ->orderBy('created_at', 'desc');
     }
 
     public static function canViewAny(): bool
