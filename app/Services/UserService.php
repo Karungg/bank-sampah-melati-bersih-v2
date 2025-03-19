@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UserService implements UserServiceInterface
 {
-    public function updateProfile(User $user)
+    public function updateProfile(User $user): void
     {
         if (url()->livewire_current() === 'filament.admin.pages.edit-profile' && $user->isDirty('avatar_url')) {
             $avatarToDelete = $user->id === auth()->id()
@@ -21,7 +21,7 @@ class UserService implements UserServiceInterface
         }
     }
 
-    public function deleteProfile(User $user)
+    public function deleteProfile(User $user): void
     {
         if ($user->avatar_url) {
             Storage::disk('public')->delete($user->avatar_url);

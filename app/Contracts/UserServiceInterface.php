@@ -6,9 +6,9 @@ use App\Models\User;
 
 interface UserServiceInterface
 {
-    public function updateProfile(User $user);
+    public function updateProfile(User $user): void;
 
-    public function deleteProfile(User $user);
+    public function deleteProfile(User $user): void;
 
     public function getTextCreateNotification(User $user): array;
 
