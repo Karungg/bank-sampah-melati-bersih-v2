@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Contracts\ReportServiceInterface;
 use App\Models\TransactionDetail;
 
-class TransactionDetailReportObserver
+class TransactionDetailObserver
 {
     public function __construct(protected ReportServiceInterface $reportService) {}
     /**

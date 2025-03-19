@@ -19,6 +19,6 @@ class TransactionDetailReport extends Model
         'quantity',
         'weight',
         'liter',
-        'total_amount'
+        'subtotal'
     ];
 }

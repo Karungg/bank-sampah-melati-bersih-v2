@@ -92,7 +92,7 @@ class ReportService implements ReportServiceInterface
                         'weight' => $transactionDetail->weight,
                         'liter' => $transactionDetail->liter,
                         'current_price' => $transactionDetail->current_price,
-                        'total_amount' => $transactionDetail->total_amount,
+                        'subtotal' => $transactionDetail->subtotal,
                         'transaction_id' => $transactionDetail->transaction_id,
                         'product_id' => $transactionDetail->product_id,
                         'created_at' => $transactionDetail->created_at,
@@ -103,6 +103,4 @@ class ReportService implements ReportServiceInterface
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
-
-    public function transactionSaleReportSave(Transaction $transaction): void {}
 }

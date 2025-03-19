@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('weight', 12, 2)->nullable();
             $table->decimal('liter', 12, 2)->nullable();
             $table->decimal('current_price', 12, 2)->nullable();
-            $table->decimal('total_amount', 12, 2);
+            $table->decimal('subtotal', 12, 2);
             $table->char('transaction_id');
             $table->char('product_id');
             $table->timestamps();

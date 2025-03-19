@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Account;
 use App\Models\CompanyProfile;
+use App\Models\Reports\TransactionDetailReport;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -98,6 +99,8 @@ class TransactionService implements TransactionServiceInterface
                 }
 
                 TransactionDetail::insert($transactionDetails);
+
+                TransactionDetailReport::insert($transactionDetails);
 
                 $transaction = Transaction::findOrFail($transactionId, ['total_amount', 'customer_id']);
 

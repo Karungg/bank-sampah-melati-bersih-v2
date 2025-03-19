@@ -15,6 +15,4 @@ interface ReportServiceInterface
     public function transactionReportSave(Transaction $transaction): void;
 
     public function transactionDetailReportSave(TransactionDetail $transactionDetail): void;
-
-    public function transactionSaleReportSave(Transaction $transaction): void;
 }
