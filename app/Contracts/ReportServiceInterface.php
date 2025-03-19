@@ -3,8 +3,11 @@
 namespace App\Contracts;
 
 use App\Models\Transaction;
+use App\Models\WithDrawal;
 
 interface ReportServiceInterface
 {
-    public function customerReportSave(Transaction $transaction): void;
+    public function customerWeighingReportSave(Transaction $transaction): void;
+
+    public function customerWithDrawalReportSave(WithDrawal $withDrawal): void;
 }

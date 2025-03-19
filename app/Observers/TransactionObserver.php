@@ -29,7 +29,7 @@ class TransactionObserver
             $route = 'filament.admin.resources.sales.index';
         }
 
-        $this->reportService->customerReportSave($transaction);
+        $this->reportService->customerWeighingReportSave($transaction);
 
         $this->notificationService->sendSuccessNotification(
             $title,
