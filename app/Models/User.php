@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Reports\TransactionReport;
 use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -72,6 +73,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(TransactionReport::class);
     }
 
     public function canAccessPanel(Panel $panel): bool

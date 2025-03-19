@@ -7,7 +7,6 @@ use App\Models\Reports\CustomerReport;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
-use Illuminate\Support\Facades\DB;
 
 class CustomerReportResource extends Resource
 {
@@ -40,11 +39,10 @@ class CustomerReportResource extends Resource
                     ->label('Jenis Transaksi')
                     ->formatStateUsing(fn(string $state): ?string => $state == 'weighing' ? 'Penimbangan' : 'Tarik Uang')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer_id')
+                Tables\Columns\TextColumn::make('customer.full_name')
                     ->label('Nama Nasabah')
                     ->searchable()
-                    ->sortable()
-                    ->formatStateUsing(fn(string $state): ?string => DB::table('customers')->where('id', $state)->value('full_name')),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('debit')
                     ->label('Debet')
                     ->sortable()

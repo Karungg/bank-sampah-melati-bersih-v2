@@ -8,6 +8,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class TransactionSaleReport extends Resource
 {
@@ -32,8 +33,52 @@ class TransactionSaleReport extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $query->where('type', 'sale');
+            })
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('id')
+                    ->label('No')
+                    ->rowIndex(),
+                Tables\Columns\TextColumn::make('transaction_code')
+                    ->searchable()
+                    ->sortable()
+                    ->label('Kode Transaksi'),
+                Tables\Columns\TextColumn::make('total_quantity')
+                    ->numeric()
+                    ->sortable()
+                    ->label('Jumlah')
+                    ->suffix(' Pcs'),
+                Tables\Columns\TextColumn::make('total_weight')
+                    ->numeric()
+                    ->sortable()
+                    ->label('Berat')
+                    ->suffix(' Kg'),
+                Tables\Columns\TextColumn::make('total_liter')
+                    ->numeric()
+                    ->sortable()
+                    ->label('Liter')
+                    ->suffix(' Liter'),
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->numeric()
+                    ->sortable()
+                    ->label('Total')
+                    ->prefix('Rp.'),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
+                    ->label('Penimbang')
+                    ->limit(20)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->label('Dibuat Saat')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->label('Diupdate Saat')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -41,7 +86,11 @@ class TransactionSaleReport extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([]);
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getRelations(): array

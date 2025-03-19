@@ -20,6 +20,9 @@ class TransactionObserver
     public function created(Transaction $transaction): void
     {
         if ($transaction->type == 'weighing') {
+
+            $this->reportService->customerWeighingReportSave($transaction);
+
             $title = 'Transaksi penimbangan berhasil ditambahkan.';
             $body = ' menambahkan transaksi penimbangan nasabah ' . $transaction->customer->full_name;
             $route = 'filament.admin.resources.transactions.index';
@@ -29,7 +32,7 @@ class TransactionObserver
             $route = 'filament.admin.resources.sales.index';
         }
 
-        $this->reportService->customerWeighingReportSave($transaction);
+        $this->reportService->transactionReportSave($transaction);
 
         $this->notificationService->sendSuccessNotification(
             $title,

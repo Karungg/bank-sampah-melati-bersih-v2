@@ -4,8 +4,6 @@ namespace App\Filament\Resources\SaleResource\Pages;
 
 use App\Contracts\TransactionServiceInterface;
 use App\Filament\Resources\SaleResource;
-use App\Filament\Widgets\StatsOverview;
-use App\Filament\Widgets\WeightedProduct;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\SaleResource\Widgets\WeightedProductsOverview;
 

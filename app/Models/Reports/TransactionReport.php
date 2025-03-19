@@ -2,8 +2,11 @@
 
 namespace App\Models\Reports;
 
+use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TransactionReport extends Model
 {
@@ -23,4 +26,14 @@ class TransactionReport extends Model
         'user_id',
         'customer_id',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Reports\CustomerReport;
+use App\Models\Reports\TransactionReport;
 use App\Observers\CustomerObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -48,5 +50,15 @@ class Customer extends Model
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(TransactionReport::class);
+    }
+
+    public function customerReports(): HasMany
+    {
+        return $this->hasMany(CustomerReport::class);
     }
 }
