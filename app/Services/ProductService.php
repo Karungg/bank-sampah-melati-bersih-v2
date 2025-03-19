@@ -30,14 +30,14 @@ class ProductService implements ProductServiceInterface
         return $prefix . $date . $sequence;
     }
 
-    public function createWeightedProduct(string $id)
+    public function createWeightedProduct(string $id): void
     {
         WeightedProduct::create([
             'product_id' => $id
         ]);
     }
 
-    public function deleteWeightedProduct(string $id)
+    public function deleteWeightedProduct(string $id): void
     {
         WeightedProduct::where('product_id', $id)->delete();
     }
