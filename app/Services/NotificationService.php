@@ -16,8 +16,8 @@ class NotificationService implements NotificationServiceInterface
         Model $model,
         string $route,
         string $tableSearch,
-        $recipient
-    ) {
+        string $recipient
+    ): void {
         $notification = Notification::make()
             ->title($title)
             ->body($body)
@@ -46,8 +46,8 @@ class NotificationService implements NotificationServiceInterface
         Model $model,
         string $route,
         string $tableSearch,
-        $recipient
-    ) {
+        string $recipient
+    ): void {
         $notification = Notification::make()
             ->title($title)
             ->body($body)
@@ -74,8 +74,8 @@ class NotificationService implements NotificationServiceInterface
         string $title,
         string $body,
         string $route,
-        $recipient
-    ) {
+        string $recipient
+    ): void {
         $notification = Notification::make()
             ->title($title)
             ->body($body)

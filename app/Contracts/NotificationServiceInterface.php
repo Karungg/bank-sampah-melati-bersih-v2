@@ -12,8 +12,8 @@ interface NotificationServiceInterface
         Model $model,
         string $route,
         string $tableSearch,
-        $recipient
-    );
+        string $recipient
+    ): void;
 
     public function sendUpdateNotification(
         string $title,
@@ -21,13 +21,13 @@ interface NotificationServiceInterface
         Model $model,
         string $route,
         string $tableSearch,
-        $recipient
-    );
+        string $recipient
+    ): void;
 
     public function sendDeleteNotification(
         string $title,
         string $body,
         string $route,
-        $recipient
-    );
+        string $recipient
+    ): void;
 }
