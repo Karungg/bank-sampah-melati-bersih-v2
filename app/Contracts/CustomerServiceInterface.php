@@ -6,7 +6,7 @@ use App\Models\Customer;
 
 interface CustomerServiceInterface
 {
-    public function updateImages(Customer $customer);
+    public function updateImages(Customer $customer): void;
 
-    public function deleteImages(Customer $customer);
+    public function deleteImages(Customer $customer): void;
 }

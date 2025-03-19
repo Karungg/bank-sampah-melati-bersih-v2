@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class CustomerService implements CustomerServiceInterface
 {
-    public function updateImages(Customer $customer)
+    public function updateImages(Customer $customer): void
     {
         try {
             $oldIdentityCard = $customer->getOriginal('identity_card_photo');
@@ -24,7 +24,7 @@ class CustomerService implements CustomerServiceInterface
     }
 
 
-    public function deleteImages(Customer $customer)
+    public function deleteImages(Customer $customer): void
     {
         try {
             $user = DB::table('users')->where('id', $customer->user_id);
