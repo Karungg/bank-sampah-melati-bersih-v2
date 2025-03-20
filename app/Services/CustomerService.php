@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerService implements CustomerServiceInterface
@@ -20,6 +21,10 @@ class CustomerService implements CustomerServiceInterface
                 Storage::disk('public')->delete($oldIdentityCard);
             }
         } catch (Exception $e) {
+            Log::error("Failed to update images customer", [
+                "customer_id" => $customer->id,
+                "message" => $e->getMessage()
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
@@ -39,6 +44,10 @@ class CustomerService implements CustomerServiceInterface
             }
             $user->delete();
         } catch (Exception $e) {
+            Log::error("Failed to delete images customer", [
+                "customer_id" => $customer->id,
+                "message" => $e->getMessage()
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
@@ -64,8 +73,12 @@ class CustomerService implements CustomerServiceInterface
             DB::commit();
             return $data;
         } catch (Exception $e) {
+            Log::error("Failed to save customer user", [
+                "user_id" => $data['user_id'],
+                "message" => $e->getMessage()
+            ]);
             DB::rollBack();
-            throw new Exception('Terjadi kesalahan saat menambahkan nasabah. Coba lagi nanti.');
+            throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
 
@@ -90,8 +103,12 @@ class CustomerService implements CustomerServiceInterface
             DB::commit();
             return $data;
         } catch (Exception $e) {
+            Log::error("Failed to edit customer user", [
+                "user_id" => $data['user_id'],
+                "message" => $e->getMessage()
+            ]);
             DB::rollBack();
-            throw new Exception('Terjadi kesalahan saat mengupdate nasabah. Coba lagi nanti.');
+            throw new Exception('Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.');
         }
     }
 }

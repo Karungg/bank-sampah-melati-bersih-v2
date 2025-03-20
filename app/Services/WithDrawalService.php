@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\WithDrawalServerInterface;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class WithDrawalService implements WithDrawalServerInterface
@@ -41,7 +42,7 @@ class WithDrawalService implements WithDrawalServerInterface
                     ->decrement('balance', $amount);
                 return true;
             });
-        } catch (\Throwable $th) {
+        } catch (Exception $e) {
             return false;
         }
     }
