@@ -96,6 +96,14 @@ class CustomerResource extends Resource
                                 ])
                                 ->prefix('+62')
                                 ->label('Nomor Telepon'),
+                            Forms\Components\DateTimePicker::make('created_at')
+                                ->readOnly()
+                                ->label('Dibuat Saat')
+                                ->hiddenOn(['edit', 'create']),
+                            Forms\Components\DateTimePicker::make('updated_at')
+                                ->readOnly()
+                                ->label('Diupdate Saat')
+                                ->hiddenOn(['edit', 'create']),
                             Forms\Components\FileUpload::make('identity_card_photo')
                                 ->label('Foto KTP')
                                 ->maxSize(3072)
