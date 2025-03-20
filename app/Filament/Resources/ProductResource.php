@@ -108,6 +108,14 @@ class ProductResource extends Resource
                                         'max_digits' => 'Harga tidak boleh lebih dari 10 digit dan dua angka dibelakang koma.',
                                         'min' => 'Harga tidak boleh kurang dari 1.',
                                     ]),
+                                Forms\Components\DateTimePicker::make('created_at')
+                                    ->readOnly()
+                                    ->label('Dibuat Saat')
+                                    ->hiddenOn(['edit', 'create']),
+                                Forms\Components\DateTimePicker::make('updated_at')
+                                    ->readOnly()
+                                    ->label('Diupdate Saat')
+                                    ->hiddenOn(['edit', 'create']),
                             ])
                     ])
             ]);
