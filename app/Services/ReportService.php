@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\WithDrawal;
+use Illuminate\Support\Facades\Log;
 
 class ReportService implements ReportServiceInterface
 {
@@ -30,6 +31,10 @@ class ReportService implements ReportServiceInterface
                     ]);
             });
         } catch (Exception $e) {
+            Log::error("Failed to save customer weighing report", [
+                "transaction_id" => $transaction->id,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
@@ -52,6 +57,10 @@ class ReportService implements ReportServiceInterface
                     ]);
             });
         } catch (Exception $e) {
+            Log::error("Failed to save customer with drawal report", [
+                "with_drawal_id" => $withDrawal->id,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
@@ -77,6 +86,10 @@ class ReportService implements ReportServiceInterface
                     ]);
             });
         } catch (Exception $e) {
+            Log::error("Failed to save transaction report", [
+                "transaction_id" => $transaction->id,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
@@ -100,6 +113,10 @@ class ReportService implements ReportServiceInterface
                     ]);
             });
         } catch (Exception $e) {
+            Log::error("Failed to save transaction detail report", [
+                "transaction_id" => $transactionDetail->transaction_id,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
