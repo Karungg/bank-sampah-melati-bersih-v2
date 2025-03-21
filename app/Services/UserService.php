@@ -4,27 +4,45 @@ namespace App\Services;
 
 use App\Contracts\UserServiceInterface;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserService implements UserServiceInterface
 {
     public function updateProfile(User $user): void
     {
-        if (url()->livewire_current() === 'filament.admin.pages.edit-profile' && $user->isDirty('avatar_url')) {
-            $avatarToDelete = $user->id === auth()->id()
-                ? auth()->user()->getOriginal('avatar_url')
-                : $user->getOriginal('avatar_url');
+        try {
+            if (url()->livewire_current() === 'filament.admin.pages.edit-profile' && $user->isDirty('avatar_url')) {
+                $avatarToDelete = $user->id === auth()->id()
+                    ? auth()->user()->getOriginal('avatar_url')
+                    : $user->getOriginal('avatar_url');
 
-            if ($avatarToDelete) {
-                Storage::disk('public')->delete($avatarToDelete);
+                if ($avatarToDelete) {
+                    Storage::disk('public')->delete($avatarToDelete);
+                }
             }
+        } catch (Exception $exception) {
+            Log::error("Failed to update profile user", [
+                "user_id" => $user->id,
+                "message" => $e->getMessage(),
+            ]);
+            throw new Exception("Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.");
         }
     }
 
     public function deleteProfile(User $user): void
     {
-        if ($user->avatar_url) {
-            Storage::disk('public')->delete($user->avatar_url);
+        try {
+            if ($user->avatar_url) {
+                Storage::disk('public')->delete($user->avatar_url);
+            }
+        } catch (Exception $e) {
+            Log::error("Failed to delete profile user", [
+                "user_id" => $user->id,
+                "message" => $e->getMessage(),
+            ]);
+            throw new Exception("Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.");
         }
     }
 
