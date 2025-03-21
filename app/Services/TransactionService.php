@@ -11,6 +11,7 @@ use App\Models\CompanyProfile;
 use App\Models\Reports\TransactionDetailReport;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TransactionService implements TransactionServiceInterface
@@ -70,6 +71,10 @@ class TransactionService implements TransactionServiceInterface
                 'user_id' => auth()->id(),
             ];
         } catch (Exception $e) {
+            Log::error("Failed to calculate transaction", [
+                "data" => $data,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi nanti.');
         }
     }
@@ -117,6 +122,10 @@ class TransactionService implements TransactionServiceInterface
                 }
             });
         } catch (Exception $e) {
+            Log::error("Failed to save transaction details", [
+                "transaction_id" => $transactionId,
+                "message" => $e->getMessage(),
+            ]);
             throw new Exception('Terjadi kesalahan saat memproses transaksi. Silahkan coba lagi.');
         }
     }
