@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Contracts\ProductServiceInterface;
 use App\Models\WeightedProduct;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductService implements ProductServiceInterface
 {
@@ -32,13 +34,29 @@ class ProductService implements ProductServiceInterface
 
     public function createWeightedProduct(string $id): void
     {
-        WeightedProduct::create([
-            'product_id' => $id
-        ]);
+        try {
+            WeightedProduct::create([
+                'product_id' => $id
+            ]);
+        } catch (Exception $e) {
+            Log::error("Failed to create weighted product", [
+                "product_id" => $id,
+                "message" => $e->getMessage(),
+            ]);
+            throw new Exception("Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.");
+        }
     }
 
     public function deleteWeightedProduct(string $id): void
     {
-        WeightedProduct::where('product_id', $id)->delete();
+        try {
+            WeightedProduct::where('product_id', $id)->delete();
+        } catch (Exception $e) {
+            Log::error("Failed to delete weighted product", [
+                "product_display_id" => $id,
+                "message" => $e->getMessage(),
+            ]);
+            throw new Exception("Terjadi kesalahan saat memproses. Silahkan coba lagi nanti.");
+        }
     }
 }
