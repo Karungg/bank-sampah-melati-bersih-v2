@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\WithDrawalServerInterface;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WithDrawalService implements WithDrawalServerInterface
 {
@@ -43,6 +44,10 @@ class WithDrawalService implements WithDrawalServerInterface
                 return true;
             });
         } catch (Exception $e) {
+            Log::error("Failed to store with drawal", [
+                "customer_id" => $customerId,
+                "message" => $e->getMessage(),
+            ]);
             return false;
         }
     }
