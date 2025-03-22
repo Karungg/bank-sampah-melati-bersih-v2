@@ -24,6 +24,7 @@ use App\Services\ReportService;
 use App\Services\TransactionService;
 use App\Services\UserService;
 use App\Services\WithDrawalService;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -61,6 +62,10 @@ class AppServiceProvider extends ServiceProvider
             } else {
                 return request()->route()->getName();
             }
+        });
+
+        Table::configureUsing(function (Table $table): void {
+            $table->paginationPageOptions([10, 25, 50]);
         });
     }
 }
