@@ -32,6 +32,11 @@ class CompanyProfile extends Page implements HasForms
 
     protected static string $view = 'filament.pages.company-profile';
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
+
     public function mount(): void
     {
         $data = DB::table('company_profiles')->get([

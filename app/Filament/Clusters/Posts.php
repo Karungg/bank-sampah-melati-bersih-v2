@@ -15,4 +15,9 @@ class Posts extends Cluster
     protected static ?string $navigationLabel = 'Kegiatan';
 
     protected static ?string $clusterBreadcrumb = 'Kegiatan';
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasRole('admin');
+    }
 }
