@@ -156,6 +156,7 @@ class WithDrawalResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->deferLoading()
             ->filters([
                 //
             ])

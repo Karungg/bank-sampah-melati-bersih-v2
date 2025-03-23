@@ -208,6 +208,7 @@ class TransactionResource extends Resource
                     ->label('Diupdate Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->deferLoading()
             ->filters([
                 //
             ])

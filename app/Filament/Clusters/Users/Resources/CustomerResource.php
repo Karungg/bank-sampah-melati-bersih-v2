@@ -341,6 +341,7 @@ class CustomerResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Diupdate Saat'),
             ])
+            ->deferLoading()
             ->filters([
                 //
             ])
@@ -372,5 +373,15 @@ class CustomerResource extends Resource
             'view' => Pages\ViewCustomer::route('/{record}'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return "Jumlah nasabah";
     }
 }

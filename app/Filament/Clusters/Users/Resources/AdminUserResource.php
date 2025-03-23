@@ -240,4 +240,14 @@ class AdminUserResource extends Resource
             })
             ->deselectRecordsAfterCompletion();
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::whereRelation('roles', 'name', '=', 'admin')->count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return "Jumlah admin";
+    }
 }

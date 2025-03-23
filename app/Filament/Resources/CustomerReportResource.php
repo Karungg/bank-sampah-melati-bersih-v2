@@ -60,6 +60,7 @@ class CustomerReportResource extends Resource
                     ->prefix('Rp.')
                     ->formatStateUsing(fn(string $state): ?string => number_format($state, 0, ',', '.')),
             ])
+            ->deferLoading()
             ->filters([
                 //
             ])

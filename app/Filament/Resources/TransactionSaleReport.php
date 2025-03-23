@@ -81,6 +81,7 @@ class TransactionSaleReport extends Resource
                     ->label('Diupdate Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->deferLoading()
             ->filters([
                 //
             ])

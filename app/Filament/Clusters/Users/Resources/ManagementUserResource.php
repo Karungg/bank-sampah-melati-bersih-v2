@@ -235,4 +235,14 @@ class ManagementUserResource extends Resource
             })
             ->deselectRecordsAfterCompletion();
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::whereRelation('roles', 'name', '=', 'management')->count();
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return "Jumlah pengurus";
+    }
 }
