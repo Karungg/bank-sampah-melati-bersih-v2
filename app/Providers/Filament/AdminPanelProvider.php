@@ -31,6 +31,8 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->brandLogo('')
+            ->homeUrl('/')
             ->profile(isSimple: false)
             ->databaseNotifications()
             ->databaseTransactions()
