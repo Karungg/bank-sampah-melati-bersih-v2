@@ -17,6 +17,7 @@
 </head>
 
 <body>
+    @include('layouts.navigation')
     <div class="min-h-screen">
         <!-- Page Content -->
         <main>

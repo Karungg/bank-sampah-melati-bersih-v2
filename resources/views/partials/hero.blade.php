@@ -1,7 +1,7 @@
 <div class="hero min-h-screen bg-cover bg-center"
     style="background-image: url({{ asset('assets/images/hero-bg.jpg') }});">
     <div class="hero-overlay bg-black/50"></div>
-    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-white relative z-10">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between text-white">
         <div class="w-full md:w-2/3 2xl:w-1/2 text-left mb-10 md:mb-0">
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5">Bank Sampah Melati Bersih Atsiri Permai</h1>
             <p class="text-lg sm:text-xl lg:text-2xl mb-5">Mengubah sampah menjadi uang</p>
