@@ -1,6 +1,6 @@
-<section class="py-16">
+<section class="py-20">
     <div class="container mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between">
-        <div class="w-full mt-12 lg:mt-0 lg:w-2/3">
+        <div class="w-full mt-8 lg:mt-0 lg:w-2/3">
             <h1 class="text-xl md:text-2xl mb-5">
                 Bank Sampah Melati Bersih Atsiri Permai
             </h1>
