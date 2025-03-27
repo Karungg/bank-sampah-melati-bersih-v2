@@ -1,5 +1,5 @@
 <section class="pb-20">
-    <div class="container mx-auto flex flex-col">
+    <div class="container mx-auto px-4 flex flex-col">
         <div class="mb-12 text-center">
             <h1 class="text-xl md:text-2xl lg:text-3xl uppercase font-bold">Alur Pendaftaran</h1>
         </div>

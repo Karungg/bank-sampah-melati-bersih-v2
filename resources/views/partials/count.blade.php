@@ -1,5 +1,5 @@
 <section class="pb-20">
-    <div class="container w-full mx-auto flex flex-col items-center">
+    <div class="container px-4 w-full mx-auto flex flex-col items-center">
         <div class="w-full text-center mb-12">
             <h1 class="text-xl md:text-2xl lg:text-3xl uppercase font-bold">Dalam Angka</h1>
         </div>

@@ -21,11 +21,6 @@
     <div class="min-h-screen">
         <!-- Page Content -->
         <main>
-            {{-- @include('partials.annountcement') --}}
-            @include('partials.hero')
-            @include('partials.about')
-            @include('partials.count')
-            @include('partials.steps')
             {{ $slot }}
         </main>
     </div>
