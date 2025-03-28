@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        URL::forceScheme('https');
+        // URL::forceScheme('https');
         URL::macro('livewire_current', function () {
             if (request()->route()->named('livewire.update')) {
                 $previousUrl = $this->previous();

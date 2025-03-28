@@ -24,7 +24,7 @@
             {{ $slot }}
         </main>
     </div>
-
+    @include('partials.footer')
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("annountcement").showModal();
