@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body>
@@ -25,11 +26,8 @@
         </main>
     </div>
     @include('partials.footer')
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("annountcement").showModal();
-        });
-    </script>
+
+    @livewireScripts
 </body>
 
 </html>
