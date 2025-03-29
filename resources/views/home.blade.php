@@ -1,3 +1,6 @@
+@section('title')
+    Beranda
+@endsection
 <x-app-layout>
     <div x-data>
         {{-- annountcement --}}
@@ -39,13 +42,13 @@
     </div>
 
     {{-- about --}}
-    <section class=" py-20">
+    <section class="py-20">
         <div class="container mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between">
             <div class="w-full mt-8 lg:mt-0 lg:w-2/3">
                 <h1 class="text-xl md:text-2xl mb-5">
                     Bank Sampah Melati Bersih Atsiri Permai
                 </h1>
-                <p class="text-sm indent-8 md:text-base text-justify mb-5">
+                <p class="text-sm md:text-base text-justify mb-5">
                     Mitra pada program PKM ini adalah Bank Sampah Melati Bersih Atsiri Permai RW 12, yang
                     berdiri pada
                     tanggal 31 Agustus 2013, dengan lokasi sekretariat di Perumahan Atsiri Permai, Jl.

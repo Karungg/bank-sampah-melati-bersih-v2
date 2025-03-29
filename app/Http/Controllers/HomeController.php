@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\ProductServiceInterface;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -11,5 +9,10 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('home');
+    }
+
+    public function about(): View
+    {
+        return view('about');
     }
 }

@@ -1,8 +1,11 @@
+@section('title')
+    Verifikasi Email
+@endsection
 <x-app-layout>
     <section class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col px-4 justify-center items-center pt-6 sm:pt-0 bg-white dark:bg-gray-900">
             <div>
-                <h1 class="text-2xl uppercase font-bold">Reset password</h1>
+                <h1 class="text-2xl uppercase font-bold">Verifikasi email</h1>
             </div>
 
             <div
