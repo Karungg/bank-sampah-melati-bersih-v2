@@ -41,8 +41,8 @@
                     class="hidden space-x-8 sm:-my-px sm:ms-5 md:ms-10 sm:flex"
                 >
                     <x-nav-link wire:navigate.hover
-                        :href="route('home')"
-                        :active="request()->routeIs('')"
+                        :href="route('products')"
+                        :active="request()->routeIs('products')"
                     >
                         Hasil Pengolahan
                     </x-nav-link>
@@ -51,8 +51,8 @@
                     class="hidden space-x-8 sm:-my-px sm:ms-5 md:ms-10 sm:flex"
                 >
                     <x-nav-link wire:navigate.hover
-                        :href="route('home')"
-                        :active="request()->routeIs('')"
+                        :href="route('posts')"
+                        :active="request()->routeIs('posts')"
                     >
                         Kegiatan
                     </x-nav-link>
@@ -180,14 +180,14 @@
                 Tentang Kami
             </x-responsive-nav-link>
             <x-responsive-nav-link wire:navigate.hover
-                :href="route('home')"
-                :active="request()->routeIs('')"
+                :href="route('products')"
+                :active="request()->routeIs('products')"
             >
                 Hasil Olahan
             </x-responsive-nav-link>
             <x-responsive-nav-link wire:navigate.hover
-                :href="route('home')"
-                :active="request()->routeIs('')"
+                :href="route('posts')"
+                :active="request()->routeIs('posts')"
             >
                 Kegiatan
             </x-responsive-nav-link>

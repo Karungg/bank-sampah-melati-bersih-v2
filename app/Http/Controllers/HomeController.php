@@ -15,4 +15,14 @@ class HomeController extends Controller
     {
         return view('about');
     }
+
+    public function products(): View
+    {
+        return view('products');
+    }
+
+    public function posts(): View
+    {
+        return view('posts');
+    }
 }

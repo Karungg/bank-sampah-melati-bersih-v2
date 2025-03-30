@@ -107,9 +107,10 @@
             <div class="mb-12 text-center">
                 <h1 class="text-xl md:text-2xl lg:text-3xl uppercase font-bold">Alur Pendaftaran</h1>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-16">
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -125,7 +126,8 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -143,7 +145,8 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10 xmlns=" http://www.w3.org/2000/svg" fill="none"
@@ -159,7 +162,8 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10 xmlns=" http://www.w3.org/2000/svg" fill="none"
@@ -175,7 +179,8 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10 xmlns=" http://www.w3.org/2000/svg" fill="none"
@@ -191,7 +196,8 @@
                     </div>
                 </div>
                 <div>
-                    <div class="card">
+                    <div
+                        class="card h-36 sm:h-32 lg:h-36 xl:h-auto rounded-[6px] bg-[linear-gradient(145deg,#e6e6e6,#ffffff)] shadow-[20px_20px_60px_#d9d9d9,-20px_-20px_60px_#ffffff]">
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <svg class="size-6 md:size-8 lg:size-10 xmlns=" http://www.w3.org/2000/svg" fill="none"
@@ -237,13 +243,13 @@
                 @endfor
             </div>
             <div class="mt-12 text-center">
-                <button class="btn btn-link">
+                <a href="{{ route('posts') }}" wire:navigate.hover class="btn btn-link">
                     Lihat selengkapnya
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                     </svg>
-                </button>
+                </a>
             </div>
         </div>
     </section>
