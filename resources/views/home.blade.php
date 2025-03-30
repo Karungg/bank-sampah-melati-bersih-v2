@@ -75,7 +75,7 @@
                 </p>
             </div>
             <div class="flex w-full justify-center lg:w-1/4">
-                <div class="shadow-sm w-96 rounded overflow-hidden">
+                <div class="shadow-xs w-96 rounded-sm overflow-hidden">
                     <img src="{{ asset('assets/images/about-bg.jpg') }}" alt="Tentang Kami">
                 </div>
             </div>
