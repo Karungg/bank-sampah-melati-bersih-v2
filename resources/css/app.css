@@ -25,4 +25,6 @@
         border-color: var(--color-gray-200, currentColor);
     }
 }
-@plugin "daisyui";
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
