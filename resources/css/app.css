@@ -2,10 +2,22 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme {
     --font-sans: Figtree, ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
+}
+
+.steps {
+    @apply rounded-[6px] shadow-[20px_20px_60px_#cfcfd1,-20px_-20px_60px_#ffffff] p-4;
+    background: linear-gradient(145deg, #dbdcdd, #ffffff);
+}
+
+.steps-dark {
+    @apply rounded-[6px] shadow-[20px_20px_60px_#191e24,-20px_-20px_60px_#212830] p-4;
+    background: linear-gradient(145deg, #1a2026, #1f252d);
 }
 
 /*
@@ -25,6 +37,4 @@
         border-color: var(--color-gray-200, currentColor);
     }
 }
-@plugin "daisyui" {
-    themes: light --default, dark --prefersdark;
-}
+@plugin "daisyui";

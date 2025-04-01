@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{
+    darkMode: localStorage.getItem('theme') === 'dark',
+    toggleTheme() {
+        this.darkMode = !this.darkMode;
+        localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+    }
+}"
+    :data-theme="darkMode ? 'dark' : 'light'" x-init="$watch('darkMode', value => localStorage.setItem('theme', value ? 'dark' : 'light'))">
 
 <head>
     <meta charset="utf-8">

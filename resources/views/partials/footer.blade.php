@@ -1,4 +1,4 @@
-<footer class="footer sm:footer-horizontal bg-gray-100 text-base-content px-4 py-10 sm:justify-items-center">
+<footer class="footer sm:footer-horizontal dark:bg-gray-800 text-base-content px-4 py-10 sm:justify-items-center">
     <aside>
         <img class="h-12 md:h-24" src="{{ asset('assets/images/logo.png') }}" alt="">
         <p>
