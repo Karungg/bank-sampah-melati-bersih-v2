@@ -65,6 +65,11 @@
                                     Dashboard
                                 </x-dropdown-link>
                             @endhasrole
+                            @hasrole('customer')
+                                <x-dropdown-link>
+                                    Transaksi Saya
+                                </x-dropdown-link>
+                            @endhasrole
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
@@ -196,6 +201,11 @@
                     @hasrole('admin')
                         <x-responsive-nav-link wire:navigate.hover :href="route('filament.admin.pages.dashboard')">
                             Dashboard
+                        </x-responsive-nav-link>
+                    @endhasrole
+                    @hasrole('customer')
+                        <x-responsive-nav-link wire:navigate.hover>
+                            Transaksi Saya
                         </x-responsive-nav-link>
                     @endhasrole
 

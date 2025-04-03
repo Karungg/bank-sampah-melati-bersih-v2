@@ -16,8 +16,10 @@
                                 src="{{ asset('assets/images/products/product-1.JPG') }}" alt="Shoes" />
                         </figure>
                         <div class="card-body p-0 mt-3">
-                            <h2 class="card-title">Tas</h2>
-                            <p>Hasil Pengolahan Sampah Anorganik Sachet Dari Bungkus Kopi Menjadi Keranjang
+                            <h2 class="text-sm md:text-base card-title">Tas</h2>
+                            <p class="text-xs md:text-sm">Hasil Pengolahan Sampah Anorganik Sachet Dari Bungkus Kopi
+                                Menjadi
+                                Keranjang
                             </p>
                         </div>
                     </div>
@@ -27,8 +29,10 @@
                                 src="{{ asset('assets/images/products/product-2.jpg') }}" alt="Shoes" />
                         </figure>
                         <div class="card-body p-0 mt-3">
-                            <h2 class="card-title">Taplak</h2>
-                            <p>Hasil Pengolahan Sampah Anorganik Sachet Dari Bungkus Kopi Menjadi Taplak Meja
+                            <h2 class="text-sm md:text-base card-title">Taplak</h2>
+                            <p class="text-xs md:text-sm">Hasil Pengolahan Sampah Anorganik Sachet Dari Bungkus Kopi
+                                Menjadi Taplak
+                                Meja
                             </p>
                         </div>
                     </div>
