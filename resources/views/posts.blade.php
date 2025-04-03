@@ -8,7 +8,7 @@
                 <h1 class="text-xl md:text-2xl lg:text-3xl uppercase font-bold">Kegiatan
                 </h1>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
                 @for ($i = 0; $i < 8; $i++)
                     <div class="card-xs sm:card md:card-md lg:card-lg xl:card-xl">
                         <figure>

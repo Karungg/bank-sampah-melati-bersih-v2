@@ -60,6 +60,11 @@
                             <x-dropdown-link :href="route('profile.edit')">
                                 Profil
                             </x-dropdown-link>
+                            @hasrole('admin')
+                                <x-dropdown-link :href="route('filament.admin.pages.dashboard')">
+                                    Dashboard
+                                </x-dropdown-link>
+                            @endhasrole
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
@@ -188,6 +193,11 @@
                     <x-responsive-nav-link wire:navigate.hover :href="route('profile.edit')">
                         Profil
                     </x-responsive-nav-link>
+                    @hasrole('admin')
+                        <x-responsive-nav-link wire:navigate.hover :href="route('filament.admin.pages.dashboard')">
+                            Dashboard
+                        </x-responsive-nav-link>
+                    @endhasrole
 
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
