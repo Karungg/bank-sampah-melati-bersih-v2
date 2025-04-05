@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Customer;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CustomerReport extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
     protected $table = 'customer_reports';
     protected $keyType = 'string';

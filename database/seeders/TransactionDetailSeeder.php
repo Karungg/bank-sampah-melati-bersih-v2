@@ -11,6 +11,6 @@ class TransactionDetailSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }
