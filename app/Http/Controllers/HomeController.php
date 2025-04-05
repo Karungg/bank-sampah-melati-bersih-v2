@@ -18,11 +18,11 @@ class HomeController extends Controller
 
     public function products(): View
     {
-        return view('products');
+        return view('products.index');
     }
 
     public function posts(): View
     {
-        return view('posts');
+        return view('posts.index');
     }
 }

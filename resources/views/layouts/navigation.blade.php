@@ -66,7 +66,7 @@
                                 </x-dropdown-link>
                             @endhasrole
                             @hasrole('customer')
-                                <x-dropdown-link>
+                                <x-dropdown-link :href="route('transaction.index')">
                                     Transaksi Saya
                                 </x-dropdown-link>
                             @endhasrole
@@ -204,7 +204,7 @@
                         </x-responsive-nav-link>
                     @endhasrole
                     @hasrole('customer')
-                        <x-responsive-nav-link wire:navigate.hover>
+                        <x-responsive-nav-link wire:navigate.hover :href="route('transaction.index')">
                             Transaksi Saya
                         </x-responsive-nav-link>
                     @endhasrole

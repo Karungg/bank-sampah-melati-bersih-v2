@@ -22,7 +22,7 @@ class ReportService implements ReportServiceInterface
                         'id' => Str::uuid(),
                         'transaction_code' => $transaction->transaction_code,
                         'debit' => $transaction->customer->account->debit + $transaction->total_amount,
-                        'credit' => $transaction->customer->account->credit ?? 0,
+                        'credit' => 0,
                         'balance' => $transaction->customer->account->balance + $transaction->total_amount,
                         'type' => $transaction->type,
                         'customer_id' => $transaction->customer_id,
@@ -47,7 +47,7 @@ class ReportService implements ReportServiceInterface
                     ->insert([
                         'id' => Str::uuid(),
                         'transaction_code' => $withDrawal->with_drawal_code,
-                        'debit' => $withDrawal->customer->account->debit,
+                        'debit' => 0,
                         'credit' => $withDrawal->customer->account->credit,
                         'balance' => $withDrawal->customer->account->balance,
                         'type' => 'with drawal',
