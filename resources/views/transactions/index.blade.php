@@ -1,12 +1,12 @@
 <x-app-layout>
     <div class="py-20">
-        <div class="w-full flex mx-auto justify-center">
+        <div class="max-w-2xl flex mx-auto justify-center">
             <div class="overflow-x-auto p-3 rounded-box border border-base-content/5 bg-base-100">
-                <div class="flex flex-wrap justify-between items-center my-3 gap-2">
+                <div class="flex flex-col sm:flex-row justify-between my-3 gap-4">
 
-                    <div class="flex gap-2">
+                    <div>
 
-                        <button class="btn btn-sm flex items-center gap-1" id="buttonCopy">
+                        <button class="btn btn-sm" id="buttonCopy">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -15,7 +15,7 @@
                             Copy
                         </button>
 
-                        <button class="btn btn-sm flex items-center gap-1" id="buttonExcel">
+                        <button class="btn btn-sm" id="buttonExcel">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-green-500" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -24,7 +24,7 @@
                             Excel
                         </button>
 
-                        <button class="btn btn-sm flex items-center gap-1" id="buttonPdf">
+                        <button class="btn btn-sm" id="buttonPdf">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-red-500" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -33,7 +33,7 @@
                             PDF
                         </button>
 
-                        <button class="btn btn-sm flex items-center gap-1" id="buttonPrint">
+                        <button class="btn btn-sm" id="buttonPrint">
                             <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -44,7 +44,7 @@
                     </div>
 
                     <div>
-                        <label class="input flex items-center gap-2">
+                        <label class="input">
                             <svg class="w-4 h-4 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                                     stroke-linejoin="round">
