@@ -56,7 +56,47 @@
             }
 
             let table = new DataTable('#transactions', {
-                paging: false
+                layout: {
+                    topStart: false,
+                    bottomEnd: {
+                        paging: {
+                            firstLast: false
+                        }
+                    }
+                },
+                buttons: [{
+                        extend: 'copy',
+                        className: 'btnCopy',
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btnExcel',
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btnPdf',
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btnPrint',
+                    },
+                ]
+            });
+
+            document.querySelector('#buttonCopy').addEventListener('click', function() {
+                table.button('.btnCopy').trigger();
+            });
+
+            document.querySelector('#buttonExcel').addEventListener('click', function() {
+                table.button('.btnExcel').trigger();
+            });
+
+            document.querySelector('#buttonPdf').addEventListener('click', function() {
+                table.button('.btnPdf').trigger();
+            });
+
+            document.querySelector('#buttonPrint').addEventListener('click', function() {
+                table.button('.btnPrint').trigger();
             });
 
             document.querySelectorAll('input.filter').forEach((el) => {

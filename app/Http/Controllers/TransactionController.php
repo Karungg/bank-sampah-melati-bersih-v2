@@ -21,8 +21,16 @@ class TransactionController extends Controller
             ->where('customer_id', auth()->user()->customer->id)
             ->get();
 
+        $totalDebit = DB::table('customer_reports')
+            ->sum('debit');
+
+        $totalCredit = DB::table('customer_reports')
+            ->sum('credit');
+
         return view('transactions.index', [
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'totalDebit' => $totalDebit,
+            'totalCredit' => $totalCredit
         ]);
     }
 }
