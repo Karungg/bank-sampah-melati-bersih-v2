@@ -5,22 +5,22 @@
             <div class="w-full mb-5 flex flex-col">
                 <div class="stats stats-vertical sm:stats-horizontal shadow">
                     <div class="stat items-center">
-                        <div class="stat-value text-sm">{{ Auth::user()->name }}</div>
+                        <div class="stat-value text-sm lg:text-base">{{ Auth::user()->name }}</div>
                     </div>
 
                     <div class="stat">
                         <div class="stat-title">Total Debet</div>
-                        <div class="stat-value text-sm">Rp.{{ number_format($totalDebit, 0, ',', '.') }}</div>
+                        <div class="stat-value text-sm lg:text-base">Rp.{{ number_format($totalDebit, 0, ',', '.') }}</div>
                     </div>
 
                     <div class="stat">
                         <div class="stat-title">Total Kredit</div>
-                        <div class="stat-value text-sm">Rp.{{ number_format($totalCredit, 0, ',', '.') }}</div>
+                        <div class="stat-value text-sm lg:text-base">Rp.{{ number_format($totalCredit, 0, ',', '.') }}</div>
                     </div>
 
                     <div class="stat">
                         <div class="stat-title">Saldo</div>
-                        <div class="stat-value text-sm">
+                        <div class="stat-value text-sm lg:text-base">
                             Rp.{{ number_format(Auth::user()->customer->account->balance, 0, ',', '.') }}</div>
                     </div>
                 </div>
