@@ -24,7 +24,6 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
 </head>
 
 <body>
@@ -109,7 +108,6 @@
             oldSearch.classList.add('hidden');
         </script>
     @endif
-    @livewireScripts
 </body>
 
 </html>

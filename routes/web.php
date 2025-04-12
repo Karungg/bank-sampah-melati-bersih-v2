@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', \App\Livewire\Home::class)->name('home');
 Route::get('/about', [\App\Http\Controllers\HomeController::class, 'about'])->name('about');
 Route::get('/products', [\App\Http\Controllers\HomeController::class, 'products'])->name('products');
 Route::get('/posts', [\App\Http\Controllers\HomeController::class, 'posts'])->name('posts');
