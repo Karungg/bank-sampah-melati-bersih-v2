@@ -26,7 +26,7 @@ class PostFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'body' => fake()->realText(500),
-            'images' => ["posts\/post-1.jpg"],
+            'images' => ["posts/post-1.jpg"],
             'active' => true,
             'link' => 'https://github.com/Karungg',
             'user_id' => $userId
