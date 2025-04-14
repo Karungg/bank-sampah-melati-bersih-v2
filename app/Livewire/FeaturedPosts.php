@@ -11,7 +11,7 @@ class FeaturedPosts extends Component
 
     public function mount()
     {
-        $this->posts = Post::limit(3)->get();
+        $this->posts = Post::limit(3)->get(['id', 'title', 'images', 'link']);
     }
 
     public function render()
