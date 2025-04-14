@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', \App\Livewire\Home::class)->name('home');
 Route::get('/about', [\App\Http\Controllers\HomeController::class, 'about'])->name('about');
 Route::get('/products', [\App\Http\Controllers\HomeController::class, 'products'])->name('products');
-Route::get('/posts', [\App\Http\Controllers\HomeController::class, 'posts'])->name('posts');
+Route::get('/posts', \App\Livewire\Posts::class)->name('posts.index');
+Route::get('/posts/{slug}', \App\Livewire\PostDetail::class)->name('posts.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

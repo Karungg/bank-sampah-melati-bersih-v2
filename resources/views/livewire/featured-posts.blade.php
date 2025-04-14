@@ -15,7 +15,7 @@
                                     <img class="w-full h-24 sm:h-36 xl:h-64 object-cover rounded-md"
                                         src="{{ $post->getSingleImage() }}" alt="Gambar">
                                 </figure>
-                                <div class="card-body p-2 mt-2">
+                                <div class="card-body p-0 mt-2">
                                     <h2 class="card-title text-xs lg:text-base">{{ $post->title }}</h2>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                 @endforeach
             </div>
             <div class="mt-12 text-center">
-                <a href="{{ route('posts') }}" wire:navigate.hover class="btn btn-link">
+                <a href="{{ route('posts.index') }}" wire:navigate.hover class="btn btn-link">
                     Lihat selengkapnya
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">

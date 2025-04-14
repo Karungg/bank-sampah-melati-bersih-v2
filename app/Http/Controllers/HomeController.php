@@ -15,9 +15,4 @@ class HomeController extends Controller
     {
         return view('products.index');
     }
-
-    public function posts(): View
-    {
-        return view('posts.index');
-    }
 }

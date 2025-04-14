@@ -29,7 +29,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-5 md:ms-8 sm:flex">
-                    <x-nav-link wire:navigate.hover :href="route('posts')" :active="request()->routeIs('posts')">
+                    <x-nav-link wire:navigate.hover :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         Kegiatan
                     </x-nav-link>
                 </div>
@@ -164,7 +164,7 @@
             <x-responsive-nav-link wire:navigate.hover :href="route('products')" :active="request()->routeIs('products')">
                 Hasil Olahan
             </x-responsive-nav-link>
-            <x-responsive-nav-link wire:navigate.hover :href="route('posts')" :active="request()->routeIs('posts')">
+            <x-responsive-nav-link wire:navigate.hover :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                 Kegiatan
             </x-responsive-nav-link>
         </div>
