@@ -17,7 +17,7 @@ class CustomerReportFactory extends Factory
      */
     public function definition(): array
     {
-        $customer = Customer::where('full_name', 'Aas Nurhasanah')->first(['id']);
+        $customer = Customer::first(['id']);
 
         return [
             'transaction_code' => date('Ymd') . fake()->randomNumber(5, true),
