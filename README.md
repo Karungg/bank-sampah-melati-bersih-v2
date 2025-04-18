@@ -124,8 +124,8 @@ Aplikasi ini dilengkapi dengan beberapa unit dan feature test untuk memastikan s
 
 📦 Menjalankan semua test
 ```
-php artisan test (jika tidak menggunakan docker)
-sail test (jika menggunakan docker sail)
+php artisan test #jika tidak menggunakan docker
+sail test #jika menggunakan docker sail
 ```
 
 👨‍💻 Developer
