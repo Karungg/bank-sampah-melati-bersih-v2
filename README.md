@@ -105,8 +105,8 @@ DB_PASSWORD=
 ```
 6. Build aplikasi
 ```
-sail up build (jika menggunakan docker sail)
-docker compose up (jika menggunakan docker compose)
+sail build #jika menggunakan docker sail
+docker compose up #jika menggunakan docker compose
 
 ```
 8. **Jalankan migrasi dan seeder**
