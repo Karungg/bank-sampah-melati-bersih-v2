@@ -119,3 +119,15 @@ sail artisan db:seed
 sail artisan npm run dev
 sail artisan queue:work
 ```
+
+✅ Menjalankan Unit Test
+Aplikasi ini dilengkapi dengan beberapa unit dan feature test untuk memastikan setiap fitur berjalan dengan baik.
+
+📦 Menjalankan semua test
+```
+php artisan test (jika tidak menggunakan docker)
+sail test (jika menggunakan docker sail)
+```
+
+👨‍💻 Developer
+Created with ❤️ by <a href="https://github.com/Karungg">Karungg</a>
