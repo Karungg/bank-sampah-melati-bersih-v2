@@ -120,7 +120,6 @@ sail artisan npm run dev
 sail artisan queue:work
 ```
 
-✅ Menjalankan Unit Test
 Aplikasi ini dilengkapi dengan beberapa unit dan feature test untuk memastikan setiap fitur berjalan dengan baik.
 
 📦 Menjalankan semua test
