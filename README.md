@@ -131,3 +131,7 @@ sail test (jika menggunakan docker sail)
 
 👨‍💻 Developer
 Created with ❤️ by <a href="https://github.com/Karungg">Karungg</a>
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](<a href="https://github.com/Karungg/bank-sampah-melati-bersih-v2?tab=MIT-1-ov-file">LICENSE</a>).
