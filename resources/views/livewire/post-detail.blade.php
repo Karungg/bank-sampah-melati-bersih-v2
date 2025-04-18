@@ -13,7 +13,7 @@
                 <div
                     class="text-sm text-gray-600 dark:text-gray-300 flex flex-col sm:flex-row sm:gap-x-4 sm:items-center justify-center lg:justify-start">
                     <p>By {{ $post->user->name }}</p>
-                    <p>7 Minute read</p>
+                    <p>{{ $post->human_read_time }}</p>
                 </div>
             </div>
 

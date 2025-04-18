@@ -26,7 +26,7 @@
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5">Bank Sampah Melati Bersih Atsiri Permai
                     </h1>
                     <p class="text-lg sm:text-xl lg:text-2xl mb-5">Mengubah sampah menjadi uang</p>
-                    <button class="btn btn-success text-white">Bergabung</button>
+                    <a href="#steps" class="btn btn-success text-white">Bergabung</a>
                 </div>
                 <div class="w-full md:w-1/3 text-center justify-items-center">
                     <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="48" height="48"
@@ -86,7 +86,7 @@
     <livewire:stats-counter />
 
     {{-- steps --}}
-    <section class="pb-20">
+    <section class="pb-20" id="steps">
         <div class="container mx-auto px-4 flex flex-col">
             <div class="mb-12 text-center">
                 <h1 class="text-xl md:text-2xl lg:text-3xl uppercase font-bold">Alur Pendaftaran</h1>

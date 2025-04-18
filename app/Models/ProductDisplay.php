@@ -22,4 +22,9 @@ class ProductDisplay extends Model
         'description',
         'image'
     ];
+
+    public function getThumbnail(): string
+    {
+        return str_starts_with($this->image, 'https') ? $this->image : "/storage/$this->image";
+    }
 }
