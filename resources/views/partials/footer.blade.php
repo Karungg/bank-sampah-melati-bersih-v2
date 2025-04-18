@@ -7,23 +7,14 @@
         </p>
     </aside>
     <nav>
-        <h6 class="footer-title">Services</h6>
-        <a class="link link-hover">Branding</a>
-        <a class="link link-hover">Design</a>
-        <a class="link link-hover">Marketing</a>
-        <a class="link link-hover">Advertisement</a>
+        <h6 class="footer-title">Didukung Oleh</h6>
+        <div class="flex">
+            <img class="h-12 lg:h-20" src="{{ asset('assets/images/logo-1.png') }}" alt="">
+            <img class="h-12 lg:h-20" src="{{ asset('assets/images/logo-2.png') }}" alt="">
+        </div>
     </nav>
     <nav>
-        <h6 class="footer-title">Company</h6>
-        <a class="link link-hover">About us</a>
-        <a class="link link-hover">Contact</a>
-        <a class="link link-hover">Jobs</a>
-        <a class="link link-hover">Press kit</a>
-    </nav>
-    <nav>
-        <h6 class="footer-title">Legal</h6>
-        <a class="link link-hover">Terms of use</a>
-        <a class="link link-hover">Privacy policy</a>
-        <a class="link link-hover">Cookie policy</a>
+        <h6 class="footer-title">Organisasi</h6>
+        <a href="{{ route('about') }}" class="link link-hover">Tentang Kami</a>
     </nav>
 </footer>
