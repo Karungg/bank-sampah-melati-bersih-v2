@@ -78,7 +78,7 @@ php artisan serve
 php artisan npm run dev
 php artisan queue:work
 ```
-Buka aplikasi di browser <a href="http://localhost/">localhost</a>
+Buka aplikasi di browser <a href="http://localhost/">http://localhost/</a>
 
 ## 🐳 Instalasi Menggunakan Docker
 1. **Clone repository**
@@ -123,7 +123,7 @@ sail artisan db:seed
 sail artisan npm run dev
 sail artisan queue:work
 ```
-Buka aplikasi di browser <a href="http://localhost/">localhost</a>
+Buka aplikasi di browser <a href="http://localhost/">http://localhost/</a>
 
 Aplikasi ini dilengkapi dengan beberapa unit dan feature test untuk memastikan setiap fitur berjalan dengan baik.
 
