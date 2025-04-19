@@ -67,12 +67,16 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
-6. **Jalankan migrasi dan seeder**
+6. **Buat key aplikasi**
+```
+php artisan key:generate
+```
+7. **Jalankan migrasi dan seeder**
 ```
 php artisan migrate
 php artisan db:seed
 ```
-7. **Jalankan aplikasi, NPM, dan Queue**
+8. **Jalankan aplikasi, NPM, dan Queue**
 ```
 php artisan serve
 php artisan npm run dev
@@ -107,7 +111,11 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
-6. Build aplikasi
+6. **Buat key aplikasi**
+```
+sail artisan key:generate
+```
+7. Build aplikasi
 ```
 sail build #jika menggunakan docker sail
 docker compose up #jika menggunakan docker compose
