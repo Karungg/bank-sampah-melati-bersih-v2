@@ -82,7 +82,7 @@ php artisan serve
 php artisan npm run dev
 php artisan queue:work
 ```
-Buka aplikasi di browser <a href="http://localhost/">http://localhost/</a>
+Buka aplikasi di browser <a href="http://localhost:8000">http://localhost:8000</a>
 
 ## 🐳 Instalasi Menggunakan Docker
 1. **Clone repository**
