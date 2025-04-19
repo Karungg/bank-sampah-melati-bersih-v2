@@ -46,11 +46,11 @@ Ikuti langkah-langkah berikut untuk menjalankan proyek ini secara lokal:
 git clone https://github.com/Karungg/bank-sampah-melati-bersih-v2.git
 cd bank-sampah-melati-bersih-v2
 ```
-2. **Install dependencies menggunakan composer**
+2. **Install dependensi menggunakan composer**
 ```
 composer install
 ```
-3. **Install dependencies menggunakan NPM**
+3. **Install dependensi menggunakan NPM**
 ```
 npm install
 ```
@@ -58,7 +58,7 @@ npm install
 ```
 cp .env.example .env
 ```
-5. **Sesuaikan konfigurasi pada file .env**
+5. **Ubah konfigurasi pada file .env sesuai kebutuhan**
 ```
 DB_CONNECTION=
 DB_HOST=
@@ -86,11 +86,11 @@ Buka aplikasi di browser <a href="http://localhost/">http://localhost/</a>
 git clone https://github.com/Karungg/bank-sampah-melati-bersih-v2.git
 cd bank-sampah-melati-bersih-v2
 ```
-2. **Install dependencies menggunakan composer**
+2. **Install dependensi menggunakan composer**
 ```
 composer install
 ```
-3. **Install dependencies menggunakan NPM**
+3. **Install dependensi menggunakan NPM**
 ```
 npm install
 ```
@@ -98,7 +98,7 @@ npm install
 ```
 cp .env.example .env
 ```
-5. **Sesuaikan konfigurasi pada file .env**
+5. **Ubah konfigurasi pada file .env sesuai kebutuhan**
 ```
 DB_CONNECTION=
 DB_HOST=
