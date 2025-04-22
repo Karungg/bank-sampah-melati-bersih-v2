@@ -35,7 +35,7 @@ Website BSMB Atisiri Permai ini merupakan hibah dari Direktorat Riset, Teknologi
     - Melihat transaksi yang pernah dilakukan
 
 ## 🛠️ Techstack
-![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white) ![Livewire](https://img.shields.io/badge/livewire-%234e56a6.svg?style=for-the-badge&logo=livewire&logoColor=white) ![Alpine.js](https://img.shields.io/badge/alpinejs-white.svg?style=for-the-badge&logo=alpinedotjs&logoColor=%238BC0D0) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white) ![Livewire](https://img.shields.io/badge/livewire-%234e56a6.svg?style=for-the-badge&logo=livewire&logoColor=white) ![Alpine.js](https://img.shields.io/badge/alpinejs-white.svg?style=for-the-badge&logo=alpinedotjs&logoColor=%238BC0D0) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Filament](https://img.shields.io/badge/Filament-FFAA00?style=for-the-badge&logoColor=%23000000) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
 ## 🛠️ Cara Instalasi
 
@@ -67,18 +67,22 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
-6. **Jalankan migrasi dan seeder**
+6. **Buat key aplikasi**
+```
+php artisan key:generate
+```
+7. **Jalankan migrasi dan seeder**
 ```
 php artisan migrate
 php artisan db:seed
 ```
-7. **Jalankan aplikasi, NPM, dan Queue**
+8. **Jalankan aplikasi, NPM, dan Queue**
 ```
 php artisan serve
 php artisan npm run dev
 php artisan queue:work
 ```
-Buka aplikasi di browser <a href="http://localhost/">http://localhost/</a>
+Buka aplikasi di browser <a href="http://localhost:8000">http://localhost:8000</a>
 
 ## 🐳 Instalasi Menggunakan Docker
 1. **Clone repository**
@@ -107,7 +111,11 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
-6. Build aplikasi
+6. **Buat key aplikasi**
+```
+sail artisan key:generate
+```
+7. Build aplikasi
 ```
 sail build #jika menggunakan docker sail
 docker compose up #jika menggunakan docker compose
