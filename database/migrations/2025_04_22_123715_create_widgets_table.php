@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('widgets', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('key', 256);
+            $table->text('body');
             $table->timestamps();
         });
     }

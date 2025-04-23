@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             ProductDisplaySeeder::class,
             CompanyProfileSeeder::class,
             TransactionSeeder::class,
-            CustomerReportSeeder::class
+            CustomerReportSeeder::class,
+            WidgetSeeder::class
         ]);
     }
 }
