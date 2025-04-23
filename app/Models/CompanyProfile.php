@@ -19,6 +19,7 @@ class CompanyProfile extends Model
         'description',
         'address',
         'weighing_location',
+        'annountcement',
         'account_number',
         'on_behalf',
         'balance',

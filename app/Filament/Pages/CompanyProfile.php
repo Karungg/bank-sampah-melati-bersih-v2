@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\CompanyProfile as ModelsCompanyProfile;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -44,6 +45,7 @@ class CompanyProfile extends Page implements HasForms
             'description',
             'address',
             'weighing_location',
+            'annountcement',
             'account_number',
             'on_behalf',
             'balance',
@@ -103,6 +105,17 @@ class CompanyProfile extends Page implements HasForms
                                     ]),
                             ])
                     ]),
+                Section::make('Pengumuman')
+                    ->schema([
+                        RichEditor::make('annountcement')
+                            ->required()
+                            ->maxLength(2000)
+                            ->label('Isi Pengumuman')
+                            ->validationMessages([
+                                'required' => 'Pengumuman harus diisi',
+                                'max' => 'Pengumuman tidak boleh lebih dari 2000 karakter.'
+                            ]),
+                    ]),
                 Section::make('Rekening')
                     ->schema([
                         Grid::make([
@@ -159,6 +172,7 @@ class CompanyProfile extends Page implements HasForms
                 'description' => $data['description'],
                 'address' => $data['address'],
                 'weighing_location' => $data['weighing_location'],
+                'annountcement' => $data['annountcement'],
                 'account_number' => $data['account_number'],
                 'on_behalf' => $data['on_behalf']
             ]);

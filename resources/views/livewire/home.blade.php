@@ -6,8 +6,10 @@
         {{-- annountcement --}}
         <dialog x-ref="modal" x-init="$el.showModal()" id="annountcement" class="modal">
             <div class="modal-box">
-                <h3 class="text-lg font-bold">Hello!</h3>
-                <p class="py-4">Press ESC key or click the button below to close</p>
+                <h3 class="text-lg font-bold">Pengumuman</h3>
+                <p class="py-4">
+                    {!! $annountcement !!}
+                </p>
                 <div class="modal-action">
                     <form method="dialog">
                         <!-- if there is a button in form, it will close the modal -->
