@@ -25,7 +25,7 @@ class CompanyProfile extends Page implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 13;
 
     protected static ?string $navigationGroup = 'Pengaturan';
 
