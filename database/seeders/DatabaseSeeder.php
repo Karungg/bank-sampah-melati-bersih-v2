@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             CompanyProfileSeeder::class,
             TransactionSeeder::class,
             CustomerReportSeeder::class,
-            WidgetSeeder::class
         ]);
     }
 }
