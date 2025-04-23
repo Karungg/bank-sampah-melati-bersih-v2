@@ -33,7 +33,7 @@ class TransactionFactory extends Factory
             'total_weight' => fake()->randomNumber(2, true),
             'total_liter' => fake()->randomNumber(2, true),
             'total_amount' => fake()->numberBetween(10000, 300000),
-            'type' => 'weighing',
+            'type' => fake()->randomElement(['weighing', 'sale']),
             'location' => 'Lapangan bola atsiri',
             'user_id' => $user->id,
             'customer_id' => $customer->id

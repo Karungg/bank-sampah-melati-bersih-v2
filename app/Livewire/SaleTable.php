@@ -32,11 +32,6 @@ class SaleTable extends Component implements HasTable, HasForms
                     ->searchable()
                     ->sortable()
                     ->label('Kode Transaksi'),
-                TextColumn::make('customer.full_name')
-                    ->searchable()
-                    ->label('Nasabah')
-                    ->limit(20)
-                    ->sortable(),
                 TextColumn::make('total_quantity')
                     ->numeric()
                     ->sortable()
