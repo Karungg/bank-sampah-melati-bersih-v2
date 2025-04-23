@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Reports\TransactionReport;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -52,11 +53,6 @@ class WeighingTable extends Component implements HasTable, HasForms
                     ->sortable()
                     ->label('Liter')
                     ->suffix(' Liter'),
-                TextColumn::make('total_amount')
-                    ->numeric()
-                    ->sortable()
-                    ->label('Total')
-                    ->prefix('Rp.'),
                 TextColumn::make('location')
                     ->searchable()
                     ->label('Lokasi')
@@ -67,6 +63,12 @@ class WeighingTable extends Component implements HasTable, HasForms
                     ->label('Penimbang')
                     ->limit(20)
                     ->sortable(),
+                TextColumn::make('total_amount')
+                    ->numeric()
+                    ->sortable()
+                    ->label('Total')
+                    ->prefix('Rp.')
+                    ->summarize(Sum::make()),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Livewire\IncomeStatement as LivewireIncomeStatement;
 use Filament\Pages\Page;
 
 class IncomeStatement extends Page
@@ -15,4 +16,11 @@ class IncomeStatement extends Page
     protected static ?string $title = 'Laporan Laba Rugi';
 
     protected static string $view = 'filament.pages.income-statement';
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            LivewireIncomeStatement::class
+        ];
+    }
 }
