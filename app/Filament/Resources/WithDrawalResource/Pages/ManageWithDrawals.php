@@ -16,7 +16,7 @@ class ManageWithDrawals extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->before(function (CreateAction $action, array $data, WithDrawalServerInterface $service) {
                     if (!$service->store($data['customer_id'], $data['amount'])) {
                         Notification::make()

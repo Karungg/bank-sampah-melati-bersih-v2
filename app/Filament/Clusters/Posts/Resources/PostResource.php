@@ -2,15 +2,31 @@
 
 namespace App\Filament\Clusters\Posts\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
+use App\Filament\Clusters\Posts\Resources\PostResource\Pages\ListPosts;
+use App\Filament\Clusters\Posts\Resources\PostResource\Pages\CreatePost;
+use App\Filament\Clusters\Posts\Resources\PostResource\Pages\ViewPost;
+use App\Filament\Clusters\Posts\Resources\PostResource\Pages\EditPost;
 use App\Filament\Clusters\Posts;
 use App\Filament\Clusters\Posts\Resources\PostResource\Pages;
 use App\Filament\Exports\PostExporter;
 use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,16 +36,16 @@ class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?string $modelLabel = 'Kegiatan';
 
     protected static ?string $cluster = Posts::class;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
                         Grid::make([
@@ -37,7 +53,7 @@ class PostResource extends Resource
                             'sm' => 2
                         ])
                             ->schema([
-                                Forms\Components\TextInput::make('title')
+                                TextInput::make('title')
                                     ->required()
                                     ->maxValue(256)
                                     ->label('Judul')
@@ -50,7 +66,7 @@ class PostResource extends Resource
                                         'max' => 'Judul tidak boleh lebih dari 256 karakter.',
                                         'unique' => 'Judul sudah digunakan.'
                                     ]),
-                                Forms\Components\TextInput::make('slug')
+                                TextInput::make('slug')
                                     ->required()
                                     ->maxValue(300)
                                     ->label('Slug')
@@ -62,7 +78,7 @@ class PostResource extends Resource
                                         'max' => 'Slug tidak boleh lebih dari 300 karakter.',
                                         'unique' => 'Slug sudah digunakan.'
                                     ]),
-                                Forms\Components\Select::make('categories')
+                                Select::make('categories')
                                     ->required()
                                     ->label('Kategori')
                                     ->relationship(titleAttribute: 'title')
@@ -70,14 +86,14 @@ class PostResource extends Resource
                                     ->validationMessages([
                                         'required' => 'Kategori harus diisi.'
                                     ]),
-                                Forms\Components\TextInput::make('link')
+                                TextInput::make('link')
                                     ->maxValue(256)
                                     ->placeholder('Masukkan link')
                                     ->nullable()
                                     ->validationMessages([
                                         'max' => 'Link tidak boleh lebih dari 256 karakter.'
                                     ]),
-                                Forms\Components\Toggle::make('active')
+                                Toggle::make('active')
                                     ->required()
                                     ->label('Status')
                                     ->validationMessages([
@@ -87,7 +103,7 @@ class PostResource extends Resource
                     ]),
                 Section::make()
                     ->schema([
-                        Forms\Components\RichEditor::make('body')
+                        RichEditor::make('body')
                             ->required()
                             ->columnSpanFull()
                             ->label('Isi')
@@ -97,7 +113,7 @@ class PostResource extends Resource
                                 'required' => 'Isi kegiatan tidak boleh kosong.',
                                 'max' => 'Isi tidak boleh lebih dari 5000 karakter'
                             ]),
-                        Forms\Components\FileUpload::make('images')
+                        FileUpload::make('images')
                             ->required()
                             ->label('Foto')
                             ->image()
@@ -120,38 +136,38 @@ class PostResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->searchable()
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable()
                     ->sortable()
                     ->label('Judul')
                     ->limit(20),
-                Tables\Columns\TextColumn::make('slug')
+                TextColumn::make('slug')
                     ->searchable()
                     ->label('Slug')
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\IconColumn::make('active')
+                IconColumn::make('active')
                     ->boolean()
                     ->label('Status')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('link')
+                TextColumn::make('link')
                     ->searchable()
                     ->limit(20),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->searchable()
                     ->label('Pembuat')
                     ->sortable()
                     ->limit(20),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Dibuat Saat'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -160,15 +176,15 @@ class PostResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
-                Tables\Actions\ExportBulkAction::make()
+                ExportBulkAction::make()
                     ->exporter(PostExporter::class)
             ]);
     }
@@ -183,10 +199,10 @@ class PostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'view' => Pages\ViewPost::route('/{record}'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
+            'index' => ListPosts::route('/'),
+            'create' => CreatePost::route('/create'),
+            'view' => ViewPost::route('/{record}'),
+            'edit' => EditPost::route('/{record}/edit'),
         ];
     }
 }

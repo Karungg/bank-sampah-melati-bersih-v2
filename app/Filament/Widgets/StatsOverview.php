@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use Filament\Widgets\StatsOverviewWidget\Stat;
 use App\Models\CompanyProfile;
 use App\Models\Transaction;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -14,11 +15,11 @@ class StatsOverview extends StatsOverviewWidget
 
     public function getStats(): array
     {
-        $startDate = $this->filters['startDate'] ?? null;
-        $endDate = $this->filters['endDate'] ?? null;
+        $startDate = $this->pageFilters['startDate'] ?? null;
+        $endDate = $this->pageFilters['endDate'] ?? null;
 
         return [
-            StatsOverviewWidget\Stat::make(
+            Stat::make(
                 label: 'Total pendapatan penimbangan',
                 value: 'Rp.' . number_format(
                     Transaction::query()
@@ -31,7 +32,7 @@ class StatsOverview extends StatsOverviewWidget
                     '.'
                 ),
             )->description($startDate ? "Dimulai dari $startDate" : ""),
-            StatsOverviewWidget\Stat::make(
+            Stat::make(
                 label: 'Total pendapatan penjualan',
                 value: 'Rp.' . number_format(
                     Transaction::query()
@@ -44,7 +45,7 @@ class StatsOverview extends StatsOverviewWidget
                     '.'
                 ),
             )->description($endDate ? "Hingga $endDate" : ""),
-            StatsOverviewWidget\Stat::make(
+            Stat::make(
                 label: 'Saldo bank',
                 value: 'Rp.' . number_format(
                     CompanyProfile::query()

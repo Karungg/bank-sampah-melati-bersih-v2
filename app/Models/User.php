@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
 use App\Models\Reports\TransactionReport;
 use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
@@ -20,7 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
 #[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasUuids, HasRoles;
 
     protected $keyType = 'string';

@@ -2,13 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\AccountResource\Pages\ListAccounts;
+use App\Filament\Resources\AccountResource\Pages\CreateAccount;
+use App\Filament\Resources\AccountResource\Pages\ViewAccount;
 use App\Filament\Resources\AccountResource\Pages;
 use App\Models\Account;
 use App\Models\Customer;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,18 +26,18 @@ class AccountResource extends Resource
 {
     protected static ?string $model = Account::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-credit-card';
 
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationGroup = 'Master';
+    protected static string | \UnitEnum | null $navigationGroup = 'Master';
 
     protected static ?string $modelLabel = 'Rekening';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
                         Grid::make([
@@ -36,7 +45,7 @@ class AccountResource extends Resource
                             'sm' => 2
                         ])
                             ->schema([
-                                Forms\Components\Select::make('customer_id')
+                                Select::make('customer_id')
                                     ->options(
                                         Customer::doesntHave('account')->pluck('full_name', 'id')
                                     )
@@ -47,7 +56,7 @@ class AccountResource extends Resource
                                     ->validationMessages([
                                         'required' => 'Nasabah harus diisi.'
                                     ]),
-                                Forms\Components\TextInput::make('debit')
+                                TextInput::make('debit')
                                     ->required()
                                     ->numeric()
                                     ->placeholder('Masukkan debit')
@@ -59,7 +68,7 @@ class AccountResource extends Resource
                                     ->validationMessages([
                                         'max_digits' => 'Debit maksimal 12 digit.'
                                     ]),
-                                Forms\Components\TextInput::make('credit')
+                                TextInput::make('credit')
                                     ->required()
                                     ->numeric()
                                     ->default(0.00)
@@ -71,7 +80,7 @@ class AccountResource extends Resource
                                     ->validationMessages([
                                         'max_digits' => 'Kredit maksimal 12 digit.'
                                     ]),
-                                Forms\Components\TextInput::make('balance')
+                                TextInput::make('balance')
                                     ->required()
                                     ->numeric()
                                     ->default(0.00)
@@ -93,37 +102,37 @@ class AccountResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('account_number')
+                TextColumn::make('account_number')
                     ->searchable()
                     ->label('Nomor Rekening'),
-                Tables\Columns\TextColumn::make('customer.full_name')
+                TextColumn::make('customer.full_name')
                     ->searchable()
                     ->label('Nasabah')
                     ->limit(30),
-                Tables\Columns\TextColumn::make('debit')
+                TextColumn::make('debit')
                     ->numeric()
                     ->sortable()
                     ->label('Debet')
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('credit')
+                TextColumn::make('credit')
                     ->numeric()
                     ->sortable()
                     ->label('Kredit')
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('balance')
+                TextColumn::make('balance')
                     ->numeric()
                     ->sortable()
                     ->label('Saldo')
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Diupdate Saat')
@@ -133,12 +142,12 @@ class AccountResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -158,9 +167,9 @@ class AccountResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAccounts::route('/'),
-            'create' => Pages\CreateAccount::route('/create'),
-            'view' => Pages\ViewAccount::route('/{record}'),
+            'index' => ListAccounts::route('/'),
+            'create' => CreateAccount::route('/create'),
+            'view' => ViewAccount::route('/{record}'),
         ];
     }
 }

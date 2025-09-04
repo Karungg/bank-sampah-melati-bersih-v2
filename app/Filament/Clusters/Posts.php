@@ -6,11 +6,11 @@ use Filament\Clusters\Cluster;
 
 class Posts extends Cluster
 {
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-newspaper';
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Master';
+    protected static string | \UnitEnum | null $navigationGroup = 'Master';
 
     protected static ?string $navigationLabel = 'Kegiatan';
 

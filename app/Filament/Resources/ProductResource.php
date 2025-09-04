@@ -2,19 +2,35 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ExportBulkAction;
+use App\Filament\Resources\ProductResource\Pages\ListProducts;
+use App\Filament\Resources\ProductResource\Pages\CreateProduct;
+use App\Filament\Resources\ProductResource\Pages\ViewProduct;
+use App\Filament\Resources\ProductResource\Pages\EditProduct;
 use App\Contracts\ProductServiceInterface;
 use App\Filament\Exports\ProductExporter;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -23,21 +39,21 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-tag';
 
     protected static ?int $navigationSort = 0;
 
-    protected static ?string $navigationGroup = 'Master';
+    protected static string | \UnitEnum | null $navigationGroup = 'Master';
 
     protected static ?string $modelLabel = 'Kategori Sampah';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('product_code')
+                        TextInput::make('product_code')
                             ->required()
                             ->maxValue(16)
                             ->label('Kode Kategori')
@@ -57,7 +73,7 @@ class ProductResource extends Resource
                             'sm' => 2
                         ])
                             ->schema([
-                                Forms\Components\TextInput::make('title')
+                                TextInput::make('title')
                                     ->required()
                                     ->maxValue(100)
                                     ->label('Nama Kategori')
@@ -72,7 +88,7 @@ class ProductResource extends Resource
                                         'max' => 'Nama Kategori tidak boleh lebih dari 100 karakter.',
                                         'unique' => 'Nama Kategori sudah digunakan.'
                                     ]),
-                                Forms\Components\Textarea::make('description')
+                                Textarea::make('description')
                                     ->label('Deskripsi')
                                     ->autosize()
                                     ->placeholder('Masukkan deskripsi kategori')
@@ -83,7 +99,7 @@ class ProductResource extends Resource
                                             }
                                         }
                                     ]),
-                                Forms\Components\Select::make('unit')
+                                Select::make('unit')
                                     ->required()
                                     ->label('Satuan')
                                     ->options([
@@ -94,7 +110,7 @@ class ProductResource extends Resource
                                     ->validationMessages([
                                         'required' => 'Satuan harus diisi.'
                                     ]),
-                                Forms\Components\TextInput::make('price')
+                                TextInput::make('price')
                                     ->required()
                                     ->numeric()
                                     ->prefix('Rp')
@@ -108,11 +124,11 @@ class ProductResource extends Resource
                                         'max_digits' => 'Harga tidak boleh lebih dari 10 digit dan dua angka dibelakang koma.',
                                         'min' => 'Harga tidak boleh kurang dari 1.',
                                     ]),
-                                Forms\Components\DateTimePicker::make('created_at')
+                                DateTimePicker::make('created_at')
                                     ->readOnly()
                                     ->label('Dibuat Saat')
                                     ->hiddenOn(['edit', 'create']),
-                                Forms\Components\DateTimePicker::make('updated_at')
+                                DateTimePicker::make('updated_at')
                                     ->readOnly()
                                     ->label('Diupdate Saat')
                                     ->hiddenOn(['edit', 'create']),
@@ -126,61 +142,61 @@ class ProductResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('product_code')
+                TextColumn::make('product_code')
                     ->searchable()
                     ->label('Kode Kategori')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable()
                     ->label('Nama Kategori')
                     ->sortable()
                     ->limit(20),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->searchable()
                     ->label('Deskripsi')
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('unit')
+                TextColumn::make('unit')
                     ->searchable()
                     ->label('Satuan')
                     ->sortable()
                     ->formatStateUsing(fn(string $state): string => ucfirst($state)),
-                Tables\Columns\TextColumn::make('price')
+                TextColumn::make('price')
                     ->sortable()
                     ->label('Harga')
                     ->formatStateUsing(fn(string $state): string => number_format($state, 0, ',', '.'))
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Dibuat Saat'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Diupdate Saat'),
-                Tables\Columns\TextColumn::make('deleted_at')
+                TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Dihapus Saat'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ForceDeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
                 ExportBulkAction::make()
                     ->exporter(ProductExporter::class),
@@ -197,10 +213,10 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
-            'view' => Pages\ViewProduct::route('/{record}'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'index' => ListProducts::route('/'),
+            'create' => CreateProduct::route('/create'),
+            'view' => ViewProduct::route('/{record}'),
+            'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
 

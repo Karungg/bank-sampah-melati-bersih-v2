@@ -2,10 +2,20 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\ProductDisplayResource\Pages\ManageProductDisplays;
 use App\Filament\Resources\ProductDisplayResource\Pages;
 use App\Models\ProductDisplay;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -14,19 +24,19 @@ class ProductDisplayResource extends Resource
 {
     protected static ?string $model = ProductDisplay::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-path';
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Master';
+    protected static string | \UnitEnum | null $navigationGroup = 'Master';
 
     protected static ?string $modelLabel = 'Hasil Olahan';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('title')
+        return $schema
+            ->components([
+                TextInput::make('title')
                     ->required()
                     ->label('Nama Hasil Olahan')
                     ->placeholder('Masukkan nama hasil olahan')
@@ -35,7 +45,7 @@ class ProductDisplayResource extends Resource
                         'required' => 'Nama Hasil Olahan harus diisi.',
                         'max' => 'Nama Hasil Olahan tidak boleh lebih dari 256 karakter.'
                     ]),
-                Forms\Components\Textarea::make('description')
+                Textarea::make('description')
                     ->required()
                     ->maxLength(2048)
                     ->autosize()
@@ -45,7 +55,7 @@ class ProductDisplayResource extends Resource
                         'required' => 'Deskripsi harus diisi.',
                         'max' => 'Deskripsi tidak boleh lebih dari 2048 karakter.'
                     ]),
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->image()
                     ->required()
                     ->maxSize(3072)
@@ -64,26 +74,26 @@ class ProductDisplayResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable()
                     ->label('Nama Hasil Olahan')
                     ->sortable()
                     ->limit(20),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->searchable()
                     ->label('Deskripsi')
                     ->limit(50),
-                Tables\Columns\ImageColumn::make('image')
+                ImageColumn::make('image')
                     ->label('Foto'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->label('Diupdate Saat')
                     ->sortable()
@@ -92,13 +102,13 @@ class ProductDisplayResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -111,7 +121,7 @@ class ProductDisplayResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageProductDisplays::route('/'),
+            'index' => ManageProductDisplays::route('/'),
         ];
     }
 }

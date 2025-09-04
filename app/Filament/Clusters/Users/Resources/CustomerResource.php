@@ -2,16 +2,32 @@
 
 namespace App\Filament\Clusters\Users\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
+use App\Filament\Clusters\Users\Resources\CustomerResource\Pages\ListCustomers;
+use App\Filament\Clusters\Users\Resources\CustomerResource\Pages\CreateCustomer;
+use App\Filament\Clusters\Users\Resources\CustomerResource\Pages\ViewCustomer;
+use App\Filament\Clusters\Users\Resources\CustomerResource\Pages\EditCustomer;
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 use App\Filament\Exports\CustomerExporter;
 use App\Models\Customer;
 use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,20 +37,20 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $cluster = Users::class;
 
     protected static ?string $modelLabel = 'Nasabah';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Data Diri')
                     ->schema([
                         Hidden::make('user_id'),
-                        Forms\Components\TextInput::make('nik')
+                        TextInput::make('nik')
                             ->required()
                             ->numeric()
                             ->maxLength(16)
@@ -53,7 +69,7 @@ class CustomerResource extends Resource
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
-                            Forms\Components\TextInput::make('full_name')
+                            TextInput::make('full_name')
                                 ->required()
                                 ->placeholder('Masukkan nama lengkap sesuai KTP, contoh: Budi Santoso')
                                 ->maxValue(100)
@@ -62,7 +78,7 @@ class CustomerResource extends Resource
                                     'required' => 'Nama Lengkap harus diisi.',
                                     'max' => 'Nama Lengkap tidak boleh melebihi 100 karakter.'
                                 ]),
-                            Forms\Components\TextInput::make('place_of_birth')
+                            TextInput::make('place_of_birth')
                                 ->required()
                                 ->placeholder('Masukkan kota kelahiran, contoh: Surabaya')
                                 ->maxValue(50)
@@ -71,7 +87,7 @@ class CustomerResource extends Resource
                                     'required' => 'Tempat Lahir harus diisi.',
                                     'max' => 'Tempat Lahir tidak boleh melebihi 50 karakter.'
                                 ]),
-                            Forms\Components\DatePicker::make('date_of_birth')
+                            DatePicker::make('date_of_birth')
                                 ->required()
                                 ->date()
                                 ->label('Tanggal Lahir')
@@ -80,7 +96,7 @@ class CustomerResource extends Resource
                                     'required' => 'Tanggal Lahir harus diisi.',
                                     'date' => 'Tanggal lahir tidak valid.'
                                 ]),
-                            Forms\Components\TextInput::make('phone')
+                            TextInput::make('phone')
                                 ->numeric()
                                 ->required()
                                 ->minLength(9)
@@ -96,15 +112,15 @@ class CustomerResource extends Resource
                                 ])
                                 ->prefix('+62')
                                 ->label('Nomor Telepon'),
-                            Forms\Components\DateTimePicker::make('created_at')
+                            DateTimePicker::make('created_at')
                                 ->readOnly()
                                 ->label('Dibuat Saat')
                                 ->hiddenOn(['edit', 'create']),
-                            Forms\Components\DateTimePicker::make('updated_at')
+                            DateTimePicker::make('updated_at')
                                 ->readOnly()
                                 ->label('Diupdate Saat')
                                 ->hiddenOn(['edit', 'create']),
-                            Forms\Components\FileUpload::make('identity_card_photo')
+                            FileUpload::make('identity_card_photo')
                                 ->label('Foto KTP')
                                 ->maxSize(3072)
                                 ->imageEditor()
@@ -112,7 +128,7 @@ class CustomerResource extends Resource
                                 ->nullable()
                                 ->image()
                                 ->placeholder('Unggah foto KTP'),
-                            Forms\Components\FileUpload::make('avatar_url')
+                            FileUpload::make('avatar_url')
                                 ->label('Foto Profil')
                                 ->maxSize(3072)
                                 ->imageEditor()
@@ -124,7 +140,7 @@ class CustomerResource extends Resource
                     ]),
                 Section::make('Alamat Lengkap')
                     ->schema([
-                        Forms\Components\Textarea::make('address')
+                        Textarea::make('address')
                             ->required()
                             ->columnSpanFull()
                             ->maxLength(2000)
@@ -138,7 +154,7 @@ class CustomerResource extends Resource
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
-                            Forms\Components\TextInput::make('rt')
+                            TextInput::make('rt')
                                 ->required()
                                 ->numeric()
                                 ->minLength(3)
@@ -150,7 +166,7 @@ class CustomerResource extends Resource
                                     'max_digits' => 'RT tidak boleh melebihi 3 digit angka.',
                                     'min_digits' => 'RT harus berisi 3 digit angka.'
                                 ]),
-                            Forms\Components\TextInput::make('rw')
+                            TextInput::make('rw')
                                 ->required()
                                 ->numeric()
                                 ->label('RW')
@@ -162,7 +178,7 @@ class CustomerResource extends Resource
                                     'max_digits' => 'RW tidak boleh melebihi 3 digit angka.',
                                     'min_digits' => 'RW harus berisi 3 digit angka.'
                                 ]),
-                            Forms\Components\TextInput::make('village')
+                            TextInput::make('village')
                                 ->required()
                                 ->maxLength(100)
                                 ->label('Desa')
@@ -171,7 +187,7 @@ class CustomerResource extends Resource
                                     'required' => 'Desa harus diisi.',
                                     'max' => 'Desa tidak boleh melebihi 100 karakter.'
                                 ]),
-                            Forms\Components\TextInput::make('district')
+                            TextInput::make('district')
                                 ->required()
                                 ->label('Kecamatan')
                                 ->maxLength(100)
@@ -180,7 +196,7 @@ class CustomerResource extends Resource
                                     'required' => 'Kecamatan harus diisi.',
                                     'max' => 'Kecamatan tidak boleh melebihi 100 karakter.'
                                 ]),
-                            Forms\Components\TextInput::make('city')
+                            TextInput::make('city')
                                 ->required()
                                 ->maxLength(100)
                                 ->label('Kota')
@@ -189,7 +205,7 @@ class CustomerResource extends Resource
                                     'required' => 'Kota harus diisi.',
                                     'max' => 'Kota tidak boleh melebihi 100 karakter.'
                                 ]),
-                            Forms\Components\TextInput::make('postal_code')
+                            TextInput::make('postal_code')
                                 ->required()
                                 ->maxLength(5)
                                 ->minLength(5)
@@ -209,7 +225,7 @@ class CustomerResource extends Resource
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
-                            Forms\Components\TextInput::make('email')
+                            TextInput::make('email')
                                 ->required()
                                 ->maxValue(255)
                                 ->placeholder('Masukkan email aktif, contoh: budi.santoso@gmail.com')
@@ -220,9 +236,9 @@ class CustomerResource extends Resource
                                     'unique' => 'Email sudah digunakan.',
                                     'email' => 'Email tidak valid.'
                                 ])->rules([
-                                    fn(): Closure => function (string $attribute, $value, Closure $fail) use ($form) {
+                                    fn(): Closure => function (string $attribute, $value, Closure $fail) use ($schema) {
                                         $userExists = DB::table('users')
-                                            ->where('id', '!=', $form->getRecord()->user_id ?? '')
+                                            ->where('id', '!=', $schema->getRecord()->user_id ?? '')
                                             ->where('email', $value)
                                             ->exists();
 
@@ -231,7 +247,7 @@ class CustomerResource extends Resource
                                         }
                                     }
                                 ]),
-                            Forms\Components\TextInput::make('password')
+                            TextInput::make('password')
                                 ->hidden(fn(string $context): bool => $context == 'view')
                                 ->required(fn(string $context): bool => $context != 'edit')
                                 ->password()
@@ -259,83 +275,83 @@ class CustomerResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('nik')
+                TextColumn::make('nik')
                     ->searchable()
                     ->sortable()
                     ->label('NIK')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('full_name')
+                TextColumn::make('full_name')
                     ->searchable()
                     ->sortable()
                     ->label('Nama Lengkap')
                     ->limit(20),
-                Tables\Columns\TextColumn::make('place_of_birth')
+                TextColumn::make('place_of_birth')
                     ->searchable()
                     ->sortable()
                     ->label('Tempat Lahir')
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('date_of_birth')
+                TextColumn::make('date_of_birth')
                     ->date()
                     ->sortable()
                     ->label('Tanggal Lahir')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->searchable()
                     ->sortable()
                     ->label('Telepon'),
-                Tables\Columns\TextColumn::make('rt')
+                TextColumn::make('rt')
                     ->searchable()
                     ->sortable()
                     ->label('RT')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('rw')
+                TextColumn::make('rw')
                     ->searchable()
                     ->sortable()
                     ->label('RW')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('village')
+                TextColumn::make('village')
                     ->searchable()
                     ->sortable()
                     ->label('Desa')
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('district')
+                TextColumn::make('district')
                     ->searchable()
                     ->sortable()
                     ->label('Kecamatan')
                     ->limit(20)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('city')
+                TextColumn::make('city')
                     ->searchable()
                     ->sortable()
                     ->label('Kota')
                     ->toggleable()
                     ->limit(20),
-                Tables\Columns\TextColumn::make('postal_code')
+                TextColumn::make('postal_code')
                     ->searchable()
                     ->sortable()
                     ->label('Kode Pos')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('address')
+                TextColumn::make('address')
                     ->searchable()
                     ->label('Alamat')
                     ->toggleable()
                     ->limit(20),
-                Tables\Columns\ImageColumn::make('identity_card_photo')
+                ImageColumn::make('identity_card_photo')
                     ->searchable()
                     ->label('Foto')
                     ->circular()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Dibuat Saat'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -345,15 +361,15 @@ class CustomerResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
-                Tables\Actions\ExportBulkAction::make()
+                ExportBulkAction::make()
                     ->exporter(CustomerExporter::class)
             ]);
     }
@@ -368,10 +384,10 @@ class CustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCustomers::route('/'),
-            'create' => Pages\CreateCustomer::route('/create'),
-            'view' => Pages\ViewCustomer::route('/{record}'),
-            'edit' => Pages\EditCustomer::route('/{record}/edit'),
+            'index' => ListCustomers::route('/'),
+            'create' => CreateCustomer::route('/create'),
+            'view' => ViewCustomer::route('/{record}'),
+            'edit' => EditCustomer::route('/{record}/edit'),
         ];
     }
 

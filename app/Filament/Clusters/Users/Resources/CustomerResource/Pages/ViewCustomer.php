@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 
+use Filament\Actions\EditAction;
 use App\Filament\Clusters\Users\Resources\CustomerResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
@@ -14,7 +15,7 @@ class ViewCustomer extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            EditAction::make(),
         ];
     }
 

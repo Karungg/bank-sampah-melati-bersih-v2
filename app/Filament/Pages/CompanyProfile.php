@@ -2,16 +2,16 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
 use App\Models\CompanyProfile as ModelsCompanyProfile;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Exceptions\Halt;
@@ -23,15 +23,15 @@ class CompanyProfile extends Page implements HasForms
 
     public ?array $data = [];
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-office';
 
     protected static ?int $navigationSort = 13;
 
-    protected static ?string $navigationGroup = 'Pengaturan';
+    protected static string | \UnitEnum | null $navigationGroup = 'Pengaturan';
 
     protected static ?string $title = 'Profil Bank Sampah';
 
-    protected static string $view = 'filament.pages.company-profile';
+    protected string $view = 'filament.pages.company-profile';
 
     public static function canAccess(): bool
     {
@@ -57,10 +57,10 @@ class CompanyProfile extends Page implements HasForms
         $this->form->fill($data[0]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Profil Utama')
                     ->schema([
                         Grid::make([

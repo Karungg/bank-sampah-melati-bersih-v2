@@ -2,16 +2,23 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\WithDrawalResource\Pages\ManageWithDrawals;
 use App\Contracts\WithDrawalServerInterface;
 use App\Filament\Resources\WithDrawalResource\Pages;
 use App\Models\WithDrawal;
 use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,18 +28,18 @@ class WithDrawalResource extends Resource
 {
     protected static ?string $model = WithDrawal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?int $navigationSort = 7;
 
-    protected static ?string $navigationGroup = 'Transaksi';
+    protected static string | \UnitEnum | null $navigationGroup = 'Transaksi';
 
     protected static ?string $modelLabel = 'Tarik Uang';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Informasi rekening')
                     ->schema([
                         Grid::make([
@@ -40,15 +47,15 @@ class WithDrawalResource extends Resource
                             'sm' => 2
                         ])
                             ->schema([
-                                Forms\Components\TextInput::make('debit')
+                                TextInput::make('debit')
                                     ->readOnly()
                                     ->label('Debet')
                                     ->prefix('Rp.'),
-                                Forms\Components\TextInput::make('credit')
+                                TextInput::make('credit')
                                     ->readOnly()
                                     ->prefix('Rp.')
                                     ->label('Kredit'),
-                                Forms\Components\TextInput::make('balance')
+                                TextInput::make('balance')
                                     ->readOnly()
                                     ->prefix('Rp.')
                                     ->label('Saldo'),
@@ -62,7 +69,7 @@ class WithDrawalResource extends Resource
                             'sm' => 2
                         ])
                             ->schema([
-                                Forms\Components\TextInput::make('with_drawal_code')
+                                TextInput::make('with_drawal_code')
                                     ->required()
                                     ->readOnly()
                                     ->label('Kode transaksi')
@@ -77,7 +84,7 @@ class WithDrawalResource extends Resource
                                         'unique' => 'Kode transaksi sudah digunakan.',
                                         'max' => 'Kode transaksi tidak boleh lebih dari 16 karakter.'
                                     ]),
-                                Forms\Components\Select::make('customer_id')
+                                Select::make('customer_id')
                                     ->searchable()
                                     ->relationship('customer', 'full_name')
                                     ->required()
@@ -98,7 +105,7 @@ class WithDrawalResource extends Resource
                                     ->validationMessages([
                                         'required' => 'Nasabah harus diisi.'
                                     ]),
-                                Forms\Components\TextInput::make('amount')
+                                TextInput::make('amount')
                                     ->required()
                                     ->numeric()
                                     ->prefix('Rp')
@@ -129,28 +136,28 @@ class WithDrawalResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->searchable()
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('with_drawal_code')
+                TextColumn::make('with_drawal_code')
                     ->searchable()
                     ->sortable()
                     ->label('Kode Transaksi'),
-                Tables\Columns\TextColumn::make('customer.full_name')
+                TextColumn::make('customer.full_name')
                     ->searchable()
                     ->label('Nasabah')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('amount')
+                TextColumn::make('amount')
                     ->numeric()
                     ->prefix('Rp.')
                     ->sortable()
                     ->label('Jumlah Tarik'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Dibuat Saat'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->label('Diupdate Saat')
                     ->sortable()
@@ -160,12 +167,12 @@ class WithDrawalResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -173,7 +180,7 @@ class WithDrawalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageWithDrawals::route('/'),
+            'index' => ManageWithDrawals::route('/'),
         ];
     }
 }

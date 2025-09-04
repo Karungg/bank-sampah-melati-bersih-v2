@@ -24,6 +24,9 @@ use App\Services\ReportService;
 use App\Services\TransactionService;
 use App\Services\UserService;
 use App\Services\WithDrawalService;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -64,8 +67,18 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
+        // Set table pagination
         Table::configureUsing(function (Table $table): void {
             $table->paginationPageOptions([10, 25, 50]);
         });
+
+        Fieldset::configureUsing(fn(Fieldset $fieldset) => $fieldset
+            ->columnSpanFull());
+
+        Grid::configureUsing(fn(Grid $grid) => $grid
+            ->columnSpanFull());
+
+        Section::configureUsing(fn(Section $section) => $section
+            ->columnSpanFull());
     }
 }

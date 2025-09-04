@@ -2,6 +2,8 @@
 
 namespace App\Filament\Clusters\Users\Resources\CustomerResource\Pages;
 
+use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
 use App\Contracts\CustomerServiceInterface;
 use App\Filament\Clusters\Users\Resources\CustomerResource;
 use App\Models\User;
@@ -25,8 +27,8 @@ class EditCustomer extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make()
+            ViewAction::make(),
+            DeleteAction::make()
         ];
     }
 

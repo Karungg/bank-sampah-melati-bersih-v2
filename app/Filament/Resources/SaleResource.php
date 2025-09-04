@@ -2,15 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\SaleResource\Pages\ListSales;
+use App\Filament\Resources\SaleResource\Pages\CreateSale;
+use App\Filament\Resources\SaleResource\Pages\ViewSale;
 use App\Filament\Resources\SaleResource\Pages;
 use App\Models\Transaction;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -22,42 +31,42 @@ class SaleResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?int $navigationSort = 6;
 
-    protected static ?string $navigationGroup = 'Transaksi';
+    protected static string | \UnitEnum | null $navigationGroup = 'Transaksi';
 
     protected static ?string $modelLabel = 'Penjualan';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('transaction_code')
+                        TextInput::make('transaction_code')
                             ->readOnly()
                             ->label('Kode Transaksi'),
                         Grid::make([
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
-                            Forms\Components\TextInput::make('user_id')
+                            TextInput::make('user_id')
                                 ->label('Penjual'),
-                            Forms\Components\TextInput::make('total_quantity')
+                            TextInput::make('total_quantity')
                                 ->suffix(' Pcs')
                                 ->readOnly()
                                 ->label('Jumlah'),
-                            Forms\Components\TextInput::make('total_weight')
+                            TextInput::make('total_weight')
                                 ->suffix(' Kg')
                                 ->readOnly()
                                 ->label('Berat'),
-                            Forms\Components\TextInput::make('total_liter')
+                            TextInput::make('total_liter')
                                 ->suffix(' Liter')
                                 ->readOnly()
                                 ->label('Liter'),
-                            Forms\Components\TextInput::make('total_amount')
+                            TextInput::make('total_amount')
                                 ->prefix('Rp.')
                                 ->readOnly()
                                 ->label('Total'),
@@ -68,7 +77,7 @@ class SaleResource extends Resource
                         Repeater::make('transactionDetails')
                             ->label('Sampah')
                             ->schema([
-                                Forms\Components\Select::make('product_id')
+                                Select::make('product_id')
                                     ->required()
                                     ->label('Kategori Sampah')
                                     ->options(
@@ -100,7 +109,7 @@ class SaleResource extends Resource
                                             $set('weighted_product', $product->value('total_liter'));
                                         }
                                     }),
-                                Forms\Components\TextInput::make('quantity')
+                                TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
                                     ->label('Jumlah')
@@ -116,7 +125,7 @@ class SaleResource extends Resource
                                     ->validationMessages([
                                         'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
                                     ]),
-                                Forms\Components\TextInput::make('weight')
+                                TextInput::make('weight')
                                     ->required()
                                     ->numeric()
                                     ->label('Berat')
@@ -132,7 +141,7 @@ class SaleResource extends Resource
                                     ->validationMessages([
                                         'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
                                     ]),
-                                Forms\Components\TextInput::make('liter')
+                                TextInput::make('liter')
                                     ->required()
                                     ->numeric()
                                     ->label('Liter')
@@ -148,7 +157,7 @@ class SaleResource extends Resource
                                     ->validationMessages([
                                         'max' => 'Jumlah tidak boleh lebih dari sampah yang terkumpul'
                                     ]),
-                                Forms\Components\TextInput::make('subtotal')
+                                TextInput::make('subtotal')
                                     ->required()
                                     ->numeric()
                                     ->label('Subtotal')
@@ -176,44 +185,44 @@ class SaleResource extends Resource
                     ->orderBy('created_at', 'desc');
             })
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('transaction_code')
+                TextColumn::make('transaction_code')
                     ->searchable()
                     ->sortable()
                     ->label('Kode Transaksi'),
-                Tables\Columns\TextColumn::make('total_quantity')
+                TextColumn::make('total_quantity')
                     ->numeric()
                     ->sortable()
                     ->label('Jumlah')
                     ->suffix(' Pcs'),
-                Tables\Columns\TextColumn::make('total_weight')
+                TextColumn::make('total_weight')
                     ->numeric()
                     ->sortable()
                     ->label('Berat')
                     ->suffix(' Kg'),
-                Tables\Columns\TextColumn::make('total_liter')
+                TextColumn::make('total_liter')
                     ->numeric()
                     ->sortable()
                     ->label('Liter')
                     ->suffix(' Liter'),
-                Tables\Columns\TextColumn::make('total_amount')
+                TextColumn::make('total_amount')
                     ->numeric()
                     ->sortable()
                     ->label('Total')
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->searchable()
                     ->label('Penjual')
                     ->limit(20)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Diupdate Saat')
@@ -222,12 +231,12 @@ class SaleResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -242,9 +251,9 @@ class SaleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSales::route('/'),
-            'create' => Pages\CreateSale::route('/create'),
-            'view' => Pages\ViewSale::route('/{record}'),
+            'index' => ListSales::route('/'),
+            'create' => CreateSale::route('/create'),
+            'view' => ViewSale::route('/{record}'),
         ];
     }
 }

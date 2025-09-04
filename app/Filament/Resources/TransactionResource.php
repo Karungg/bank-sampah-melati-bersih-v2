@@ -2,15 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\TransactionResource\Pages\ListTransactions;
+use App\Filament\Resources\TransactionResource\Pages\CreateTransaction;
+use App\Filament\Resources\TransactionResource\Pages\ViewTransaction;
 use App\Filament\Resources\TransactionResource\Pages;
 use App\Models\Transaction;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,21 +30,21 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-scale';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-scale';
 
     protected static ?int $navigationSort = 5;
 
-    protected static ?string $navigationGroup = 'Transaksi';
+    protected static string | \UnitEnum | null $navigationGroup = 'Transaksi';
 
     protected static ?string $modelLabel = 'Penimbangan';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('transaction_code')
+                        TextInput::make('transaction_code')
                             ->readOnly()
                             ->label('Kode Transaksi')
                             ->hiddenOn('create'),
@@ -43,7 +52,7 @@ class TransactionResource extends Resource
                             'default' => 1,
                             'sm' => 2
                         ])->schema([
-                            Forms\Components\Select::make('customer_id')
+                            Select::make('customer_id')
                                 ->options(
                                     DB::table('customers')->pluck('full_name', 'id')
                                 )
@@ -54,30 +63,30 @@ class TransactionResource extends Resource
                                 ->validationMessages([
                                     'required' => 'Nasabah harus diisi.'
                                 ]),
-                            Forms\Components\TextInput::make('user_id')
+                            TextInput::make('user_id')
                                 ->label('Penimbang')
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('location')
+                            TextInput::make('location')
                                 ->maxLength(255)
                                 ->label('Lokasi Penimbangan')
                                 ->readOnly()
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('total_quantity')
+                            TextInput::make('total_quantity')
                                 ->suffix(' Pcs')
                                 ->readOnly()
                                 ->label('Jumlah')
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('total_weight')
+                            TextInput::make('total_weight')
                                 ->suffix(' Kg')
                                 ->readOnly()
                                 ->label('Berat')
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('total_liter')
+                            TextInput::make('total_liter')
                                 ->suffix(' Liter')
                                 ->readOnly()
                                 ->label('Liter')
                                 ->hiddenOn('create'),
-                            Forms\Components\TextInput::make('total_amount')
+                            TextInput::make('total_amount')
                                 ->prefix('Rp.')
                                 ->readOnly()
                                 ->label('Total')
@@ -89,7 +98,7 @@ class TransactionResource extends Resource
                         Repeater::make('transactionDetails')
                             ->label('Sampah')
                             ->schema([
-                                Forms\Components\Select::make('product_id')
+                                Select::make('product_id')
                                     ->required()
                                     ->label('Kategori Sampah')
                                     ->options(
@@ -106,28 +115,28 @@ class TransactionResource extends Resource
 
                                         $set('product_unit', $unit);
                                     }),
-                                Forms\Components\TextInput::make('quantity')
+                                TextInput::make('quantity')
                                     ->required()
                                     ->numeric()
                                     ->label('Jumlah')
                                     ->suffix('Pcs')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'pcs'
                                         || $state != null),
-                                Forms\Components\TextInput::make('weight')
+                                TextInput::make('weight')
                                     ->required()
                                     ->numeric()
                                     ->label('Berat')
                                     ->suffix('Kg')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'kg'
                                         || $state != null),
-                                Forms\Components\TextInput::make('liter')
+                                TextInput::make('liter')
                                     ->required()
                                     ->numeric()
                                     ->label('Liter')
                                     ->suffix('Liter')
                                     ->visible(fn(Get $get, ?string $state): bool => $get('product_unit') == 'liter'
                                         || $state != null),
-                                Forms\Components\TextInput::make('subtotal')
+                                TextInput::make('subtotal')
                                     ->required()
                                     ->numeric()
                                     ->label('Subtotal')
@@ -155,54 +164,54 @@ class TransactionResource extends Resource
                     ->orderBy('created_at', 'desc');
             })
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('transaction_code')
+                TextColumn::make('transaction_code')
                     ->searchable()
                     ->sortable()
                     ->label('Kode Transaksi'),
-                Tables\Columns\TextColumn::make('customer.full_name')
+                TextColumn::make('customer.full_name')
                     ->searchable()
                     ->label('Nasabah')
                     ->limit(20)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_quantity')
+                TextColumn::make('total_quantity')
                     ->numeric()
                     ->sortable()
                     ->label('Jumlah')
                     ->suffix(' Pcs'),
-                Tables\Columns\TextColumn::make('total_weight')
+                TextColumn::make('total_weight')
                     ->numeric()
                     ->sortable()
                     ->label('Berat')
                     ->suffix(' Kg'),
-                Tables\Columns\TextColumn::make('total_liter')
+                TextColumn::make('total_liter')
                     ->numeric()
                     ->sortable()
                     ->label('Liter')
                     ->suffix(' Liter'),
-                Tables\Columns\TextColumn::make('total_amount')
+                TextColumn::make('total_amount')
                     ->numeric()
                     ->sortable()
                     ->label('Total')
                     ->prefix('Rp.'),
-                Tables\Columns\TextColumn::make('location')
+                TextColumn::make('location')
                     ->searchable()
                     ->label('Lokasi')
                     ->limit(20)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->searchable()
                     ->label('Penimbang')
                     ->limit(20)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Dibuat Saat')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Diupdate Saat')
@@ -212,12 +221,12 @@ class TransactionResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -232,9 +241,9 @@ class TransactionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTransactions::route('/'),
-            'create' => Pages\CreateTransaction::route('/create'),
-            'view' => Pages\ViewTransaction::route('/{record}'),
+            'index' => ListTransactions::route('/'),
+            'create' => CreateTransaction::route('/create'),
+            'view' => ViewTransaction::route('/{record}'),
         ];
     }
 }

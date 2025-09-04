@@ -2,12 +2,22 @@
 
 namespace App\Filament\Clusters\Users\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\ExportBulkAction;
+use App\Filament\Clusters\Users\Resources\AdminUserResource\Pages\ManageAdminUsers;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use App\Filament\Clusters\Users;
 use App\Filament\Clusters\Users\Resources\AdminUserResource\Pages;
 use App\Filament\Exports\UserExporter;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,21 +29,21 @@ class AdminUserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-plus';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-plus';
 
     protected static ?string $cluster = Users::class;
 
     protected static ?string $modelLabel = 'Admin';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\FileUpload::make('avatar_url')
+        return $schema
+            ->components([
+                FileUpload::make('avatar_url')
                     ->hidden(
                         fn(string $context) =>
                         $context === 'edit' && auth()->id()
-                            !== ($form->getRecord()->id ?? '')
+                            !== ($schema->getRecord()->id ?? '')
                     )
                     ->label('Foto Profil')
                     ->maxSize(3072)
@@ -43,7 +53,7 @@ class AdminUserResource extends Resource
                     ->nullable()
                     ->placeholder('Unggah foto profil')
                     ->image(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->maxValue(255)
                     ->label('Nama')
@@ -52,7 +62,7 @@ class AdminUserResource extends Resource
                         'required' => 'Nama harus diisi.',
                         'max' => 'Nama tidak boleh lebih dari 255 karakter.'
                     ]),
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->required()
                     ->maxValue(255)
                     ->unique(ignoreRecord: true)
@@ -64,7 +74,7 @@ class AdminUserResource extends Resource
                         'unique' => 'Email sudah digunakan.',
                         'email' => 'Email tidak valid.'
                     ]),
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
                     ->required(fn(string $context) => $context != 'edit')
                     ->password()
                     ->revealable()
@@ -88,30 +98,30 @@ class AdminUserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable()
                     ->label('Nama')
                     ->limit(20),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable()
                     ->sortable()
                     ->limit(20),
-                Tables\Columns\ImageColumn::make('avatar_url')
+                ImageColumn::make('avatar_url')
                     ->defaultImageUrl(asset('assets/avatars/default.jpeg'))
                     ->circular()
                     ->extraImgAttributes(['loading' => 'lazy'])
                     ->alignCenter()
                     ->label('Foto Profil'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('Dibuat Saat'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -120,15 +130,15 @@ class AdminUserResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 static::getEditAction(),
                 static::getDeleteAction()
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+            ->toolbarActions([
+                BulkActionGroup::make([
                     static::getDeleteBulkAction()
                 ]),
-                Tables\Actions\ExportBulkAction::make()
+                ExportBulkAction::make()
                     ->exporter(UserExporter::class),
             ]);
     }
@@ -136,7 +146,7 @@ class AdminUserResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageAdminUsers::route('/'),
+            'index' => ManageAdminUsers::route('/'),
         ];
     }
 
@@ -161,21 +171,21 @@ class AdminUserResource extends Resource
         return auth()->user()->hasRole('admin');
     }
 
-    public static function getEditAction(): Tables\Actions\EditAction
+    public static function getEditAction(): EditAction
     {
-        return Tables\Actions\EditAction::make()
+        return EditAction::make()
             ->url(fn($record) => $record->id === auth()->id()
                 ? route('filament.admin.pages.edit-profile')
                 : null)
-            ->mutateFormDataUsing(function (array $data, $record): array {
+            ->mutateDataUsing(function (array $data, $record): array {
                 $data['password'] ?? $data['password'] = $record->password;
                 return $data;
             });
     }
 
-    public static function getDeleteAction(): Tables\Actions\Action
+    public static function getDeleteAction(): Action
     {
-        return Tables\Actions\Action::make('hapus')
+        return Action::make('hapus')
             ->hidden(fn(User $user) => $user->id == auth()->id())
             ->requiresConfirmation()
             ->modalHeading('Hapus admin')
@@ -183,8 +193,8 @@ class AdminUserResource extends Resource
             ->modalSubmitActionLabel('Hapus')
             ->icon('heroicon-m-trash')
             ->color('danger')
-            ->form([
-                Forms\Components\TextInput::make('confirm')
+            ->schema([
+                TextInput::make('confirm')
                     ->required()
                     ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
             ])
@@ -207,9 +217,9 @@ class AdminUserResource extends Resource
             });
     }
 
-    public static function getDeleteBulkAction(): Tables\Actions\BulkAction
+    public static function getDeleteBulkAction(): BulkAction
     {
-        return Tables\Actions\BulkAction::make('Hapus admin yang dipilih')
+        return BulkAction::make('Hapus admin yang dipilih')
             ->requiresConfirmation()
             ->modalHeading('Hapus admin yang dipilih')
             ->modalDescription('Apakah anda yakin ingin menghapus admin ini? Hal ini tidak dapat dibatalkan.')
@@ -217,7 +227,7 @@ class AdminUserResource extends Resource
             ->icon('heroicon-m-trash')
             ->color('danger')
             ->form([
-                Forms\Components\TextInput::make('confirm')
+                TextInput::make('confirm')
                     ->required()
                     ->label('Ketik "Saya yakin ingin menghapus" untuk konfirmasi.'),
             ])

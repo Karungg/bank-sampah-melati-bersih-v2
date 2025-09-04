@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use Filament\Actions\Action;
 use App\Contracts\NotificationServiceInterface;
 use App\Models\User;
-use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 

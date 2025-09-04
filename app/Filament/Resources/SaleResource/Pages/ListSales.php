@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SaleResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\SaleResource;
 use App\Filament\Resources\SaleResource\Widgets\WeightedProductsOverview;
 use Filament\Actions;
@@ -14,7 +15,7 @@ class ListSales extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 

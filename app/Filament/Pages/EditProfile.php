@@ -2,15 +2,15 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\Action;
 use Exception;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\Alignment;
@@ -22,8 +22,8 @@ use Illuminate\Validation\Rules\Password;
 class EditProfile extends Page implements HasForms
 {
     use InteractsWithForms;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static string $view = 'filament.pages.edit-profile';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+    protected string $view = 'filament.pages.edit-profile';
     protected static bool $shouldRegisterNavigation = false;
     public static string | Alignment $formActionsAlignment = Alignment::End;
     public ?array $profileData = [];
@@ -42,10 +42,10 @@ class EditProfile extends Page implements HasForms
         ];
     }
 
-    public function editProfileForm(Form $form): Form
+    public function editProfileForm(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Informasi ' . __('filament-panels::pages/auth/edit-profile.label'))
                     ->aside()
                     ->description('Perbarui informasi profil akun dan alamat email anda.')
@@ -85,10 +85,10 @@ class EditProfile extends Page implements HasForms
             ->statePath('profileData');
     }
 
-    public function editPasswordForm(Form $form): Form
+    public function editPasswordForm(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Perbarui Password')
                     ->aside()
                     ->description('Pastikan akun anda menggunakan password yang tidak mudah ditebak agar menjaga keamanan akun anda.')

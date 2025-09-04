@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Tables\Columns\TextColumn;
+use App\Filament\Resources\CustomerReportResource\Pages\ManageCustomerReports;
 use App\Filament\Resources\CustomerReportResource\Pages;
 use App\Models\Reports\CustomerReport;
 use Filament\Resources\Resource;
@@ -12,11 +14,11 @@ class CustomerReportResource extends Resource
 {
     protected static ?string $model = CustomerReport::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
     protected static ?int $navigationSort = 9;
 
-    protected static ?string $navigationGroup = 'Laporan';
+    protected static string | \UnitEnum | null $navigationGroup = 'Laporan';
 
     protected static ?string $modelLabel = 'Laporan Saldo Nasabah';
 
@@ -25,36 +27,36 @@ class CustomerReportResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('No')
                     ->searchable()
                     ->rowIndex(),
-                Tables\Columns\TextColumn::make('transaction_code')
+                TextColumn::make('transaction_code')
                     ->label('Kode Transaksi')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Tanggal')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->label('Jenis Transaksi')
                     ->formatStateUsing(fn(string $state): ?string => $state == 'weighing' ? 'Penimbangan' : 'Tarik Uang')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('customer.full_name')
+                TextColumn::make('customer.full_name')
                     ->label('Nama Nasabah')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('debit')
+                TextColumn::make('debit')
                     ->label('Debet')
                     ->sortable()
                     ->prefix('Rp.')
                     ->formatStateUsing(fn(string $state): ?string => number_format($state, 0, ',', '.')),
-                Tables\Columns\TextColumn::make('credit')
+                TextColumn::make('credit')
                     ->label('Kredit')
                     ->sortable()
                     ->prefix('Rp.')
                     ->formatStateUsing(fn(string $state): ?string => number_format($state, 0, ',', '.')),
-                Tables\Columns\TextColumn::make('balance')
+                TextColumn::make('balance')
                     ->label('Saldo')
                     ->sortable()
                     ->prefix('Rp.')
@@ -64,14 +66,14 @@ class CustomerReportResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([])
-            ->bulkActions([]);
+            ->recordActions([])
+            ->toolbarActions([]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageCustomerReports::route('/'),
+            'index' => ManageCustomerReports::route('/'),
         ];
     }
 }
