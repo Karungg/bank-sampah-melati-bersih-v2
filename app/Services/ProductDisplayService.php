@@ -14,7 +14,7 @@ class ProductDisplayService implements ProductDisplayServiceInterface
     {
         try {
             if ($productDisplay->isDirty('image') && $productDisplay->getOriginal('image') != null) {
-                Storage::disk('public')->delete($productDisplay->getOriginal('image'));
+                Storage::disk('local')->delete($productDisplay->getOriginal('image'));
             }
         } catch (Exception $e) {
             Log::error("Failed to update image in product display resource", [
@@ -29,7 +29,7 @@ class ProductDisplayService implements ProductDisplayServiceInterface
     {
         try {
             if ($productDisplay->image) {
-                Storage::disk('public')->delete($productDisplay->image);
+                Storage::disk('local')->delete($productDisplay->image);
             }
         } catch (Exception $e) {
             Log::error("Failed to delete image in product display resource", [

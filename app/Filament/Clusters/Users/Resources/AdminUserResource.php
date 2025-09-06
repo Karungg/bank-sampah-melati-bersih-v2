@@ -45,11 +45,11 @@ class AdminUserResource extends Resource
                         $context === 'edit' && auth()->id()
                             !== ($schema->getRecord()->id ?? '')
                     )
+                    ->directory('avatars')
                     ->label('Foto Profil')
                     ->maxSize(3072)
                     ->avatar()
                     ->imageEditor()
-                    ->directory('avatars')
                     ->nullable()
                     ->placeholder('Unggah foto profil')
                     ->image(),

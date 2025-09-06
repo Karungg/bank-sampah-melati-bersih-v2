@@ -30,14 +30,14 @@ class PostService implements PostServiceInterface
 
                 # Simple case: one file
                 if (!is_array($originalFieldContentsDecoded) or count($originalFieldContentsDecoded) == 0) {
-                    Storage::disk('public')->delete($originalFieldContents);
+                    Storage::disk('local')->delete($originalFieldContents);
                 }
 
                 # Complex case: multiple files
                 else {
                     foreach ($originalFieldContentsDecoded as $originalFile) {
                         if (trim($originalFile) != null && !in_array($originalFile, $newFieldContents)) {
-                            Storage::disk('public')->delete($originalFile);
+                            Storage::disk('local')->delete($originalFile);
                         }
                     }
                 }
@@ -61,14 +61,14 @@ class PostService implements PostServiceInterface
 
                 # Simple case: one file
                 if (!is_array($fieldContentsDecoded)) {
-                    Storage::disk('public')->delete($post->images);
+                    Storage::disk('local')->delete($post->images);
                 }
 
                 # Complex case: multiple files
                 else {
 
                     foreach ($fieldContentsDecoded as $file) {
-                        Storage::disk('public')->delete($file);
+                        Storage::disk('local')->delete($file);
                     }
                 }
             }

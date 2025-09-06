@@ -18,7 +18,7 @@ class CustomerService implements CustomerServiceInterface
             $oldIdentityCard = $customer->getOriginal('identity_card_photo');
 
             if ($customer->isDirty('identity_card_photo') && $oldIdentityCard) {
-                Storage::disk('public')->delete($oldIdentityCard);
+                Storage::disk('local')->delete($oldIdentityCard);
             }
         } catch (Exception $e) {
             Log::error("Failed to update images customer", [
@@ -36,11 +36,11 @@ class CustomerService implements CustomerServiceInterface
             $user = DB::table('users')->where('id', $customer->user_id);
 
             if ($customer->identity_card_photo != null) {
-                Storage::disk('public')->delete($customer->identity_card_photo);
+                Storage::disk('local')->delete($customer->identity_card_photo);
             }
 
             if ($user->value('avatar_url') != null) {
-                Storage::disk('public')->delete($user->value('avatar_url'));
+                Storage::disk('local')->delete($user->value('avatar_url'));
             }
             $user->delete();
         } catch (Exception $e) {
@@ -96,7 +96,7 @@ class CustomerService implements CustomerServiceInterface
             ]);
 
             if ($user->isDirty('avatar_url') && $user->getOriginal('avatar_url') != null) {
-                Storage::disk('public')->delete($user->getOriginal('avatar_url'));
+                Storage::disk('local')->delete($user->getOriginal('avatar_url'));
             }
 
             $user->saveQuietly();

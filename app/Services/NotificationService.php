@@ -27,7 +27,7 @@ class NotificationService implements NotificationServiceInterface
         if ($model) {
             $notification->actions([
                 Action::make('Lihat')
-                    ->url(route($route, ['tableSearch' => $model->$tableSearch]))
+                    ->url(route($route, ['search' => $model->$tableSearch]))
             ]);
         }
 
@@ -57,7 +57,7 @@ class NotificationService implements NotificationServiceInterface
         if ($model) {
             $notification->actions([
                 Action::make('Lihat')
-                    ->url(route($route, ['tableSearch' => $model->$tableSearch]))
+                    ->url(route($route, ['search' => $model->$tableSearch]))
             ]);
         }
 

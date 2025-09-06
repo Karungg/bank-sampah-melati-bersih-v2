@@ -148,8 +148,7 @@ class ProductResource extends Resource
                     ->rowIndex(),
                 TextColumn::make('product_code')
                     ->searchable()
-                    ->label('Kode Kategori')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Kode Kategori'),
                 TextColumn::make('title')
                     ->searchable()
                     ->label('Nama Kategori')
@@ -158,8 +157,7 @@ class ProductResource extends Resource
                 TextColumn::make('description')
                     ->searchable()
                     ->label('Deskripsi')
-                    ->limit(20)
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->limit(20),
                 TextColumn::make('unit')
                     ->searchable()
                     ->label('Satuan')

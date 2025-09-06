@@ -19,7 +19,7 @@ class UserService implements UserServiceInterface
                     : $user->getOriginal('avatar_url');
 
                 if ($avatarToDelete) {
-                    Storage::disk('public')->delete($avatarToDelete);
+                    Storage::disk('local')->delete($avatarToDelete);
                 }
             }
         } catch (Exception $e) {
@@ -35,7 +35,7 @@ class UserService implements UserServiceInterface
     {
         try {
             if ($user->avatar_url) {
-                Storage::disk('public')->delete($user->avatar_url);
+                Storage::disk('local')->delete($user->avatar_url);
             }
         } catch (Exception $e) {
             Log::error("Failed to delete profile user", [
