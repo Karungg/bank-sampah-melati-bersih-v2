@@ -6,27 +6,35 @@ use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Actions\Action;
 use Exception;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class EditProfile extends Page implements HasForms
+class EditProfile extends Page implements HasSchemas, HasActions
 {
-    use InteractsWithForms;
+    use InteractsWithSchemas, InteractsWithActions;
+
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+
     protected string $view = 'filament.pages.edit-profile';
+
     protected static bool $shouldRegisterNavigation = false;
+
     public static string | Alignment $formActionsAlignment = Alignment::End;
+
     public ?array $profileData = [];
+
     public ?array $passwordData = [];
 
     public function mount(): void
@@ -151,22 +159,20 @@ class EditProfile extends Page implements HasForms
         $this->editPasswordForm->fill($data);
     }
 
-    protected function getUpdateProfileFormActions(): array
+    protected function getUpdateProfileFormActions(): Action
     {
-        return [
+        return
             Action::make('updateProfileAction')
-                ->label(__('filament-panels::pages/auth/edit-profile.form.actions.save.label'))
-                ->submit('editProfileForm')
-        ];
+            ->label(__('filament-panels::pages/auth/edit-profile.form.actions.save.label'))
+            ->submit('editProfileForm');
     }
 
-    protected function getUpdatePasswordFormActions(): array
+    protected function getUpdatePasswordFormActions(): Action
     {
-        return [
+        return
             Action::make('updatePasswordAction')
-                ->label(__('filament-panels::pages/auth/edit-profile.form.actions.save.label'))
-                ->submit('editPasswordForm')
-        ];
+            ->label(__('filament-panels::pages/auth/edit-profile.form.actions.save.label'))
+            ->submit('editPasswordForm');
     }
 
     public function updateProfile(): void
