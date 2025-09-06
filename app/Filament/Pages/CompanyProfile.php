@@ -7,19 +7,22 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
 use App\Models\CompanyProfile as ModelsCompanyProfile;
 use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Facades\DB;
 
-class CompanyProfile extends Page implements HasForms
+class CompanyProfile extends Page implements HasSchemas, HasActions
 {
-    use InteractsWithForms;
+    use InteractsWithSchemas;
+    use InteractsWithActions;
 
     public ?array $data = [];
 
@@ -152,16 +155,14 @@ class CompanyProfile extends Page implements HasForms
             ])->statePath('data');
     }
 
-    protected function getFormActions(): array
+    protected function editAction(): Action
     {
-        return [
-            Action::make('save')
-                ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
-                ->submit('save'),
-        ];
+        return Action::make('edit')
+            ->label(__('filament-panels::resources/pages/edit-record.navigation_label'))
+            ->submit('edit');
     }
 
-    public function save(): void
+    public function edit(): void
     {
         try {
             $data = $this->form->getState();
