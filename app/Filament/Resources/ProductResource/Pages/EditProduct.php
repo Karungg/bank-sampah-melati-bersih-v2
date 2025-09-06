@@ -24,11 +24,4 @@ class EditProduct extends EditRecord
     {
         $this->record->deleted_at != null ? redirect(route('filament.admin.resources.products.index')) : '';
     }
-
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        $data['price'] = substr($data['price'], 0, -3);
-
-        return $data;
-    }
 }

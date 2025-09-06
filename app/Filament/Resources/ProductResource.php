@@ -8,8 +8,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ViewAction;
@@ -25,12 +25,10 @@ use App\Filament\Resources\ProductResource\Pages\ViewProduct;
 use App\Filament\Resources\ProductResource\Pages\EditProduct;
 use App\Contracts\ProductServiceInterface;
 use App\Filament\Exports\ProductExporter;
-use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Closure;
-use Filament\Forms;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Support\RawJs;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -99,7 +97,7 @@ class ProductResource extends Resource
                                             }
                                         }
                                     ]),
-                                Select::make('unit')
+                                ToggleButtons::make('unit')
                                     ->required()
                                     ->label('Satuan')
                                     ->options([
@@ -107,6 +105,7 @@ class ProductResource extends Resource
                                         'liter' => 'Liter',
                                         'pcs' => 'Pcs'
                                     ])
+                                    ->inline()
                                     ->validationMessages([
                                         'required' => 'Satuan harus diisi.'
                                     ]),
@@ -118,6 +117,8 @@ class ProductResource extends Resource
                                     ->maxLength(10)
                                     ->placeholder('Masukkan harga')
                                     ->minValue(1)
+                                    ->mask(RawJs::make('$money($input, \',\')'))
+                                    ->stripCharacters('.')
                                     ->validationMessages([
                                         'required' => 'Harga harus diisi.',
                                         'numeric' => 'Harga harus berupa angka.',
@@ -168,7 +169,7 @@ class ProductResource extends Resource
                     ->sortable()
                     ->label('Harga')
                     ->formatStateUsing(fn(string $state): string => number_format($state, 0, ',', '.'))
-                    ->prefix('Rp.'),
+                    ->prefix('Rp'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
