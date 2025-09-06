@@ -22,7 +22,7 @@ class UserService implements UserServiceInterface
                     Storage::disk('public')->delete($avatarToDelete);
                 }
             }
-        } catch (Exception $exception) {
+        } catch (Exception $e) {
             Log::error("Failed to update profile user", [
                 "user_id" => $user->id,
                 "message" => $e->getMessage(),
